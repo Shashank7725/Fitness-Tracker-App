@@ -3,1542 +3,1599 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#f5f5f7">
-
+<meta name="theme-color" content="#111214">
 <title>Fitness Tracker</title>
 
 <style>
-* {
-    box-sizing: border-box;
+*{box-sizing:border-box}
+
+:root{
+--bg:#f3f1ed;
+--card:#fbfaf7;
+--soft:#ebe8e2;
+--border:#dedad3;
+--text:#1a1a1b;
+--secondary:#77746f;
+--primary:#dca47e;
+--primaryText:#171513;
+--input:#eeebe6;
+--green:#78966f;
+--greenSoft:#e3ebe0;
+--red:#a96666;
+--redSoft:#efe1df;
+--future:#e5e2dc
+}
+
+body.dark{
+--bg:#111214;
+--card:#1a1b1e;
+--soft:#232427;
+--border:#2c2d31;
+--text:#f2f1ee;
+--secondary:#8d8e93;
+--primary:#e8b38f;
+--primaryText:#171719;
+--input:#222326;
+--green:#83a879;
+--greenSoft:#202b20;
+--red:#a95f5f;
+--redSoft:#302020;
+--future:#25262a
+}
+
+html,body{
+margin:0;
+background:var(--bg);
+color:var(--text);
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+min-height:100%
+}
+
+.screen{
+display:none;
+max-width:560px;
+min-height:100vh;
+margin:auto;
+padding:max(24px,env(safe-area-inset-top)) 20px 110px
+}
+
+.screen.active{display:block}
+
+h1{
+font-size:34px;
+letter-spacing:-1.4px;
+margin:8px 0
+}
+
+h2{
+font-size:21px;
+margin:0 0 8px
 }
 
-:root {
-    /* =========================
-       LIGHT THEME
-       Warm / minimal
-    ========================= */
+h3{margin:0 0 8px}
 
-    --bg: #f3f1ed;
+.muted,p{color:var(--secondary)}
 
-    --card: #fbfaf7;
+.muted{font-size:13px}
 
-    --soft: #ebe8e2;
-
-    --border: #dedad3;
-
-    --text: #1a1a1b;
-
-    --secondary: #77746f;
-
-    /* Main peach accent */
-    --primary: #dca47e;
-
-    --primaryText: #171513;
-
-    --input: #eeebe6;
-
-    /* Progress + calendar */
-    --green: #78966f;
-
-    --greenSoft: #e3ebe0;
-
-    --red: #a96666;
-
-    --redSoft: #efe1df;
-
-    --future: #e5e2dc;
-}
-
-
-body.dark {
-    /* =========================
-       DARK THEME
-       Based on your reference
-    ========================= */
-
-    --bg: #111214;
-
-    --card: #1a1b1e;
-
-    --soft: #232427;
-
-    --border: #2c2d31;
-
-    --text: #f2f1ee;
-
-    --secondary: #8d8e93;
-
-    /* Main peach accent */
-    --primary: #e8b38f;
-
-    --primaryText: #171719;
-
-    --input: #222326;
-
-    /* Progress + calendar */
-    --green: #83a879;
-
-    --greenSoft: #202b20;
-
-    --red: #a95f5f;
-
-    --redSoft: #302020;
-
-    --future: #25262a;
-}
-
-html {
-    background: var(--bg);
-}
-
-body {
-    margin: 0;
-    min-height: 100vh;
-
-    background: var(--bg);
-    color: var(--text);
-
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "Segoe UI",
-        sans-serif;
-
-    transition: background .2s, color .2s;
-}
-
-.screen {
-    display: none;
-
-    width: 100%;
-    max-width: 520px;
-
-    min-height: 100vh;
-
-    margin: auto;
-
-    padding:
-        max(25px, env(safe-area-inset-top))
-        20px
-        110px;
-}
-
-.screen.active {
-    display: block;
-}
-
-h1 {
-    font-size: 34px;
-    letter-spacing: -1.3px;
-    line-height: 1.08;
-
-    margin: 10px 0;
-}
-
-h2 {
-    font-size: 21px;
-    letter-spacing: -.4px;
-
-    margin: 0 0 7px;
-}
-
-h3 {
-    margin: 0 0 8px;
-}
-
-p {
-    color: var(--secondary);
-    line-height: 1.5;
-}
-
-.muted {
-    color: var(--secondary);
-    font-size: 13px;
-}
-
-.card,
-.workoutCard {
-    background: var(--card);
-
-    border: 1px solid var(--border);
-
-    border-radius: 20px;
-
-    padding: 19px;
-
-    margin: 14px 0;
-}
-
-button {
-    font-family: inherit;
-    cursor: pointer;
-}
-
-.primary {
-    width: 100%;
-
-    padding: 15px;
-
-    border: 0;
-    border-radius: 14px;
-
-    background: var(--primary);
-    color: var(--primaryText);
-
-    font-size: 15px;
-    font-weight: 700;
-
-    margin-top: 10px;
-}
-
-.secondary {
-    width: 100%;
-
-    padding: 14px;
-
-    border-radius: 14px;
-
-    border: 1px solid var(--border);
-
-    background: var(--soft);
-    color: var(--text);
-
-    font-size: 15px;
-    font-weight: 600;
-
-    margin-top: 9px;
-}
-
-.danger {
-    color: var(--red);
-}
-
-button:active {
-    transform: scale(.98);
-}
-
-.iconButton {
-    width: 42px;
-    height: 42px;
-
-    flex: 0 0 42px;
-
-    border-radius: 50%;
-
-    border: 1px solid var(--border);
-
-    background: var(--card);
-    color: var(--text);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 17px;
-}
-
-.back {
-    background: none;
-    border: 0;
-
-    color: var(--secondary);
-
-    padding: 0;
-
-    font-size: 15px;
-
-    margin-bottom: 25px;
-}
-
-.delete {
-    background: none;
-    border: 0;
-
-    color: var(--red);
-
-    padding: 12px 0 0;
-}
-
-label {
-    display: block;
-
-    color: var(--secondary);
-
-    font-size: 13px;
-
-    margin: 16px 0 7px;
-}
-
-input {
-    width: 100%;
-
-    padding: 14px;
-
-    border-radius: 13px;
-
-    border: 1px solid var(--border);
-
-    background: var(--input);
-    color: var(--text);
-
-    font-size: 16px;
-
-    outline: none;
-}
-
-input:focus {
-    border-color: var(--secondary);
-}
-
-input:disabled {
-    opacity: .65;
-}
-
-.topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 12px;
-
-    margin-bottom: 34px;
-}
-
-.profile {
-    display: flex;
-    align-items: center;
-
-    gap: 11px;
-
-    min-width: 0;
-}
-
-.profile img,
-.friendPhoto {
-    width: 42px;
-    height: 42px;
-
-    border-radius: 50%;
-
-    object-fit: cover;
-
-    background: var(--soft);
-}
-
-.profileName {
-    font-weight: 700;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.topActions {
-    display: flex;
-    align-items: center;
-
-    gap: 6px;
-}
-
-.logout {
-    background: none;
-    border: 0;
-
-    color: var(--secondary);
-
-    font-size: 13px;
-}
-
-#loginScreen {
-    flex-direction: column;
-    justify-content: center;
-
-    position: relative;
-}
-
-#loginScreen.active {
-    display: flex;
-}
-
-.loginTheme {
-    position: absolute;
-
-    right: 20px;
-    top: max(22px, env(safe-area-inset-top));
-}
-
-.loginIcon {
-    width: 62px;
-    height: 62px;
-
-    border-radius: 18px;
-
-    background: var(--primary);
-    color: var(--primaryText);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 30px;
-
-    margin-bottom: 25px;
-}
-
-#loginScreen h1 {
-    font-size: 46px;
-    letter-spacing: -2px;
+.card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:20px;
+padding:18px;
+margin:14px 0
 }
 
-#loginScreen > p {
-    font-size: 16px;
+button,input,select,textarea{font:inherit}
 
-    max-width: 380px;
+button{cursor:pointer}
 
-    margin-bottom: 35px;
+.primary,.secondary{
+width:100%;
+border-radius:14px;
+padding:14px;
+font-weight:700;
+margin-top:9px
 }
 
-.currentSplit {
-    margin-top: 30px;
+.primary{
+border:0;
+background:var(--primary);
+color:var(--primaryText)
 }
 
-.exerciseSummary {
-    color: var(--secondary);
-
-    font-size: 14px;
-
-    margin: 7px 0;
-}
-
-.exerciseBuilderItem {
-    padding: 15px 0;
-
-    border-bottom: 1px solid var(--border);
-}
-
-.exerciseBuilderItem:last-child {
-    border-bottom: 0;
-}
-
-.repGrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-
-    gap: 10px;
-}
-
-.exerciseHeading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 10px;
-}
-
-.targetBadge {
-    display: inline-block;
-
-    background: var(--soft);
-
-    border-radius: 8px;
-
-    padding: 5px 8px;
-
-    color: var(--secondary);
-
-    font-size: 12px;
-
-    white-space: nowrap;
-}
-
-.setRow,
-.headerRow {
-    display: grid;
-
-    grid-template-columns: 38px 1fr 1fr;
-
-    gap: 8px;
-
-    align-items: center;
+.secondary{
+border:1px solid var(--border);
+background:var(--soft);
+color:var(--text)
 }
-
-.setRow {
-    margin: 9px 0;
-}
-
-.setRow input {
-    text-align: center;
 
-    padding: 12px 7px;
+.icon{
+width:42px;
+height:42px;
+border-radius:50%;
+border:1px solid var(--border);
+background:var(--card);
+color:var(--text);
+display:grid;
+place-items:center
 }
 
-.headerRow {
-    text-align: center;
-
-    color: var(--secondary);
-
-    font-size: 11px;
-
-    margin-top: 20px;
+.back{
+border:0;
+background:none;
+color:var(--secondary);
+padding:0;
+margin-bottom:22px
 }
 
-.setNumber {
-    text-align: center;
-
-    font-weight: 700;
+input,select,textarea{
+width:100%;
+padding:13px;
+border-radius:12px;
+border:1px solid var(--border);
+background:var(--input);
+color:var(--text);
+font-size:16px
 }
-
-.previousBox {
-    background: var(--soft);
 
-    border-radius: 12px;
-
-    padding: 12px;
-
-    margin-top: 14px;
-
-    font-size: 13px;
-
-    color: var(--secondary);
+label{
+display:block;
+font-size:13px;
+color:var(--secondary);
+margin:14px 0 6px
 }
-
-.previousSets {
-    margin-top: 6px;
 
-    color: var(--text);
-
-    line-height: 1.6;
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+margin-bottom:30px
 }
-
-.progressCard {
-    display: none;
-
-    background: var(--greenSoft);
-
-    border-radius: 15px;
-
-    padding: 16px;
 
-    margin-bottom: 18px;
+.profile{
+display:flex;
+align-items:center;
+gap:10px;
+min-width:0
 }
 
-.progressCard.visible {
-    display: block;
+.profile img,.avatar{
+width:42px;
+height:42px;
+border-radius:50%;
+object-fit:cover;
+background:var(--soft)
 }
 
-.progressLabel {
-    color: var(--green);
-
-    font-size: 12px;
-    font-weight: 700;
+.actions{
+display:flex;
+gap:5px
 }
-
-.progressPercent {
-    color: var(--green);
 
-    font-size: 31px;
-    font-weight: 800;
-
-    margin: 3px 0;
+.profileName{
+font-weight:750;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis
 }
-
-.finishedBadge {
-    display: none;
-
-    color: var(--green);
 
-    font-size: 13px;
-    font-weight: 700;
-
-    margin-top: 10px;
+#loginScreen.active{
+display:flex;
+flex-direction:column;
+justify-content:center;
+position:relative
 }
 
-.finishedBadge.visible {
-    display: block;
+.loginTheme{
+position:absolute;
+right:20px;
+top:max(22px,env(safe-area-inset-top))
 }
-
-.finishWorkout {
-    display: none;
-
-    position: fixed;
-
-    left: 50%;
-    transform: translateX(-50%);
-
-    bottom: max(20px, env(safe-area-inset-bottom));
 
-    width: calc(100% - 40px);
-    max-width: 480px;
+.logo{
+width:62px;
+height:62px;
+border-radius:18px;
+background:var(--primary);
+color:var(--primaryText);
+display:grid;
+place-items:center;
+font-size:29px;
+margin-bottom:22px
 }
 
+#loginScreen h1{font-size:46px}
 
-/* FRIENDS */
-
-.friendSearch {
-    display: flex;
-
-    gap: 8px;
-
-    margin-top: 15px;
+.exerciseSummary{
+font-size:14px;
+color:var(--secondary);
+margin:7px 0
 }
 
-.friendSearch input {
-    flex: 1;
-
-    min-width: 0;
+.builderExercise{
+padding:14px 0;
+border-bottom:1px solid var(--border)
 }
-
-.friendSearch button {
-    width: auto;
 
-    white-space: nowrap;
-
-    margin: 0;
+.grid2{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px
 }
-
-.friendRow {
-    display: flex;
-    align-items: center;
 
-    gap: 12px;
-
-    padding: 14px 0;
-
-    border-bottom: 1px solid var(--border);
-}
+.danger{color:var(--red)}
 
-.friendRow:last-child {
-    border-bottom: 0;
+.dangerButton{
+background:var(--redSoft);
+color:var(--red);
+border:1px solid var(--red);
+margin-top:25px
 }
 
-.friendInfo {
-    flex: 1;
-
-    min-width: 0;
+.setRow,.setHeader{
+display:grid;
+grid-template-columns:38px 1fr 1fr;
+gap:8px;
+align-items:center
 }
 
-.friendName {
-    font-weight: 700;
+.setHeader{
+font-size:11px;
+color:var(--secondary);
+text-align:center;
+margin-top:18px
 }
-
-.friendEmail {
-    color: var(--secondary);
 
-    font-size: 12px;
+.setRow{margin:8px 0}
 
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
+.setRow input{text-align:center}
 
-.friendButtons {
-    display: flex;
-
-    gap: 6px;
+.previous{
+background:var(--soft);
+padding:12px;
+border-radius:12px;
+font-size:13px;
+line-height:1.6;
+margin:12px 0
 }
-
-.friendButtons button {
-    width: auto;
 
-    padding: 9px 11px;
-
-    margin: 0;
-
-    font-size: 13px;
+.progress{
+display:none;
+background:var(--greenSoft);
+padding:14px;
+border-radius:14px;
+margin-bottom:14px
 }
-
-.toggleRow {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 20px;
-
-    padding: 15px 0;
 
-    border-bottom: 1px solid var(--border);
-}
+.progress.show{display:block}
 
-.toggleRow:last-child {
-    border-bottom: 0;
+.progress strong{
+font-size:28px;
+color:var(--green)
 }
-
-.switch {
-    position: relative;
 
-    width: 50px;
-    height: 30px;
-
-    flex: 0 0 50px;
+.tabs{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+background:var(--soft);
+padding:4px;
+border-radius:13px;
+margin:20px 0
 }
 
-.switch input {
-    display: none;
+.tab{
+border:0;
+background:transparent;
+color:var(--secondary);
+padding:10px;
+border-radius:10px;
+font-weight:700
 }
-
-.slider {
-    position: absolute;
-
-    inset: 0;
 
-    background: var(--soft);
-
-    border: 1px solid var(--border);
-
-    border-radius: 20px;
-
-    transition: .2s;
+.tab.active{
+background:var(--card);
+color:var(--text)
 }
-
-.slider:before {
-    content: "";
-
-    position: absolute;
-
-    width: 24px;
-    height: 24px;
-
-    left: 2px;
-    top: 2px;
-
-    background: white;
-
-    border-radius: 50%;
 
-    transition: .2s;
-
-    box-shadow: 0 1px 4px rgba(0,0,0,.2);
+.calnav{
+display:grid;
+grid-template-columns:42px 1fr 42px;
+align-items:center;
+margin-bottom:15px
 }
 
-.switch input:checked + .slider {
-    background: var(--green);
+.calnav button{
+width:38px;
+height:38px;
+border-radius:50%;
+border:1px solid var(--border);
+background:var(--card);
+color:var(--text)
 }
 
-.switch input:checked + .slider:before {
-    transform: translateX(20px);
+.calTitle{
+text-align:center;
+font-weight:800
 }
-
-
-/* CALENDAR */
-
-.calendarTabs {
-    display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
 
-    background: var(--soft);
-
-    border-radius: 13px;
-
-    padding: 4px;
-
-    margin: 24px 0 18px;
+.weeklabels,.calendarGrid,.weekGrid{
+display:grid;
+grid-template-columns:repeat(7,1fr);
+gap:6px
 }
-
-.calendarTab {
-    border: 0;
-
-    background: transparent;
-    color: var(--secondary);
 
-    border-radius: 10px;
-
-    padding: 10px;
-
-    font-weight: 600;
+.weeklabels div{
+text-align:center;
+color:var(--secondary);
+font-size:10px;
+font-weight:700
 }
 
-.calendarTab.active {
-    background: var(--card);
-    color: var(--text);
-
-    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+.day{
+aspect-ratio:1;
+border-radius:10px;
+display:grid;
+place-items:center;
+font-size:12px;
+font-weight:750
 }
-
-.calendarNav {
-    display: grid;
-
-    grid-template-columns: 44px 1fr 44px;
 
-    align-items: center;
-
-    margin-bottom: 18px;
+.day.gym{
+background:var(--green);
+color:white
 }
-
-.calendarNav button {
-    width: 40px;
-    height: 40px;
-
-    border: 1px solid var(--border);
-
-    background: var(--card);
-    color: var(--text);
-
-    border-radius: 50%;
 
-    font-size: 20px;
+.day.missed{
+background:var(--red);
+color:white
 }
 
-.calendarTitle {
-    text-align: center;
-
-    font-size: 18px;
-    font-weight: 700;
+.day.future{
+background:var(--future);
+color:var(--secondary)
 }
-
-.calendarStats {
-    display: flex;
 
-    gap: 10px;
-
-    margin-bottom: 18px;
+.day.today{
+outline:2px solid var(--text);
+outline-offset:2px
 }
-
-.statCard {
-    flex: 1;
-
-    background: var(--card);
 
-    border: 1px solid var(--border);
+.day.blank{background:transparent}
 
-    border-radius: 15px;
-
-    padding: 14px;
+.yearGrid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:9px
 }
 
-.statNumber {
-    font-size: 23px;
-    font-weight: 800;
+.miniMonth{
+background:var(--card);
+border:1px solid var(--border);
+padding:8px;
+border-radius:13px
 }
-
-.statLabel {
-    color: var(--secondary);
 
-    font-size: 11px;
-
-    margin-top: 3px;
+.miniTitle{
+text-align:center;
+font-size:11px;
+font-weight:800;
+margin-bottom:6px
 }
-
-.weekLabels,
-.monthGrid,
-.weekGrid {
-    display: grid;
-
-    grid-template-columns: repeat(7, 1fr);
 
-    gap: 6px;
+.miniGrid{
+display:grid;
+grid-template-columns:repeat(7,1fr);
+gap:2px
 }
 
-.weekLabels {
-    margin-bottom: 6px;
+.miniDay{
+aspect-ratio:1;
+border-radius:3px
 }
 
-.weekLabel {
-    text-align: center;
+.miniDay.gym{background:var(--green)}
+.miniDay.missed{background:var(--red)}
+.miniDay.future{background:var(--future)}
 
-    color: var(--secondary);
-
-    font-size: 10px;
-    font-weight: 700;
+.friendRow{
+display:flex;
+align-items:center;
+gap:10px;
+padding:12px 0;
+border-bottom:1px solid var(--border)
 }
-
-.dayBox {
-    aspect-ratio: 1;
-
-    border-radius: 11px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 13px;
-    font-weight: 700;
 
-    min-width: 0;
+.friendInfo{
+flex:1;
+min-width:0
 }
 
-.dayBox.workout {
-    background: var(--green);
-
-    color: white;
-
-    cursor: pointer;
+.friendEmail{
+font-size:12px;
+color:var(--secondary);
+overflow:hidden;
+text-overflow:ellipsis
 }
 
-.dayBox.missed {
-    background: var(--red);
-
-    color: white;
+.friendRow button{
+width:auto;
+margin:0;
+padding:9px
 }
 
-.dayBox.future {
-    background: var(--future);
-
-    color: var(--secondary);
+.toggleRow{
+display:flex;
+justify-content:space-between;
+gap:15px;
+padding:14px 0;
+border-bottom:1px solid var(--border)
 }
-
-.dayBox.today {
-    outline: 2px solid var(--text);
 
-    outline-offset: 2px;
+.toggleRow input{
+width:24px;
+height:24px
 }
 
-.dayBox.blank {
-    background: transparent;
+.prRow{
+display:flex;
+justify-content:space-between;
+gap:12px;
+padding:13px 0;
+border-bottom:1px solid var(--border)
 }
 
-.yearMonths {
-    display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
-
-    gap: 10px;
+.fab{
+position:fixed;
+right:20px;
+bottom:max(22px,env(safe-area-inset-bottom));
+width:54px;
+height:54px;
+border-radius:50%;
+border:0;
+background:var(--primary);
+color:var(--primaryText);
+font-size:22px;
+font-weight:900;
+box-shadow:0 8px 24px rgba(0,0,0,.2);
+display:none
 }
-
-.miniMonth {
-    background: var(--card);
-
-    border: 1px solid var(--border);
-
-    border-radius: 14px;
 
-    padding: 9px;
+.fab.show{display:block}
 
-    min-width: 0;
+.chatPanel{
+position:fixed;
+right:16px;
+bottom:88px;
+width:min(390px,calc(100% - 32px));
+max-height:70vh;
+background:var(--card);
+border:1px solid var(--border);
+border-radius:20px;
+display:none;
+flex-direction:column;
+overflow:hidden;
+box-shadow:0 14px 40px rgba(0,0,0,.25);
+z-index:20
 }
 
-.miniMonthTitle {
-    font-size: 11px;
-    font-weight: 700;
+.chatPanel.show{display:flex}
 
-    margin-bottom: 7px;
-
-    text-align: center;
+.chatHead{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px;
+border-bottom:1px solid var(--border)
 }
-
-.miniGrid {
-    display: grid;
 
-    grid-template-columns: repeat(7, 1fr);
-
-    gap: 2px;
+.chatMessages{
+padding:14px;
+overflow:auto;
+min-height:220px
 }
-
-.miniDay {
-    aspect-ratio: 1;
-
-    border-radius: 3px;
 
-    background: var(--future);
+.bubble{
+padding:11px 13px;
+border-radius:14px;
+margin:8px 0;
+max-width:88%;
+line-height:1.4;
+font-size:14px
 }
 
-.miniDay.workout {
-    background: var(--green);
-
-    cursor: pointer;
+.bubble.user{
+margin-left:auto;
+background:var(--primary);
+color:var(--primaryText)
 }
 
-.miniDay.missed {
-    background: var(--red);
-}
+.bubble.ai{background:var(--soft)}
 
-.miniDay.future {
-    background: var(--future);
+.chatInput{
+display:grid;
+grid-template-columns:1fr 46px;
+gap:7px;
+padding:12px;
+border-top:1px solid var(--border)
 }
 
-.miniDay.blank {
-    background: transparent;
+.modelWrap{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin-top:16px
 }
-
-.calendarLegend {
-    display: flex;
-
-    gap: 15px;
-
-    margin-top: 18px;
 
-    flex-wrap: wrap;
-
-    color: var(--secondary);
-
-    font-size: 12px;
+.bodyModel{
+background:var(--soft);
+border-radius:18px;
+padding:10px
 }
 
-.legendItem {
-    display: flex;
-    align-items: center;
-
-    gap: 6px;
+.bodyModel svg{
+width:100%;
+height:auto
 }
 
-.legendSquare {
-    width: 11px;
-    height: 11px;
-
-    border-radius: 3px;
+.muscle{
+fill:#777;
+stroke:transparent;
+stroke-width:2;
+cursor:pointer;
+transition:.2s
 }
 
-.detailExercise {
-    padding: 13px 0;
+.muscle.i1{fill:#b56d61}
+.muscle.i2{fill:#d85f4f}
+.muscle.i3{fill:#f04f35}
 
-    border-bottom: 1px solid var(--border);
+.muscle.selected{
+stroke:#fff;
+stroke-width:3
 }
-
-.detailSets {
-    color: var(--secondary);
 
-    font-size: 14px;
-
-    line-height: 1.7;
-
-    margin-top: 5px;
+.bodyBase{
+fill:#68686c;
+opacity:.38
 }
 
-.privateBox {
-    text-align: center;
+.muscleInfo{margin-top:14px}
 
-    padding: 30px 15px;
-
-    color: var(--secondary);
+.role{
+font-size:11px;
+padding:3px 7px;
+border-radius:8px;
+background:var(--soft);
+color:var(--secondary)
 }
-
-.loading {
-    text-align: center;
-
-    color: var(--secondary);
 
-    padding: 25px 0;
+.loading{
+text-align:center;
+color:var(--secondary);
+padding:20px
 }
-
-@media (max-width: 390px) {
-
-    .yearMonths {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .logout {
-        display: none;
-    }
-
-    .topActions {
-        gap: 4px;
-    }
-
-    .iconButton {
-        width: 39px;
-        height: 39px;
 
-        flex-basis: 39px;
-    }
+@media(max-width:390px){
+.yearGrid{grid-template-columns:repeat(2,1fr)}
+.actions{gap:3px}
+.icon{width:38px;height:38px}
+.modelWrap{gap:7px}
 }
 </style>
 </head>
 
 <body>
 
-
-<!-- LOGIN -->
-
 <div id="loginScreen" class="screen active">
 
-    <button class="iconButton loginTheme themeButton">
-        ☾
-    </button>
+<button class="icon loginTheme themeBtn">☾</button>
 
-    <div class="loginIcon">
-        ↑
-    </div>
+<div class="logo">↑</div>
 
-    <h1>
-        Train smarter.
-    </h1>
+<h1>Train smarter.</h1>
 
-    <p>
-        Build your split, track every set,
-        see your progress and train with friends.
-    </p>
+<p>
+Track every set, understand your program,
+and see yourself get stronger.
+</p>
 
-    <button id="googleLogin" class="primary">
-        Continue with Google
-    </button>
+<button id="googleLogin" class="primary">
+Continue with Google
+</button>
 
 </div>
 
-
-<!-- HOME -->
 
 <div id="homeScreen" class="screen">
 
-    <div class="topbar">
+<div class="topbar">
 
-        <div class="profile">
+<div class="profile">
 
-            <img id="profilePhoto">
+<img id="profilePhoto">
 
-            <div>
-
-                <div class="muted">
-                    WELCOME BACK
-                </div>
-
-                <div id="profileName" class="profileName">
-                    Athlete
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="topActions">
-
-            <button id="friendsButton" class="iconButton" title="Friends">
-                👥
-            </button>
-
-            <button id="calendarButton" class="iconButton" title="Calendar">
-                📅
-            </button>
-
-            <button class="iconButton themeButton" title="Theme">
-                ☾
-            </button>
-
-            <button id="logout" class="logout">
-                Log out
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <div class="muted">
-        FITNESS TRACKER
-    </div>
-
-    <h1>
-        Your Training
-    </h1>
-
-    <p>
-        Choose today's workout and keep moving forward.
-    </p>
-
-
-    <div id="splitContainer"></div>
-
-
-    <button id="createSplitButton" class="primary">
-        + Create Workout Split
-    </button>
+<div>
+<div class="muted">WELCOME BACK</div>
+<div id="profileName" class="profileName">Athlete</div>
+</div>
 
 </div>
 
+<div class="actions">
 
-<!-- SPLIT BUILDER -->
+<button id="prButton" class="icon">🏆</button>
+<button id="friendsButton" class="icon">👥</button>
+<button id="calendarButton" class="icon">📅</button>
+<button class="icon themeBtn">☾</button>
+
+</div>
+
+</div>
+
+<div class="muted">FITNESS TRACKER</div>
+
+<h1>Your Training</h1>
+
+<p>
+Choose today's workout or inspect your program.
+</p>
+
+<div id="splitContainer"></div>
+
+<button id="createSplitButton" class="primary">
++ Create Workout Split
+</button>
+
+<button id="logout" class="secondary">
+Log out
+</button>
+
+</div>
+
 
 <div id="builderScreen" class="screen">
 
-    <button id="builderBack" class="back">
-        ← Back
-    </button>
+<button class="back" data-home>
+← Back
+</button>
 
-    <div class="muted">
-        WORKOUT BUILDER
-    </div>
+<div class="muted">
+WORKOUT BUILDER
+</div>
 
-    <h1 id="builderTitle">
-        Create Split
-    </h1>
+<h1 id="builderTitle">
+Create Split
+</h1>
 
-    <p>
-        Sets and target reps are locked while training.
-        Weight and actual reps stay editable during the workout.
-    </p>
+<label>Split name</label>
 
+<input
+id="splitName"
+placeholder="Upper / Lower"
+>
 
-    <label>
-        Split name
-    </label>
+<div id="daysBuilder"></div>
 
-    <input
-        id="splitName"
-        placeholder="Example: Upper / Lower"
-    >
+<button id="addDay" class="secondary">
++ Add Workout Day
+</button>
 
+<button id="saveSplit" class="primary">
+Save Split
+</button>
 
-    <div id="daysBuilder"></div>
-
-
-    <button id="addDay" class="secondary">
-        + Add Workout Day
-    </button>
-
-    <button id="saveSplit" class="primary">
-        Save Split
-    </button>
+<button
+id="deleteSplit"
+class="secondary dangerButton"
+style="display:none"
+>
+Delete Split
+</button>
 
 </div>
 
-
-<!-- WORKOUT -->
 
 <div id="workoutScreen" class="screen">
 
-    <button id="exitWorkout" class="back">
-        ← Exit Workout
-    </button>
+<button id="exitWorkout" class="back">
+← Exit Workout
+</button>
 
-    <div class="muted">
-        ACTIVE WORKOUT
-    </div>
+<div class="muted">
+ACTIVE WORKOUT
+</div>
 
-    <h1 id="activeWorkoutName"></h1>
+<h1 id="activeWorkoutName"></h1>
 
-    <p>
-        Enter the weight and reps you actually complete.
-    </p>
+<div id="activeExercises"></div>
 
-    <div id="activeExercises"></div>
-
-    <button id="finishWorkout" class="primary finishWorkout">
-        Finish Workout
-    </button>
+<button
+id="finishWorkout"
+class="primary"
+style="display:none"
+>
+Finish Workout
+</button>
 
 </div>
 
-
-<!-- OWN CALENDAR -->
 
 <div id="calendarScreen" class="screen">
 
-    <button id="calendarBack" class="back">
-        ← Back
-    </button>
+<button id="calendarBack" class="back">
+← Back
+</button>
 
-    <div class="muted">
-        ACTIVITY
-    </div>
+<div
+id="calendarOwner"
+class="muted"
+>
+YOUR ACTIVITY
+</div>
 
-    <h1>
-        Gym Calendar
-    </h1>
+<h1>Gym Calendar</h1>
 
-    <div id="calendarOwnerLabel" class="muted">
-        YOUR ACTIVITY
-    </div>
+<div class="tabs">
 
-    <div class="calendarTabs">
+<button
+class="tab active"
+data-calview="week"
+>
+Week
+</button>
 
-        <button class="calendarTab active" data-view="week">
-            Week
-        </button>
+<button
+class="tab"
+data-calview="month"
+>
+Month
+</button>
 
-        <button class="calendarTab" data-view="month">
-            Month
-        </button>
-
-        <button class="calendarTab" data-view="year">
-            Year
-        </button>
-
-    </div>
-
-
-    <div class="calendarNav">
-
-        <button id="calendarPrevious">
-            ‹
-        </button>
-
-        <div id="calendarTitle" class="calendarTitle"></div>
-
-        <button id="calendarNext">
-            ›
-        </button>
-
-    </div>
-
-
-    <div class="calendarStats">
-
-        <div class="statCard">
-
-            <div id="workoutCount" class="statNumber">
-                0
-            </div>
-
-            <div class="statLabel">
-                WORKOUTS
-            </div>
-
-        </div>
-
-
-        <div class="statCard">
-
-            <div id="attendancePercent" class="statNumber">
-                0%
-            </div>
-
-            <div class="statLabel">
-                DAYS TRAINED
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div id="calendarContent"></div>
-
-
-    <div class="calendarLegend">
-
-        <div class="legendItem">
-            <span
-                class="legendSquare"
-                style="background:var(--green)">
-            </span>
-            Gym
-        </div>
-
-        <div class="legendItem">
-            <span
-                class="legendSquare"
-                style="background:var(--red)">
-            </span>
-            Didn't go
-        </div>
-
-        <div class="legendItem">
-            <span
-                class="legendSquare"
-                style="background:var(--future)">
-            </span>
-            Future
-        </div>
-
-    </div>
-
-
-    <div id="workoutDetail"></div>
+<button
+class="tab"
+data-calview="year"
+>
+Year
+</button>
 
 </div>
 
+<div class="calnav">
 
-<!-- FRIENDS -->
+<button id="calPrev">
+‹
+</button>
+
+<div
+id="calTitle"
+class="calTitle"
+></div>
+
+<button id="calNext">
+›
+</button>
+
+</div>
+
+<div id="calendarContent"></div>
+
+<div id="calendarDetail"></div>
+
+</div>
+
 
 <div id="friendsScreen" class="screen">
 
-    <button id="friendsBack" class="back">
-        ← Back
-    </button>
+<button class="back" data-home>
+← Back
+</button>
 
-    <div class="muted">
-        SOCIAL
-    </div>
+<div class="muted">
+SOCIAL
+</div>
 
-    <h1>
-        Friends
-    </h1>
+<h1>Friends</h1>
 
+<div class="card">
 
-    <div class="card">
+<h2>Add Friend</h2>
 
-        <h2>
-            Add Friend
-        </h2>
+<label>Google email</label>
 
-        <p>
-            Enter the Google email they use to sign in.
-        </p>
+<input
+id="friendEmail"
+type="email"
+placeholder="friend@gmail.com"
+>
 
-        <div class="friendSearch">
-
-            <input
-                id="friendEmail"
-                type="email"
-                placeholder="friend@gmail.com"
-            >
-
-            <button id="sendFriendRequest" class="primary">
-                Add
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <h2>
-            Requests
-        </h2>
-
-        <div id="friendRequests">
-            <div class="muted">
-                No requests
-            </div>
-        </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <h2>
-            Your Friends
-        </h2>
-
-        <div id="friendsList">
-            <div class="muted">
-                No friends yet
-            </div>
-        </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <h2>
-            Privacy
-        </h2>
-
-        <p>
-            Choose what accepted friends can see.
-        </p>
-
-
-        <div class="toggleRow">
-
-            <div>
-
-                <strong>
-                    Share workout split
-                </strong>
-
-                <div class="muted">
-                    Friends can see exercises, sets and target reps.
-                </div>
-
-            </div>
-
-            <label class="switch">
-
-                <input
-                    id="shareSplit"
-                    type="checkbox"
-                >
-
-                <span class="slider"></span>
-
-            </label>
-
-        </div>
-
-
-        <div class="toggleRow">
-
-            <div>
-
-                <strong>
-                    Share weights & reps
-                </strong>
-
-                <div class="muted">
-                    Friends can see what you lifted.
-                </div>
-
-            </div>
-
-            <label class="switch">
-
-                <input
-                    id="shareWeights"
-                    type="checkbox"
-                >
-
-                <span class="slider"></span>
-
-            </label>
-
-        </div>
-
-
-        <div class="toggleRow">
-
-            <div>
-
-                <strong>
-                    Share gym calendar
-                </strong>
-
-                <div class="muted">
-                    Friends can see which days you went.
-                </div>
-
-            </div>
-
-            <label class="switch">
-
-                <input
-                    id="shareCalendar"
-                    type="checkbox"
-                >
-
-                <span class="slider"></span>
-
-            </label>
-
-        </div>
-
-    </div>
+<button
+id="sendRequest"
+class="primary"
+>
+Send Friend Request
+</button>
 
 </div>
 
 
-<!-- FRIEND PROFILE -->
+<div class="card">
+
+<h2>Requests</h2>
+
+<div
+id="requestsList"
+class="muted"
+>
+No requests
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>Your Friends</h2>
+
+<div
+id="friendsList"
+class="muted"
+>
+No friends yet
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>Privacy</h2>
+
+<div class="toggleRow">
+
+<div>
+<b>Share workout split</b>
+<div class="muted">
+Friends can view your split.
+</div>
+</div>
+
+<input
+id="shareSplit"
+type="checkbox"
+>
+
+</div>
+
+
+<div class="toggleRow">
+
+<div>
+<b>Share weights & reps</b>
+<div class="muted">
+Friends can view lifting details.
+</div>
+</div>
+
+<input
+id="shareWeights"
+type="checkbox"
+>
+
+</div>
+
+
+<div class="toggleRow">
+
+<div>
+<b>Share gym calendar</b>
+<div class="muted">
+Friends can view days you trained.
+</div>
+</div>
+
+<input
+id="shareCalendar"
+type="checkbox"
+>
+
+</div>
+
+</div>
+
+</div>
+
 
 <div id="friendProfileScreen" class="screen">
 
-    <button id="friendProfileBack" class="back">
-        ← Friends
-    </button>
+<button
+id="friendBack"
+class="back"
+>
+← Friends
+</button>
+
+<div class="profile">
+
+<img
+id="friendPhoto"
+class="avatar"
+>
+
+<div>
+
+<h2 id="friendName"></h2>
+
+<div
+id="friendEmailLabel"
+class="muted"
+></div>
+
+</div>
+
+</div>
+
+<button
+id="friendCalendarButton"
+class="secondary"
+>
+📅 View Calendar
+</button>
+
+<div id="friendSplit"></div>
+
+<button
+id="removeFriend"
+class="secondary danger"
+>
+Remove Friend
+</button>
+
+</div>
 
 
-    <div class="profile" style="margin-bottom:25px;">
+<div id="prScreen" class="screen">
 
-        <img id="friendProfilePhoto" class="friendPhoto">
+<button class="back" data-home>
+← Back
+</button>
 
-        <div>
+<div class="muted">
+PERSONAL RECORDS
+</div>
 
-            <h2 id="friendProfileName" style="margin:0;">
-                Friend
-            </h2>
+<h1>PRs</h1>
 
-            <div id="friendProfileEmail" class="muted"></div>
+<button
+id="showAddPR"
+class="primary"
+>
++ Add PR
+</button>
 
-        </div>
+<div
+id="prForm"
+class="card"
+style="display:none"
+>
 
-    </div>
+<label>Exercise</label>
+
+<input
+id="prExercise"
+placeholder="Chest Press"
+>
+
+<div class="grid2">
+
+<div>
+
+<label>Weight (lb)</label>
+
+<input
+id="prWeight"
+type="number"
+>
+
+</div>
+
+<div>
+
+<label>Reps</label>
+
+<input
+id="prReps"
+type="number"
+>
+
+</div>
+
+</div>
+
+<label>Date</label>
+
+<input
+id="prDate"
+type="date"
+>
+
+<button
+id="savePR"
+class="primary"
+>
+Save PR
+</button>
+
+</div>
+
+<div id="prList"></div>
+
+</div>
 
 
-    <button id="viewFriendCalendar" class="secondary">
-        📅 View Calendar
-    </button>
+<div id="overviewScreen" class="screen">
+
+<button class="back" data-home>
+← Back
+</button>
+
+<div class="muted">
+AI MUSCLE ANALYSIS
+</div>
+
+<h1>Muscle Coverage</h1>
+
+<select
+id="analysisSelector"
+></select>
+
+<button
+id="analyzeButton"
+class="primary"
+>
+✦ Analyze with AI
+</button>
+
+<div
+id="analysisStatus"
+class="muted"
+style="margin-top:10px"
+></div>
 
 
-    <div id="friendSplitSection"></div>
+<div class="modelWrap">
+
+<div class="bodyModel">
+
+<div
+class="muted"
+style="text-align:center"
+>
+FRONT
+</div>
+
+<svg
+viewBox="0 0 180 420"
+aria-label="Front muscle model"
+>
+
+<circle
+class="bodyBase"
+cx="90"
+cy="35"
+r="25"
+/>
+
+<rect
+class="bodyBase"
+x="62"
+y="65"
+width="56"
+height="125"
+rx="24"
+/>
+
+<rect
+class="bodyBase"
+x="30"
+y="72"
+width="25"
+height="145"
+rx="12"
+/>
+
+<rect
+class="bodyBase"
+x="125"
+y="72"
+width="25"
+height="145"
+rx="12"
+/>
+
+<rect
+class="bodyBase"
+x="61"
+y="185"
+width="25"
+height="205"
+rx="13"
+/>
+
+<rect
+class="bodyBase"
+x="94"
+y="185"
+width="25"
+height="205"
+rx="13"
+/>
 
 
-    <button id="removeFriend" class="secondary danger">
-        Remove Friend
-    </button>
+<ellipse
+class="muscle"
+data-muscle="front_delts"
+cx="57"
+cy="86"
+rx="18"
+ry="15"
+/>
+
+<ellipse
+class="muscle"
+data-muscle="front_delts"
+cx="123"
+cy="86"
+rx="18"
+ry="15"
+/>
+
+
+<path
+class="muscle"
+data-muscle="upper_chest"
+d="M65 88 Q90 72 115 88 L110 108 Q90 96 70 108Z"
+/>
+
+<path
+class="muscle"
+data-muscle="chest"
+d="M68 108 Q90 98 112 108 L108 140 Q90 150 72 140Z"
+/>
+
+
+<ellipse
+class="muscle"
+data-muscle="biceps"
+cx="45"
+cy="132"
+rx="12"
+ry="28"
+/>
+
+<ellipse
+class="muscle"
+data-muscle="biceps"
+cx="135"
+cy="132"
+rx="12"
+ry="28"
+/>
+
+
+<rect
+class="muscle"
+data-muscle="forearms"
+x="35"
+y="158"
+width="18"
+height="50"
+rx="9"
+/>
+
+<rect
+class="muscle"
+data-muscle="forearms"
+x="127"
+y="158"
+width="18"
+height="50"
+rx="9"
+/>
+
+
+<rect
+class="muscle"
+data-muscle="abs"
+x="76"
+y="142"
+width="28"
+height="55"
+rx="10"
+/>
+
+
+<path
+class="muscle"
+data-muscle="obliques"
+d="M64 143 L75 150 L72 194 L60 181Z"
+/>
+
+<path
+class="muscle"
+data-muscle="obliques"
+d="M116 143 L105 150 L108 194 L120 181Z"
+/>
+
+
+<path
+class="muscle"
+data-muscle="quads"
+d="M62 202 Q75 190 86 205 L82 300 Q68 314 58 294Z"
+/>
+
+<path
+class="muscle"
+data-muscle="quads"
+d="M118 202 Q105 190 94 205 L98 300 Q112 314 122 294Z"
+/>
+
+
+<ellipse
+class="muscle"
+data-muscle="adductors"
+cx="88"
+cy="230"
+rx="8"
+ry="34"
+/>
+
+<ellipse
+class="muscle"
+data-muscle="adductors"
+cx="92"
+cy="230"
+rx="8"
+ry="34"
+/>
+
+
+<path
+class="muscle"
+data-muscle="calves"
+d="M60 305 Q73 294 81 315 L77 380 Q66 390 59 370Z"
+/>
+
+<path
+class="muscle"
+data-muscle="calves"
+d="M120 305 Q107 294 99 315 L103 380 Q114 390 121 370Z"
+/>
+
+</svg>
+
+</div>
+
+
+<div class="bodyModel">
+
+<div
+class="muted"
+style="text-align:center"
+>
+BACK
+</div>
+
+<svg
+viewBox="0 0 180 420"
+aria-label="Back muscle model"
+>
+
+<circle
+class="bodyBase"
+cx="90"
+cy="35"
+r="25"
+/>
+
+<rect
+class="bodyBase"
+x="62"
+y="65"
+width="56"
+height="125"
+rx="24"
+/>
+
+<rect
+class="bodyBase"
+x="30"
+y="72"
+width="25"
+height="145"
+rx="12"
+/>
+
+<rect
+class="bodyBase"
+x="125"
+y="72"
+width="25"
+height="145"
+rx="12"
+/>
+
+<rect
+class="bodyBase"
+x="61"
+y="185"
+width="25"
+height="205"
+rx="13"
+/>
+
+<rect
+class="bodyBase"
+x="94"
+y="185"
+width="25"
+height="205"
+rx="13"
+/>
+
+
+<path
+class="muscle"
+data-muscle="traps"
+d="M72 70 L90 60 L108 70 L102 105 L78 105Z"
+/>
+
+
+<ellipse
+class="muscle"
+data-muscle="rear_delts"
+cx="58"
+cy="91"
+rx="18"
+ry="15"
+/>
+
+<ellipse
+class="muscle"
+data-muscle="rear_delts"
+cx="122"
+cy="91"
+rx="18"
+ry="15"
+/>
+
+
+<path
+class="muscle"
+data-muscle="upper_back"
+d="M70 102 L110 102 L108 130 L72 130Z"
+/>
+
+
+<path
+class="muscle"
+data-muscle="lats"
+d="M67 112 L80 128 L76 175 L60 158Z"
+/>
+
+<path
+class="muscle"
+data-muscle="lats"
+d="M113 112 L100 128 L104 175 L120 158Z"
+/>
+
+
+<ellipse
+class="muscle"
+data-muscle="triceps"
+cx="45"
+cy="132"
+rx="12"
+ry="29"
+/>
+
+<ellipse
+class="muscle"
+data-muscle="triceps"
+cx="135"
+cy="132"
+rx="12"
+ry="29"
+/>
+
+
+<rect
+class="muscle"
+data-muscle="forearms"
+x="35"
+y="158"
+width="18"
+height="50"
+rx="9"
+/>
+
+<rect
+class="muscle"
+data-muscle="forearms"
+x="127"
+y="158"
+width="18"
+height="50"
+rx="9"
+/>
+
+
+<rect
+class="muscle"
+data-muscle="lower_back"
+x="78"
+y="132"
+width="24"
+height="54"
+rx="8"
+/>
+
+
+<ellipse
+class="muscle"
+data-muscle="glutes"
+cx="76"
+cy="201"
+rx="20"
+ry="20"
+/>
+
+<ellipse
+class="muscle"
+data-muscle="glutes"
+cx="104"
+cy="201"
+rx="20"
+ry="20"
+/>
+
+
+<path
+class="muscle"
+data-muscle="hamstrings"
+d="M62 220 Q74 210 84 224 L80 300 Q68 308 60 292Z"
+/>
+
+<path
+class="muscle"
+data-muscle="hamstrings"
+d="M118 220 Q106 210 96 224 L100 300 Q112 308 120 292Z"
+/>
+
+
+<path
+class="muscle"
+data-muscle="calves"
+d="M60 305 Q73 294 81 315 L77 380 Q66 390 59 370Z"
+/>
+
+<path
+class="muscle"
+data-muscle="calves"
+d="M120 305 Q107 294 99 315 L103 380 Q114 390 121 370Z"
+/>
+
+
+<ellipse
+class="muscle"
+data-muscle="abductors"
+cx="59"
+cy="205"
+rx="9"
+ry="22"
+/>
+
+<ellipse
+class="muscle"
+data-muscle="abductors"
+cx="121"
+cy="205"
+rx="9"
+ry="22"
+/>
+
+</svg>
+
+</div>
+
+</div>
+
+
+<div
+id="analysisSummary"
+class="card"
+style="display:none"
+></div>
+
+
+<div
+id="muscleInfo"
+class="card muscleInfo"
+>
+
+<div class="muted">
+Tap a highlighted muscle to see what targets it.
+</div>
+
+</div>
+
+</div>
+
+
+<button
+id="aiFab"
+class="fab"
+>
+✦
+</button>
+
+
+<div
+id="chatPanel"
+class="chatPanel"
+>
+
+<div class="chatHead">
+
+<div>
+
+<b>✦ AI Coach</b>
+
+<div class="muted">
+Ask about your training
+</div>
+
+</div>
+
+<button
+id="closeChat"
+class="icon"
+>
+×
+</button>
+
+</div>
+
+
+<div
+id="chatMessages"
+class="chatMessages"
+>
+
+<div class="bubble ai">
+Ask me about exercises, attachments, grips,
+progression, or your current split.
+</div>
+
+</div>
+
+
+<div class="chatInput">
+
+<input
+id="chatQuestion"
+placeholder="Ask anything..."
+>
+
+<button
+id="sendChat"
+class="icon"
+>
+↑
+</button>
+
+</div>
 
 </div>
 
@@ -1546,3941 +1603,4482 @@ input:disabled {
 <script type="module">
 
 import {
-    initializeApp
+initializeApp
 }
 from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
 
 
 import {
-    getAuth,
-    GoogleAuthProvider,
-    signInWithPopup,
-    signOut,
-    onAuthStateChanged
+getAuth,
+GoogleAuthProvider,
+signInWithPopup,
+signOut,
+onAuthStateChanged
 }
 from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
 
 import {
-    getFirestore,
-    doc,
-    setDoc,
-    getDoc,
-    deleteDoc,
-    collection,
-    addDoc,
-    getDocs,
-    query,
-    where,
-    orderBy,
-    limit,
-    serverTimestamp
+getFirestore,
+doc,
+setDoc,
+getDoc,
+deleteDoc,
+collection,
+addDoc,
+getDocs,
+query,
+where,
+orderBy,
+limit,
+serverTimestamp
 }
 from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
 
 const firebaseConfig = {
 
-    apiKey:
-        "AIzaSyBtPjGGV8n_1y58m4yLRVFAEahxtT-HbM0",
+apiKey:
+"AIzaSyBtPjGGV8n_1y58m4yLRVFAEahxtT-HbM0",
 
-    authDomain:
-        "fitness-tracker-d235f.firebaseapp.com",
+authDomain:
+"fitness-tracker-d235f.firebaseapp.com",
 
-    projectId:
-        "fitness-tracker-d235f",
+projectId:
+"fitness-tracker-d235f",
 
-    storageBucket:
-        "fitness-tracker-d235f.firebasestorage.app",
+storageBucket:
+"fitness-tracker-d235f.firebasestorage.app",
 
-    messagingSenderId:
-        "786431774975",
+messagingSenderId:
+"786431774975",
 
-    appId:
-        "1:786431774975:web:d037c915f88d771e00fcca"
+appId:
+"1:786431774975:web:d037c915f88d771e00fcca"
+
 };
 
 
+const AI_URL =
+"https://fitness-tracker-ai.shashank-vennam.workers.dev";
+
+
 const app =
-    initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
 const auth =
-    getAuth(app);
+getAuth(app);
 
 const db =
-    getFirestore(app);
+getFirestore(app);
 
 const provider =
-    new GoogleAuthProvider();
+new GoogleAuthProvider();
 
 
-let currentUser = null;
-let currentProfile = null;
-
-let currentSplit = null;
+let user = null;
+let profile = null;
+let split = null;
 let activeDay = null;
+let previous = {};
+let history = [];
+let selectedFriend = null;
+let calendarFriend = null;
 
-let previousExerciseData = {};
+let calView =
+"week";
 
-let workoutHistory = [];
+let calDate =
+new Date();
 
-let calendarView =
-    "week";
+let analysis =
+null;
 
-let calendarDate =
-    new Date();
-
-let calendarFriendUid =
-    null;
-
-let calendarFriendProfile =
-    null;
-
-let selectedFriend =
-    null;
+let selectedMuscle =
+null;
 
 
-/* =====================
-   UTILITIES
-===================== */
+const $ =
+id =>
+document.getElementById(id);
 
-function showScreen(id) {
 
-    document
-        .querySelectorAll(".screen")
-        .forEach(screen => {
-            screen.classList.remove("active");
-        });
+function esc(v){
 
-    document
-        .getElementById(id)
-        .classList
-        .add("active");
+return String(v ?? "")
 
-    window.scrollTo(0, 0);
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
 }
 
 
-function escapeHTML(value) {
+function screen(id){
 
-    return String(value ?? "")
+document
+.querySelectorAll(".screen")
+.forEach(
+x =>
+x.classList.remove("active")
+);
 
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+$(id)
+.classList.add("active");
+
+window.scrollTo(0,0);
+
+$("aiFab")
+.classList
+.toggle(
+"show",
+id !== "loginScreen"
+);
+
 }
 
 
-function normalizedEmail(email) {
+function normEmail(e){
 
-    return String(email || "")
-        .trim()
-        .toLowerCase();
+return String(e || "")
+.trim()
+.toLowerCase();
+
 }
 
 
-async function emailKey(email) {
+async function emailKey(e){
 
-    const normalized =
-        normalizedEmail(email);
+const bytes =
+new TextEncoder()
+.encode(
+normEmail(e)
+);
 
-    const bytes =
-        new TextEncoder()
-            .encode(normalized);
+const digest =
+await crypto.subtle.digest(
+"SHA-256",
+bytes
+);
 
-    const digest =
-        await crypto.subtle.digest(
-            "SHA-256",
-            bytes
-        );
+return [
+...new Uint8Array(digest)
+]
+.map(
+x =>
+x.toString(16)
+.padStart(2,"0")
+)
+.join("");
 
-    return Array
-        .from(
-            new Uint8Array(digest)
-        )
-        .map(
-            byte =>
-                byte
-                    .toString(16)
-                    .padStart(2, "0")
-        )
-        .join("");
 }
 
 
-function friendshipId(a, b) {
+function friendshipId(a,b){
 
-    return [a, b]
-        .sort()
-        .join("_");
+return [a,b]
+.sort()
+.join("_");
+
 }
 
 
-function dateKey(date) {
+function dkey(d){
 
-    const year =
-        date.getFullYear();
+return (
+`${d.getFullYear()}-` +
+`${String(d.getMonth()+1).padStart(2,"0")}-` +
+`${String(d.getDate()).padStart(2,"0")}`
+);
 
-    const month =
-        String(
-            date.getMonth() + 1
-        ).padStart(2, "0");
-
-    const day =
-        String(
-            date.getDate()
-        ).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
 }
 
 
-function startOfDay(date) {
+function dayStart(d){
 
-    return new Date(
-        date.getFullYear(),
-        date.getMonth(),
-        date.getDate()
-    );
+return new Date(
+d.getFullYear(),
+d.getMonth(),
+d.getDate()
+);
+
 }
 
 
-function isToday(date) {
+function today(d){
 
-    return (
-        dateKey(date) ===
-        dateKey(new Date())
-    );
+return (
+dkey(d) ===
+dkey(new Date())
+);
+
 }
 
 
-/* =====================
-   THEME
-===================== */
-
-const themeButtons =
-    document.querySelectorAll(
-        ".themeButton"
-    );
-
+/* THEME */
 
 if(
-    localStorage.getItem(
-        "fitnessTheme"
-    ) === "dark"
-) {
+localStorage.getItem(
+"fitnessTheme"
+) === "dark"
+){
 
-    document.body
-        .classList
-        .add("dark");
+document.body
+.classList
+.add("dark");
+
 }
 
 
-function updateThemeIcons() {
-
-    const dark =
-        document.body
-            .classList
-            .contains("dark");
-
-    themeButtons.forEach(button => {
-
-        button.textContent =
-            dark ? "☀" : "☾";
-
-    });
-}
-
-
-updateThemeIcons();
-
-
-themeButtons.forEach(button => {
-
-    button.addEventListener(
-        "click",
-        () => {
-
-            document.body
-                .classList
-                .toggle("dark");
-
-            const dark =
-                document.body
-                    .classList
-                    .contains("dark");
-
-            localStorage.setItem(
-                "fitnessTheme",
-                dark ? "dark" : "light"
-            );
-
-            updateThemeIcons();
-        }
-    );
-});
-
-
-/* =====================
-   LOGIN
-===================== */
+function themeIcons(){
 
 document
-.getElementById("googleLogin")
-.addEventListener(
-"click",
-async () => {
-
-    try {
-
-        await signInWithPopup(
-            auth,
-            provider
-        );
-
-    }
-
-    catch(error) {
-
-        alert(
-            "Google login failed: " +
-            error.message
-        );
-    }
-});
-
-
-document
-.getElementById("logout")
-.addEventListener(
-"click",
-() => signOut(auth)
-);
-
-
-onAuthStateChanged(
-auth,
-async user => {
-
-    if(!user) {
-
-        currentUser = null;
-        currentProfile = null;
-        currentSplit = null;
-
-        showScreen(
-            "loginScreen"
-        );
-
-        return;
-    }
-
-
-    currentUser = user;
-
-
-    document
-        .getElementById(
-            "profileName"
-        )
-        .textContent =
-            user.displayName ||
-            "Athlete";
-
-
-    if(user.photoURL) {
-
-        document
-            .getElementById(
-                "profilePhoto"
-            )
-            .src =
-                user.photoURL;
-    }
-
-
-    await createOrUpdateProfile();
-
-    await loadSplit();
-
-
-    showScreen(
-        "homeScreen"
-    );
-});
-
-
-async function createOrUpdateProfile() {
-
-    const profileRef =
-        doc(
-            db,
-            "profiles",
-            currentUser.uid
-        );
-
-
-    const old =
-        await getDoc(
-            profileRef
-        );
-
-
-    const oldData =
-        old.exists()
-            ? old.data()
-            : {};
-
-
-    currentProfile = {
-
-        uid:
-            currentUser.uid,
-
-        displayName:
-            currentUser.displayName ||
-            "Athlete",
-
-        email:
-            normalizedEmail(
-                currentUser.email
-            ),
-
-        photoURL:
-            currentUser.photoURL || "",
-
-        shareSplit:
-            oldData.shareSplit ??
-            false,
-
-        shareWeights:
-            oldData.shareWeights ??
-            false,
-
-        shareCalendar:
-            oldData.shareCalendar ??
-            false
-    };
-
-
-    await setDoc(
-        profileRef,
-        currentProfile
-    );
-
-
-    const key =
-        await emailKey(
-            currentUser.email
-        );
-
-
-    await setDoc(
-
-        doc(
-            db,
-            "emailLookup",
-            key
-        ),
-
-        {
-            uid:
-                currentUser.uid
-        }
-
-    );
-}
-
-
-/* =====================
-   SPLIT BUILDER
-===================== */
-
-document
-.getElementById(
-    "createSplitButton"
+.querySelectorAll(
+".themeBtn"
 )
-.addEventListener(
-"click",
-() => {
+.forEach(
+b =>
 
-    document
-        .getElementById(
-            "builderTitle"
-        )
-        .textContent =
-            "Create Split";
+b.textContent =
+document.body
+.classList
+.contains("dark")
+? "☀"
+: "☾"
 
-
-    document
-        .getElementById(
-            "splitName"
-        )
-        .value =
-            "";
-
-
-    document
-        .getElementById(
-            "daysBuilder"
-        )
-        .innerHTML =
-            "";
-
-
-    addWorkoutDay();
-
-
-    showScreen(
-        "builderScreen"
-    );
-});
-
-
-document
-.getElementById("builderBack")
-.addEventListener(
-"click",
-() => showScreen("homeScreen")
 );
 
-
-document
-.getElementById("addDay")
-.addEventListener(
-"click",
-() => addWorkoutDay()
-);
-
-
-function addWorkoutDay(
-    data = null
-) {
-
-    const day =
-        document.createElement(
-            "div"
-        );
-
-
-    day.className =
-        "card dayBuilder";
-
-
-    day.innerHTML = `
-
-        <label>
-            Workout name
-        </label>
-
-        <input
-            class="dayName"
-            placeholder="Example: Upper A"
-        >
-
-        <div class="exerciseBuilder"></div>
-
-        <button class="secondary addExercise">
-            + Add Exercise
-        </button>
-
-        <button class="delete removeDay">
-            Remove workout day
-        </button>
-    `;
-
-
-    if(data) {
-
-        day
-            .querySelector(
-                ".dayName"
-            )
-            .value =
-                data.name || "";
-    }
-
-
-    const container =
-        day.querySelector(
-            ".exerciseBuilder"
-        );
-
-
-    day
-        .querySelector(
-            ".addExercise"
-        )
-        .addEventListener(
-            "click",
-            () =>
-                addExercise(
-                    container
-                )
-        );
-
-
-    day
-        .querySelector(
-            ".removeDay"
-        )
-        .addEventListener(
-            "click",
-            () => day.remove()
-        );
-
-
-    document
-        .getElementById(
-            "daysBuilder"
-        )
-        .appendChild(day);
-
-
-    if(
-        data?.exercises?.length
-    ) {
-
-        data.exercises.forEach(
-            exercise =>
-                addExercise(
-                    container,
-                    exercise
-                )
-        );
-    }
-
-    else {
-
-        addExercise(
-            container
-        );
-    }
 }
 
 
-function addExercise(
-    container,
-    data = null
-) {
-
-    const exercise =
-        document.createElement(
-            "div"
-        );
-
-
-    exercise.className =
-        "exerciseBuilderItem";
-
-
-    exercise.innerHTML = `
-
-        <label>
-            Exercise
-        </label>
-
-        <input
-            class="exerciseName"
-            placeholder="Example: Chest Press"
-        >
-
-        <label>
-            Number of sets
-        </label>
-
-        <input
-            class="exerciseSets"
-            type="number"
-            min="1"
-            max="10"
-            value="3"
-        >
-
-        <div class="repGrid">
-
-            <div>
-
-                <label>
-                    Minimum reps
-                </label>
-
-                <input
-                    class="minReps"
-                    type="number"
-                    min="1"
-                    value="6"
-                >
-
-            </div>
-
-            <div>
-
-                <label>
-                    Maximum reps
-                </label>
-
-                <input
-                    class="maxReps"
-                    type="number"
-                    min="1"
-                    value="10"
-                >
-
-            </div>
-
-        </div>
-
-        <button class="delete removeExercise">
-            Remove exercise
-        </button>
-    `;
-
-
-    if(data) {
-
-        exercise
-            .querySelector(
-                ".exerciseName"
-            )
-            .value =
-                data.name || "";
-
-
-        exercise
-            .querySelector(
-                ".exerciseSets"
-            )
-            .value =
-                data.sets || 3;
-
-
-        exercise
-            .querySelector(
-                ".minReps"
-            )
-            .value =
-                data.minReps || 6;
-
-
-        exercise
-            .querySelector(
-                ".maxReps"
-            )
-            .value =
-                data.maxReps || 10;
-    }
-
-
-    exercise
-        .querySelector(
-            ".removeExercise"
-        )
-        .addEventListener(
-            "click",
-            () => exercise.remove()
-        );
-
-
-    container.appendChild(
-        exercise
-    );
-}
-
-
-document
-.getElementById("saveSplit")
-.addEventListener(
-"click",
-async () => {
-
-    const splitName =
-        document
-            .getElementById(
-                "splitName"
-            )
-            .value
-            .trim();
-
-
-    if(!splitName) {
-
-        alert(
-            "Enter a split name."
-        );
-
-        return;
-    }
-
-
-    const days = [];
-
-
-    for(
-        const dayElement
-        of document.querySelectorAll(
-            ".dayBuilder"
-        )
-    ) {
-
-        const dayName =
-            dayElement
-                .querySelector(
-                    ".dayName"
-                )
-                .value
-                .trim();
-
-
-        if(!dayName) {
-
-            alert(
-                "Give every workout day a name."
-            );
-
-            return;
-        }
-
-
-        const exercises = [];
-
-
-        for(
-            const element
-            of dayElement.querySelectorAll(
-                ".exerciseBuilderItem"
-            )
-        ) {
-
-            const name =
-                element
-                    .querySelector(
-                        ".exerciseName"
-                    )
-                    .value
-                    .trim();
-
-
-            const sets =
-                Number(
-                    element
-                        .querySelector(
-                            ".exerciseSets"
-                        )
-                        .value
-                );
-
-
-            const minReps =
-                Number(
-                    element
-                        .querySelector(
-                            ".minReps"
-                        )
-                        .value
-                );
-
-
-            const maxReps =
-                Number(
-                    element
-                        .querySelector(
-                            ".maxReps"
-                        )
-                        .value
-                );
-
-
-            if(
-                !name ||
-                !sets ||
-                !minReps ||
-                !maxReps ||
-                minReps > maxReps
-            ) {
-
-                alert(
-                    "Check every exercise, set count and rep range."
-                );
-
-                return;
-            }
-
-
-            exercises.push({
-                name,
-                sets,
-                minReps,
-                maxReps
-            });
-        }
-
-
-        if(!exercises.length) {
-
-            alert(
-                "Each workout needs an exercise."
-            );
-
-            return;
-        }
-
-
-        days.push({
-            name: dayName,
-            exercises
-        });
-    }
-
-
-    if(!days.length) {
-
-        alert(
-            "Add at least one workout day."
-        );
-
-        return;
-    }
-
-
-    currentSplit = {
-        name:
-            splitName,
-
-        days
-    };
-
-
-    await setDoc(
-
-        doc(
-            db,
-            "users",
-            currentUser.uid,
-            "data",
-            "split"
-        ),
-
-        currentSplit
-    );
-
-
-    await syncSharedSplit();
-
-
-    renderSplit();
-
-    showScreen(
-        "homeScreen"
-    );
-});
-
-
-async function loadSplit() {
-
-    const snapshot =
-        await getDoc(
-
-            doc(
-                db,
-                "users",
-                currentUser.uid,
-                "data",
-                "split"
-            )
-        );
-
-
-    currentSplit =
-        snapshot.exists()
-            ? snapshot.data()
-            : null;
-
-
-    renderSplit();
-}
-
-
-function renderSplit() {
-
-    const container =
-        document.getElementById(
-            "splitContainer"
-        );
-
-
-    container.innerHTML =
-        "";
-
-
-    const create =
-        document.getElementById(
-            "createSplitButton"
-        );
-
-
-    if(!currentSplit) {
-
-        create.style.display =
-            "block";
-
-
-        container.innerHTML = `
-
-            <div class="card">
-
-                <div class="muted">
-                    GET STARTED
-                </div>
-
-                <h2>
-                    No workout split yet
-                </h2>
-
-                <p>
-                    Create your first split to start tracking your training.
-                </p>
-
-            </div>
-        `;
-
-        return;
-    }
-
-
-    create.style.display =
-        "none";
-
-
-    const header =
-        document.createElement(
-            "div"
-        );
-
-
-    header.className =
-        "currentSplit";
-
-
-    header.innerHTML = `
-
-        <div class="muted">
-            CURRENT SPLIT
-        </div>
-
-        <h2>
-            ${escapeHTML(currentSplit.name)}
-        </h2>
-
-        <button class="secondary editSplit">
-            Edit Split
-        </button>
-    `;
-
-
-    header
-        .querySelector(
-            ".editSplit"
-        )
-        .addEventListener(
-            "click",
-            openEditSplit
-        );
-
-
-    container.appendChild(
-        header
-    );
-
-
-    currentSplit.days.forEach(
-        (day, index) => {
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-
-            card.className =
-                "workoutCard";
-
-
-            const exercises =
-                day.exercises
-                    .map(
-                        exercise => `
-
-                            <div class="exerciseSummary">
-
-                                ${escapeHTML(exercise.name)}
-                                · ${exercise.sets} sets
-                                · ${exercise.minReps}–${exercise.maxReps} reps
-
-                            </div>
-                        `
-                    )
-                    .join("");
-
-
-            card.innerHTML = `
-
-                <h2>
-                    ${escapeHTML(day.name)}
-                </h2>
-
-                ${exercises}
-
-                <button class="primary">
-                    Start Workout
-                </button>
-            `;
-
-
-            card
-                .querySelector(
-                    ".primary"
-                )
-                .addEventListener(
-                    "click",
-                    () =>
-                        startWorkout(
-                            index
-                        )
-                );
-
-
-            container.appendChild(
-                card
-            );
-        }
-    );
-}
-
-
-function openEditSplit() {
-
-    document
-        .getElementById(
-            "builderTitle"
-        )
-        .textContent =
-            "Edit Split";
-
-
-    document
-        .getElementById(
-            "splitName"
-        )
-        .value =
-            currentSplit.name;
-
-
-    const container =
-        document.getElementById(
-            "daysBuilder"
-        );
-
-
-    container.innerHTML =
-        "";
-
-
-    currentSplit.days.forEach(
-        day =>
-            addWorkoutDay(
-                day
-            )
-    );
-
-
-    showScreen(
-        "builderScreen"
-    );
-}
-
-
-/* =====================
-   WORKOUTS
-===================== */
-
-async function getPreviousExerciseData(
-    day
-) {
-
-    const results = {};
-
-
-    day.exercises.forEach(
-        exercise => {
-
-            results[
-                exercise.name
-                    .toLowerCase()
-            ] = null;
-        }
-    );
-
-
-    const snapshot =
-        await getDocs(
-
-            query(
-
-                collection(
-                    db,
-                    "users",
-                    currentUser.uid,
-                    "workouts"
-                ),
-
-                orderBy(
-                    "completedAt",
-                    "desc"
-                ),
-
-                limit(50)
-            )
-        );
-
-
-    snapshot.forEach(
-        docSnap => {
-
-            const workout =
-                docSnap.data();
-
-
-            workout.exercises
-                ?.forEach(
-                    exercise => {
-
-                        const key =
-                            String(
-                                exercise.name
-                            )
-                            .toLowerCase();
-
-
-                        if(
-                            key in results &&
-                            results[key] === null
-                        ) {
-
-                            results[key] =
-                                exercise;
-                        }
-                    }
-                );
-        }
-    );
-
-
-    return results;
-}
-
-
-async function startWorkout(
-    index
-) {
-
-    activeDay =
-        currentSplit.days[index];
-
-
-    document
-        .getElementById(
-            "activeWorkoutName"
-        )
-        .textContent =
-            activeDay.name;
-
-
-    const container =
-        document.getElementById(
-            "activeExercises"
-        );
-
-
-    container.innerHTML =
-        `<div class="loading">Loading previous workout...</div>`;
-
-
-    document
-        .getElementById(
-            "finishWorkout"
-        )
-        .style.display =
-            "none";
-
-
-    showScreen(
-        "workoutScreen"
-    );
-
-
-    previousExerciseData =
-        await getPreviousExerciseData(
-            activeDay
-        );
-
-
-    container.innerHTML =
-        "";
-
-
-    activeDay.exercises.forEach(
-        (exercise, exerciseIndex) => {
-
-            createWorkoutCard(
-                container,
-                exercise,
-                exerciseIndex
-            );
-        }
-    );
-}
-
-
-function createWorkoutCard(
-    container,
-    exercise,
-    index
-) {
-
-    const card =
-        document.createElement(
-            "div"
-        );
-
-
-    card.className =
-        "card exerciseWorkout";
-
-
-    card.dataset.finished =
-        "false";
-
-
-    const previous =
-        previousExerciseData[
-            exercise.name
-                .toLowerCase()
-        ];
-
-
-    let previousHTML =
-        "No previous workout";
-
-
-    if(previous?.sets) {
-
-        previousHTML =
-            previous.sets
-                .map(
-                    (set, i) =>
-                        `Set ${i + 1}: ${set.weight} lb × ${set.reps}`
-                )
-                .join("<br>");
-    }
-
-
-    let rows = "";
-
-
-    for(
-        let i = 0;
-        i < exercise.sets;
-        i++
-    ) {
-
-        const old =
-            previous?.sets?.[i];
-
-
-        rows += `
-
-            <div class="setRow">
-
-                <div class="setNumber">
-                    ${i + 1}
-                </div>
-
-                <input
-                    class="weight"
-                    type="number"
-                    inputmode="decimal"
-                    min="0"
-                    step="0.5"
-                    placeholder="lb"
-                    value="${old?.weight || ""}"
-                >
-
-                <input
-                    class="reps"
-                    type="number"
-                    inputmode="numeric"
-                    min="1"
-                    placeholder="${exercise.minReps}–${exercise.maxReps}"
-                    value="${old?.reps || ""}"
-                >
-
-            </div>
-        `;
-    }
-
-
-    card.innerHTML = `
-
-        <div class="progressCard">
-
-            <div class="progressLabel">
-                ↑ PROGRESS
-            </div>
-
-            <div class="progressPercent"></div>
-
-            <div class="muted">
-                Since your previous workout
-            </div>
-
-        </div>
-
-
-        <div class="exerciseHeading">
-
-            <h2>
-                ${escapeHTML(exercise.name)}
-            </h2>
-
-            <span class="targetBadge">
-                ${exercise.sets} sets · ${exercise.minReps}–${exercise.maxReps}
-            </span>
-
-        </div>
-
-
-        <div class="previousBox">
-
-            <strong>
-                Previous
-            </strong>
-
-            <div class="previousSets">
-                ${previousHTML}
-            </div>
-
-        </div>
-
-
-        <div class="headerRow">
-
-            <span>SET</span>
-            <span>WEIGHT</span>
-            <span>REPS</span>
-
-        </div>
-
-
-        ${rows}
-
-
-        <div class="finishedBadge">
-            ✓ Exercise completed
-        </div>
-
-
-        <button class="secondary finishExercise">
-            Finish Exercise
-        </button>
-    `;
-
-
-    card
-        .querySelector(
-            ".finishExercise"
-        )
-        .addEventListener(
-            "click",
-            () =>
-                finishExercise(
-                    card,
-                    exercise
-                )
-        );
-
-
-    container.appendChild(
-        card
-    );
-}
-
-
-function estimatedStrength(
-    weight,
-    reps
-) {
-
-    weight =
-        Number(weight);
-
-    reps =
-        Number(reps);
-
-
-    if(
-        weight <= 0 ||
-        reps <= 0
-    ) {
-        return 0;
-    }
-
-
-    return (
-        weight *
-        (
-            1 +
-            reps / 30
-        )
-    );
-}
-
-
-function bestStrengthFromSets(
-    sets
-) {
-
-    let best =
-        0;
-
-
-    sets.forEach(
-        set => {
-
-            best =
-                Math.max(
-                    best,
-                    estimatedStrength(
-                        set.weight,
-                        set.reps
-                    )
-                );
-        }
-    );
-
-
-    return best;
-}
-
-
-function finishExercise(
-    card,
-    exercise
-) {
-
-    if(
-        card.dataset.finished ===
-        "true"
-    ) {
-        return;
-    }
-
-
-    const rows =
-        card.querySelectorAll(
-            ".setRow"
-        );
-
-
-    const currentSets =
-        [];
-
-
-    let valid =
-        true;
-
-
-    rows.forEach(
-        row => {
-
-            const weight =
-                Number(
-                    row
-                        .querySelector(
-                            ".weight"
-                        )
-                        .value
-                );
-
-
-            const reps =
-                Number(
-                    row
-                        .querySelector(
-                            ".reps"
-                        )
-                        .value
-                );
-
-
-            if(
-                weight <= 0 ||
-                reps <= 0
-            ) {
-                valid = false;
-            }
-
-
-            currentSets.push({
-                weight,
-                reps
-            });
-        }
-    );
-
-
-    if(!valid) {
-
-        alert(
-            "Enter weight and reps for every set first."
-        );
-
-        return;
-    }
-
-
-    rows.forEach(
-        row => {
-
-            row
-                .querySelector(
-                    ".weight"
-                )
-                .disabled =
-                    true;
-
-
-            row
-                .querySelector(
-                    ".reps"
-                )
-                .disabled =
-                    true;
-        }
-    );
-
-
-    card.dataset.finished =
-        "true";
-
-
-    card.currentSets =
-        currentSets;
-
-
-    card
-        .querySelector(
-            ".finishExercise"
-        )
-        .style.display =
-            "none";
-
-
-    card
-        .querySelector(
-            ".finishedBadge"
-        )
-        .classList
-        .add("visible");
-
-
-    const previous =
-        previousExerciseData[
-            exercise.name
-                .toLowerCase()
-        ];
-
-
-    if(previous?.sets?.length) {
-
-        const oldStrength =
-            bestStrengthFromSets(
-                previous.sets
-            );
-
-
-        const newStrength =
-            bestStrengthFromSets(
-                currentSets
-            );
-
-
-        if(
-            oldStrength > 0 &&
-            newStrength > oldStrength
-        ) {
-
-            const percent =
-                (
-                    (
-                        newStrength -
-                        oldStrength
-                    )
-                    /
-                    oldStrength
-                )
-                *
-                100;
-
-
-            const progress =
-                card.querySelector(
-                    ".progressCard"
-                );
-
-
-            progress
-                .querySelector(
-                    ".progressPercent"
-                )
-                .textContent =
-                    `+${percent.toFixed(1)}%`;
-
-
-            progress
-                .classList
-                .add("visible");
-        }
-    }
-
-
-    checkAllExercisesFinished();
-}
-
-
-function checkAllExercisesFinished() {
-
-    const cards =
-        [
-            ...document.querySelectorAll(
-                ".exerciseWorkout"
-            )
-        ];
-
-
-    if(
-        cards.length &&
-        cards.every(
-            card =>
-                card.dataset.finished ===
-                "true"
-        )
-    ) {
-
-        document
-            .getElementById(
-                "finishWorkout"
-            )
-            .style.display =
-                "block";
-    }
-}
-
-
-document
-.getElementById("finishWorkout")
-.addEventListener(
-"click",
-async () => {
-
-    const cards =
-        [
-            ...document.querySelectorAll(
-                ".exerciseWorkout"
-            )
-        ];
-
-
-    if(
-        !cards.every(
-            card =>
-                card.dataset.finished ===
-                "true"
-        )
-    ) {
-
-        alert(
-            "Finish every exercise first."
-        );
-
-        return;
-    }
-
-
-    const exercises =
-        cards.map(
-            (card, index) => ({
-
-                name:
-                    activeDay
-                        .exercises[index]
-                        .name,
-
-                sets:
-                    card.currentSets
-            })
-        );
-
-
-    const workoutData = {
-
-        split:
-            currentSplit.name,
-
-        workout:
-            activeDay.name,
-
-        exercises,
-
-        completedAt:
-            serverTimestamp()
-    };
-
-
-    const saved =
-        await addDoc(
-
-            collection(
-                db,
-                "users",
-                currentUser.uid,
-                "workouts"
-            ),
-
-            workoutData
-        );
-
-
-    /*
-       Shared copy.
-
-       This allows friends to see calendar days.
-       We still enforce display privacy in the app.
-    */
-
-    await setDoc(
-
-        doc(
-            db,
-            "sharedWorkouts",
-            currentUser.uid,
-            "items",
-            saved.id
-        ),
-
-        workoutData
-    );
-
-
-    activeDay =
-        null;
-
-
-    document
-        .getElementById(
-            "finishWorkout"
-        )
-        .style.display =
-            "none";
-
-
-    showScreen(
-        "homeScreen"
-    );
-
-
-    alert(
-        "Workout saved!"
-    );
-});
-
-
-document
-.getElementById("exitWorkout")
-.addEventListener(
-"click",
-() => {
-
-    if(
-        confirm(
-            "Exit this workout? Unsaved progress will be lost."
-        )
-    ) {
-
-        activeDay =
-            null;
-
-        showScreen(
-            "homeScreen"
-        );
-    }
-});
-
-
-/* =====================
-   FRIEND PRIVACY
-===================== */
-
-async function syncSharedSplit() {
-
-    if(
-        !currentUser ||
-        !currentSplit
-    ) {
-        return;
-    }
-
-
-    if(
-        currentProfile?.shareSplit
-    ) {
-
-        await setDoc(
-
-            doc(
-                db,
-                "sharedSplits",
-                currentUser.uid
-            ),
-
-            currentSplit
-        );
-    }
-
-    else {
-
-        try {
-
-            await deleteDoc(
-
-                doc(
-                    db,
-                    "sharedSplits",
-                    currentUser.uid
-                )
-            );
-
-        }
-
-        catch(error) {
-            console.log(error);
-        }
-    }
-}
-
-
-async function savePrivacy() {
-
-    currentProfile.shareSplit =
-        document
-            .getElementById(
-                "shareSplit"
-            )
-            .checked;
-
-
-    currentProfile.shareWeights =
-        document
-            .getElementById(
-                "shareWeights"
-            )
-            .checked;
-
-
-    currentProfile.shareCalendar =
-        document
-            .getElementById(
-                "shareCalendar"
-            )
-            .checked;
-
-
-    await setDoc(
-
-        doc(
-            db,
-            "profiles",
-            currentUser.uid
-        ),
-
-        currentProfile
-    );
-
-
-    await syncSharedSplit();
-}
-
-
-[
-    "shareSplit",
-    "shareWeights",
-    "shareCalendar"
-]
-.forEach(id => {
-
-    document
-        .getElementById(id)
-        .addEventListener(
-            "change",
-            savePrivacy
-        );
-});
-
-
-/* =====================
-   FRIENDS
-===================== */
-
-document
-.getElementById("friendsButton")
-.addEventListener(
-"click",
-async () => {
-
-    showScreen(
-        "friendsScreen"
-    );
-
-
-    document
-        .getElementById(
-            "shareSplit"
-        )
-        .checked =
-            !!currentProfile.shareSplit;
-
-
-    document
-        .getElementById(
-            "shareWeights"
-        )
-        .checked =
-            !!currentProfile.shareWeights;
-
-
-    document
-        .getElementById(
-            "shareCalendar"
-        )
-        .checked =
-            !!currentProfile.shareCalendar;
-
-
-    await loadFriendRequests();
-
-    await loadFriends();
-});
-
-
-document
-.getElementById("friendsBack")
-.addEventListener(
-"click",
-() => showScreen("homeScreen")
-);
-
-
-document
-.getElementById("sendFriendRequest")
-.addEventListener(
-"click",
-async () => {
-
-    const email =
-        normalizedEmail(
-
-            document
-                .getElementById(
-                    "friendEmail"
-                )
-                .value
-        );
-
-
-    if(!email) {
-
-        alert(
-            "Enter their Google email."
-        );
-
-        return;
-    }
-
-
-    if(
-        email ===
-        normalizedEmail(
-            currentUser.email
-        )
-    ) {
-
-        alert(
-            "You can't add yourself."
-        );
-
-        return;
-    }
-
-
-    const key =
-        await emailKey(
-            email
-        );
-
-
-    const lookup =
-        await getDoc(
-
-            doc(
-                db,
-                "emailLookup",
-                key
-            )
-        );
-
-
-    if(!lookup.exists()) {
-
-        alert(
-            "No Fitness Tracker account was found with that email."
-        );
-
-        return;
-    }
-
-
-    const friendUid =
-        lookup.data().uid;
-
-
-    const existingFriend =
-        await getDoc(
-
-            doc(
-                db,
-                "friendships",
-                friendshipId(
-                    currentUser.uid,
-                    friendUid
-                )
-            )
-        );
-
-
-    if(existingFriend.exists()) {
-
-        alert(
-            "You're already friends."
-        );
-
-        return;
-    }
-
-
-    const duplicateQuery =
-        query(
-
-            collection(
-                db,
-                "friendRequests"
-            ),
-
-            where(
-                "fromUid",
-                "==",
-                currentUser.uid
-            ),
-
-            where(
-                "toUid",
-                "==",
-                friendUid
-            )
-        );
-
-
-    const duplicate =
-        await getDocs(
-            duplicateQuery
-        );
-
-
-    if(!duplicate.empty) {
-
-        alert(
-            "Friend request already sent."
-        );
-
-        return;
-    }
-
-
-    await addDoc(
-
-        collection(
-            db,
-            "friendRequests"
-        ),
-
-        {
-            fromUid:
-                currentUser.uid,
-
-            toUid:
-                friendUid,
-
-            status:
-                "pending",
-
-            createdAt:
-                serverTimestamp()
-        }
-    );
-
-
-    document
-        .getElementById(
-            "friendEmail"
-        )
-        .value =
-            "";
-
-
-    alert(
-        "Friend request sent!"
-    );
-});
-
-
-async function loadFriendRequests() {
-
-    const container =
-        document.getElementById(
-            "friendRequests"
-        );
-
-
-    container.innerHTML =
-        `<div class="loading">Loading...</div>`;
-
-
-    const snapshot =
-        await getDocs(
-
-            query(
-
-                collection(
-                    db,
-                    "friendRequests"
-                ),
-
-                where(
-                    "toUid",
-                    "==",
-                    currentUser.uid
-                )
-            )
-        );
-
-
-    const requests =
-        [];
-
-
-    for(
-        const requestDoc
-        of snapshot.docs
-    ) {
-
-        const data =
-            requestDoc.data();
-
-
-        if(
-            data.status !==
-            "pending"
-        ) {
-            continue;
-        }
-
-
-        const profile =
-            await getDoc(
-
-                doc(
-                    db,
-                    "profiles",
-                    data.fromUid
-                )
-            );
-
-
-        if(profile.exists()) {
-
-            requests.push({
-
-                id:
-                    requestDoc.id,
-
-                ...data,
-
-                profile:
-                    profile.data()
-            });
-        }
-    }
-
-
-    if(!requests.length) {
-
-        container.innerHTML =
-            `<div class="muted">No requests</div>`;
-
-        return;
-    }
-
-
-    container.innerHTML =
-        "";
-
-
-    requests.forEach(
-        request => {
-
-            const row =
-                document.createElement(
-                    "div"
-                );
-
-
-            row.className =
-                "friendRow";
-
-
-            row.innerHTML = `
-
-                <img
-                    class="friendPhoto"
-                    src="${escapeHTML(request.profile.photoURL)}"
-                >
-
-                <div class="friendInfo">
-
-                    <div class="friendName">
-                        ${escapeHTML(request.profile.displayName)}
-                    </div>
-
-                    <div class="friendEmail">
-                        ${escapeHTML(request.profile.email)}
-                    </div>
-
-                </div>
-
-                <div class="friendButtons">
-
-                    <button class="secondary accept">
-                        Accept
-                    </button>
-
-                    <button class="secondary decline">
-                        Decline
-                    </button>
-
-                </div>
-            `;
-
-
-            row
-                .querySelector(
-                    ".accept"
-                )
-                .addEventListener(
-                    "click",
-                    async () => {
-
-                        const id =
-                            friendshipId(
-                                currentUser.uid,
-                                request.fromUid
-                            );
-
-
-                        await setDoc(
-
-                            doc(
-                                db,
-                                "friendships",
-                                id
-                            ),
-
-                            {
-                                users: [
-                                    currentUser.uid,
-                                    request.fromUid
-                                ],
-
-                                createdAt:
-                                    serverTimestamp()
-                            }
-                        );
-
-
-                        await deleteDoc(
-
-                            doc(
-                                db,
-                                "friendRequests",
-                                request.id
-                            )
-                        );
-
-
-                        await loadFriendRequests();
-
-                        await loadFriends();
-                    }
-                );
-
-
-            row
-                .querySelector(
-                    ".decline"
-                )
-                .addEventListener(
-                    "click",
-                    async () => {
-
-                        await deleteDoc(
-
-                            doc(
-                                db,
-                                "friendRequests",
-                                request.id
-                            )
-                        );
-
-
-                        await loadFriendRequests();
-                    }
-                );
-
-
-            container.appendChild(
-                row
-            );
-        }
-    );
-}
-
-
-async function loadFriends() {
-
-    const container =
-        document.getElementById(
-            "friendsList"
-        );
-
-
-    container.innerHTML =
-        `<div class="loading">Loading...</div>`;
-
-
-    const snapshot =
-        await getDocs(
-
-            query(
-
-                collection(
-                    db,
-                    "friendships"
-                ),
-
-                where(
-                    "users",
-                    "array-contains",
-                    currentUser.uid
-                )
-            )
-        );
-
-
-    const friends =
-        [];
-
-
-    for(
-        const friendship
-        of snapshot.docs
-    ) {
-
-        const users =
-            friendship.data().users;
-
-
-        const uid =
-            users.find(
-                id =>
-                    id !==
-                    currentUser.uid
-            );
-
-
-        if(!uid) {
-            continue;
-        }
-
-
-        const profile =
-            await getDoc(
-
-                doc(
-                    db,
-                    "profiles",
-                    uid
-                )
-            );
-
-
-        if(profile.exists()) {
-
-            friends.push({
-
-                friendshipId:
-                    friendship.id,
-
-                ...profile.data()
-            });
-        }
-    }
-
-
-    if(!friends.length) {
-
-        container.innerHTML =
-            `<div class="muted">No friends yet</div>`;
-
-        return;
-    }
-
-
-    container.innerHTML =
-        "";
-
-
-    friends.forEach(
-        friend => {
-
-            const row =
-                document.createElement(
-                    "div"
-                );
-
-
-            row.className =
-                "friendRow";
-
-
-            row.innerHTML = `
-
-                <img
-                    class="friendPhoto"
-                    src="${escapeHTML(friend.photoURL)}"
-                >
-
-                <div class="friendInfo">
-
-                    <div class="friendName">
-                        ${escapeHTML(friend.displayName)}
-                    </div>
-
-                    <div class="friendEmail">
-                        ${escapeHTML(friend.email)}
-                    </div>
-
-                </div>
-
-                <button class="secondary openFriend"
-                        style="width:auto;margin:0;">
-                    View
-                </button>
-            `;
-
-
-            row
-                .querySelector(
-                    ".openFriend"
-                )
-                .addEventListener(
-                    "click",
-                    () =>
-                        openFriend(
-                            friend
-                        )
-                );
-
-
-            container.appendChild(
-                row
-            );
-        }
-    );
-}
-
-
-async function openFriend(
-    friend
-) {
-
-    selectedFriend =
-        friend;
-
-
-    document
-        .getElementById(
-            "friendProfileName"
-        )
-        .textContent =
-            friend.displayName;
-
-
-    document
-        .getElementById(
-            "friendProfileEmail"
-        )
-        .textContent =
-            friend.email;
-
-
-    document
-        .getElementById(
-            "friendProfilePhoto"
-        )
-        .src =
-            friend.photoURL || "";
-
-
-    const calendarButton =
-        document.getElementById(
-            "viewFriendCalendar"
-        );
-
-
-    calendarButton.style.display =
-        friend.shareCalendar
-            ? "block"
-            : "none";
-
-
-    const splitSection =
-        document.getElementById(
-            "friendSplitSection"
-        );
-
-
-    if(friend.shareSplit) {
-
-        try {
-
-            const split =
-                await getDoc(
-
-                    doc(
-                        db,
-                        "sharedSplits",
-                        friend.uid
-                    )
-                );
-
-
-            if(split.exists()) {
-
-                const data =
-                    split.data();
-
-
-                let html = `
-
-                    <div class="card">
-
-                        <div class="muted">
-                            CURRENT SPLIT
-                        </div>
-
-                        <h2>
-                            ${escapeHTML(data.name)}
-                        </h2>
-                `;
-
-
-                data.days?.forEach(
-                    day => {
-
-                        html += `
-
-                            <div style="margin-top:18px;">
-
-                                <strong>
-                                    ${escapeHTML(day.name)}
-                                </strong>
-                        `;
-
-
-                        day.exercises
-                            ?.forEach(
-                                exercise => {
-
-                                    html += `
-
-                                        <div class="exerciseSummary">
-
-                                            ${escapeHTML(exercise.name)}
-                                            · ${exercise.sets} sets
-                                            · ${exercise.minReps}–${exercise.maxReps} reps
-
-                                        </div>
-                                    `;
-                                }
-                            );
-
-
-                        html +=
-                            `</div>`;
-                    }
-                );
-
-
-                html +=
-                    `</div>`;
-
-
-                splitSection.innerHTML =
-                    html;
-            }
-
-            else {
-
-                splitSection.innerHTML =
-                    `<div class="privateBox">No shared split yet.</div>`;
-            }
-        }
-
-        catch(error) {
-
-            splitSection.innerHTML =
-                `<div class="privateBox">Unable to load split.</div>`;
-        }
-    }
-
-    else {
-
-        splitSection.innerHTML = `
-
-            <div class="card privateBox">
-                🔒 Workout split is private
-            </div>
-        `;
-    }
-
-
-    showScreen(
-        "friendProfileScreen"
-    );
-}
-
-
-document
-.getElementById("friendProfileBack")
-.addEventListener(
-"click",
-() => showScreen("friendsScreen")
-);
-
-
-document
-.getElementById("removeFriend")
-.addEventListener(
-"click",
-async () => {
-
-    if(
-        !selectedFriend ||
-        !confirm(
-            `Remove ${selectedFriend.displayName} from your friends?`
-        )
-    ) {
-        return;
-    }
-
-
-    await deleteDoc(
-
-        doc(
-            db,
-            "friendships",
-            friendshipId(
-                currentUser.uid,
-                selectedFriend.uid
-            )
-        )
-    );
-
-
-    selectedFriend =
-        null;
-
-
-    showScreen(
-        "friendsScreen"
-    );
-
-
-    await loadFriends();
-});
-
-
-/* =====================
-   CALENDAR
-===================== */
-
-document
-.getElementById("calendarButton")
-.addEventListener(
-"click",
-async () => {
-
-    calendarFriendUid =
-        null;
-
-    calendarFriendProfile =
-        null;
-
-
-    await openCalendar();
-});
-
-
-document
-.getElementById("viewFriendCalendar")
-.addEventListener(
-"click",
-async () => {
-
-    if(!selectedFriend) {
-        return;
-    }
-
-
-    calendarFriendUid =
-        selectedFriend.uid;
-
-    calendarFriendProfile =
-        selectedFriend;
-
-
-    await openCalendar();
-});
-
-
-async function openCalendar() {
-
-    calendarDate =
-        new Date();
-
-    calendarView =
-        "week";
-
-
-    setCalendarTabs();
-
-
-    document
-        .getElementById(
-            "calendarOwnerLabel"
-        )
-        .textContent =
-            calendarFriendProfile
-                ? `${calendarFriendProfile.displayName.toUpperCase()}'S ACTIVITY`
-                : "YOUR ACTIVITY";
-
-
-    showScreen(
-        "calendarScreen"
-    );
-
-
-    document
-        .getElementById(
-            "calendarContent"
-        )
-        .innerHTML =
-            `<div class="loading">Loading activity...</div>`;
-
-
-    await loadCalendarHistory();
-
-
-    renderCalendar();
-}
-
-
-document
-.getElementById("calendarBack")
-.addEventListener(
-"click",
-() => {
-
-    if(calendarFriendUid) {
-
-        showScreen(
-            "friendProfileScreen"
-        );
-    }
-
-    else {
-
-        showScreen(
-            "homeScreen"
-        );
-    }
-});
+themeIcons();
 
 
 document
 .querySelectorAll(
-    ".calendarTab"
+".themeBtn"
 )
-.forEach(button => {
+.forEach(
+b => {
 
-    button.addEventListener(
-        "click",
-        () => {
+b.onclick =
+() => {
 
-            calendarView =
-                button.dataset.view;
+document.body
+.classList
+.toggle("dark");
 
-            calendarDate =
-                new Date();
+localStorage
+.setItem(
 
-            setCalendarTabs();
+"fitnessTheme",
 
-            renderCalendar();
-        }
-    );
+document.body
+.classList
+.contains("dark")
+? "dark"
+: "light"
+
+);
+
+themeIcons();
+
+};
+
+}
+);
+
+
+document
+.querySelectorAll(
+"[data-home]"
+)
+.forEach(
+b =>
+b.onclick =
+() =>
+screen("homeScreen")
+);
+
+
+/* LOGIN */
+
+$("googleLogin")
+.onclick =
+async () => {
+
+try{
+
+await signInWithPopup(
+auth,
+provider
+);
+
+}
+catch(e){
+
+alert(e.message);
+
+}
+
+};
+
+
+$("logout")
+.onclick =
+() =>
+signOut(auth);
+
+
+onAuthStateChanged(
+auth,
+async u => {
+
+if(!u){
+
+user = null;
+profile = null;
+split = null;
+
+screen(
+"loginScreen"
+);
+
+return;
+
+}
+
+
+user = u;
+
+
+$("profileName")
+.textContent =
+u.displayName ||
+"Athlete";
+
+
+if(u.photoURL){
+
+$("profilePhoto")
+.src =
+u.photoURL;
+
+}
+
+
+await ensureProfile();
+
+await loadSplit();
+
+screen(
+"homeScreen"
+);
+
+}
+);
+
+
+async function ensureProfile(){
+
+const ref =
+doc(
+db,
+"profiles",
+user.uid
+);
+
+
+const snap =
+await getDoc(ref);
+
+
+const old =
+snap.exists()
+? snap.data()
+: {};
+
+
+profile = {
+
+uid:
+user.uid,
+
+displayName:
+user.displayName ||
+"Athlete",
+
+email:
+normEmail(
+user.email
+),
+
+photoURL:
+user.photoURL || "",
+
+shareSplit:
+old.shareSplit ??
+false,
+
+shareWeights:
+old.shareWeights ??
+false,
+
+shareCalendar:
+old.shareCalendar ??
+false
+
+};
+
+
+await setDoc(
+ref,
+profile
+);
+
+
+await setDoc(
+
+doc(
+db,
+"emailLookup",
+await emailKey(
+user.email
+)
+),
+
+{
+uid:
+user.uid
+}
+
+);
+
+}
+
+
+/* SPLITS */
+
+async function loadSplit(){
+
+const snap =
+await getDoc(
+
+doc(
+db,
+"users",
+user.uid,
+"data",
+"split"
+)
+
+);
+
+
+split =
+snap.exists()
+? snap.data()
+: null;
+
+
+renderSplit();
+
+}
+
+
+function renderSplit(){
+
+const container =
+$("splitContainer");
+
+
+container.innerHTML =
+"";
+
+
+if(!split){
+
+$("createSplitButton")
+.style.display =
+"block";
+
+
+container.innerHTML = `
+
+<div class="card">
+
+<h2>
+No workout split yet
+</h2>
+
+<p>
+Create your first split to start tracking.
+</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+$("createSplitButton")
+.style.display =
+"none";
+
+
+const head =
+document.createElement(
+"div"
+);
+
+
+head.className =
+"card";
+
+
+head.innerHTML = `
+
+<div class="muted">
+CURRENT SPLIT
+</div>
+
+<h2>
+${esc(split.name)}
+</h2>
+
+<button class="secondary overview">
+View Muscle Coverage
+</button>
+
+<button class="secondary edit">
+Edit Split
+</button>
+
+`;
+
+
+head
+.querySelector(
+".overview"
+)
+.onclick =
+openOverview;
+
+
+head
+.querySelector(
+".edit"
+)
+.onclick =
+openEdit;
+
+
+container
+.appendChild(head);
+
+
+split.days
+.forEach(
+(day,i) => {
+
+const card =
+document.createElement(
+"div"
+);
+
+
+card.className =
+"card";
+
+
+card.innerHTML = `
+
+<h2>
+${esc(day.name)}
+</h2>
+
+${day.exercises
+.map(
+e => `
+
+<div class="exerciseSummary">
+
+${esc(e.name)}
+· ${e.sets} sets
+· ${e.minReps}–${e.maxReps} reps
+
+</div>
+
+`
+)
+.join("")}
+
+<button class="secondary dayOverview">
+Muscle Coverage
+</button>
+
+<button class="primary start">
+Start Workout
+</button>
+
+`;
+
+
+card
+.querySelector(
+".start"
+)
+.onclick =
+() =>
+startWorkout(i);
+
+
+card
+.querySelector(
+".dayOverview"
+)
+.onclick =
+() =>
+openOverview(i);
+
+
+container
+.appendChild(card);
+
+}
+);
+
+}
+
+
+$("createSplitButton")
+.onclick =
+() => {
+
+prepareBuilder(null);
+
+screen(
+"builderScreen"
+);
+
+};
+
+
+function prepareBuilder(data){
+
+$("builderTitle")
+.textContent =
+data
+? "Edit Split"
+: "Create Split";
+
+
+$("splitName")
+.value =
+data?.name || "";
+
+
+$("daysBuilder")
+.innerHTML =
+"";
+
+
+(
+data?.days ||
+[null]
+)
+.forEach(
+addDay
+);
+
+
+$("deleteSplit")
+.style.display =
+data
+? "block"
+: "none";
+
+}
+
+
+function openEdit(){
+
+prepareBuilder(
+split
+);
+
+screen(
+"builderScreen"
+);
+
+}
+
+
+$("addDay")
+.onclick =
+() =>
+addDay(null);
+
+
+function addDay(data){
+
+const el =
+document.createElement(
+"div"
+);
+
+
+el.className =
+"card dayBuilder";
+
+
+el.innerHTML = `
+
+<label>
+Workout name
+</label>
+
+<input
+class="dayName"
+placeholder="Upper A"
+>
+
+<div class="exerciseBuilder">
+</div>
+
+<button class="secondary addEx">
++ Add Exercise
+</button>
+
+<button class="secondary danger removeDay">
+Remove Day
+</button>
+
+`;
+
+
+el
+.querySelector(
+".dayName"
+)
+.value =
+data?.name || "";
+
+
+const exerciseContainer =
+el.querySelector(
+".exerciseBuilder"
+);
+
+
+el
+.querySelector(
+".addEx"
+)
+.onclick =
+() =>
+addExercise(
+exerciseContainer
+);
+
+
+el
+.querySelector(
+".removeDay"
+)
+.onclick =
+() =>
+el.remove();
+
+
+$("daysBuilder")
+.appendChild(el);
+
+
+(
+data?.exercises ||
+[null]
+)
+.forEach(
+x =>
+addExercise(
+exerciseContainer,
+x
+)
+);
+
+}
+
+
+function addExercise(
+container,
+data = null
+){
+
+const exercise =
+document.createElement(
+"div"
+);
+
+
+exercise.className =
+"builderExercise";
+
+
+exercise.innerHTML = `
+
+<label>
+Exercise
+</label>
+
+<input
+class="exName"
+placeholder="Chest Press"
+>
+
+<label>
+Sets
+</label>
+
+<input
+class="exSets"
+type="number"
+min="1"
+value="3"
+>
+
+<div class="grid2">
+
+<div>
+
+<label>
+Min reps
+</label>
+
+<input
+class="minReps"
+type="number"
+min="1"
+value="6"
+>
+
+</div>
+
+<div>
+
+<label>
+Max reps
+</label>
+
+<input
+class="maxReps"
+type="number"
+min="1"
+value="10"
+>
+
+</div>
+
+</div>
+
+<button class="secondary danger removeEx">
+Remove Exercise
+</button>
+
+`;
+
+
+exercise
+.querySelector(
+".exName"
+)
+.value =
+data?.name || "";
+
+
+exercise
+.querySelector(
+".exSets"
+)
+.value =
+data?.sets || 3;
+
+
+exercise
+.querySelector(
+".minReps"
+)
+.value =
+data?.minReps || 6;
+
+
+exercise
+.querySelector(
+".maxReps"
+)
+.value =
+data?.maxReps || 10;
+
+
+exercise
+.querySelector(
+".removeEx"
+)
+.onclick =
+() =>
+exercise.remove();
+
+
+container
+.appendChild(
+exercise
+);
+
+}
+$("saveSplit").onclick =
+async () => {
+
+const name =
+$("splitName")
+.value
+.trim();
+
+
+const days =
+[];
+
+
+if(!name){
+
+alert(
+"Enter a split name."
+);
+
+return;
+
+}
+
+
+for(
+const dayElement
+of document.querySelectorAll(
+".dayBuilder"
+)
+){
+
+const dayName =
+dayElement
+.querySelector(
+".dayName"
+)
+.value
+.trim();
+
+
+const exercises =
+[];
+
+
+if(!dayName){
+
+alert(
+"Name every workout day."
+);
+
+return;
+
+}
+
+
+for(
+const exerciseElement
+of dayElement.querySelectorAll(
+".builderExercise"
+)
+){
+
+const exerciseName =
+exerciseElement
+.querySelector(
+".exName"
+)
+.value
+.trim();
+
+
+const sets =
+Number(
+exerciseElement
+.querySelector(
+".exSets"
+)
+.value
+);
+
+
+const minReps =
+Number(
+exerciseElement
+.querySelector(
+".minReps"
+)
+.value
+);
+
+
+const maxReps =
+Number(
+exerciseElement
+.querySelector(
+".maxReps"
+)
+.value
+);
+
+
+if(
+!exerciseName ||
+sets < 1 ||
+minReps < 1 ||
+maxReps < minReps
+){
+
+alert(
+"Check every exercise."
+);
+
+return;
+
+}
+
+
+exercises.push({
+
+name:
+exerciseName,
+
+sets,
+
+minReps,
+
+maxReps
+
+});
+
+}
+
+
+if(
+!exercises.length
+){
+
+alert(
+"Each day needs an exercise."
+);
+
+return;
+
+}
+
+
+days.push({
+
+name:
+dayName,
+
+exercises
+
+});
+
+}
+
+
+split = {
+
+name,
+
+days
+
+};
+
+
+await setDoc(
+
+doc(
+db,
+"users",
+user.uid,
+"data",
+"split"
+),
+
+split
+
+);
+
+
+await syncSharedSplit();
+
+
+renderSplit();
+
+
+screen(
+"homeScreen"
+);
+
+};
+
+
+$("deleteSplit").onclick =
+async () => {
+
+if(
+!split ||
+!confirm(
+`Delete "${split.name}"? Your workout history will be kept.`
+)
+){
+
+return;
+
+}
+
+
+await deleteDoc(
+
+doc(
+db,
+"users",
+user.uid,
+"data",
+"split"
+)
+
+);
+
+
+try{
+
+await deleteDoc(
+
+doc(
+db,
+"sharedSplits",
+user.uid
+)
+
+);
+
+}
+catch{}
+
+
+split =
+null;
+
+
+renderSplit();
+
+
+screen(
+"homeScreen"
+);
+
+};
+
+
+async function syncSharedSplit(){
+
+if(!split){
+
+return;
+
+}
+
+
+if(
+profile?.shareSplit
+){
+
+await setDoc(
+
+doc(
+db,
+"sharedSplits",
+user.uid
+),
+
+split
+
+);
+
+}
+else{
+
+try{
+
+await deleteDoc(
+
+doc(
+db,
+"sharedSplits",
+user.uid
+)
+
+);
+
+}
+catch{}
+
+}
+
+}
+
+
+/* WORKOUT */
+
+async function previousFor(day){
+
+const result =
+{};
+
+
+day.exercises
+.forEach(
+exercise => {
+
+result[
+exercise.name
+.toLowerCase()
+] = null;
+
+}
+);
+
+
+const snapshot =
+await getDocs(
+
+query(
+
+collection(
+db,
+"users",
+user.uid,
+"workouts"
+),
+
+orderBy(
+"completedAt",
+"desc"
+),
+
+limit(50)
+
+)
+
+);
+
+
+snapshot
+.forEach(
+workoutDoc => {
+
+workoutDoc
+.data()
+.exercises
+?.forEach(
+exercise => {
+
+const key =
+exercise.name
+.toLowerCase();
+
+
+if(
+key in result &&
+result[key] === null
+){
+
+result[key] =
+exercise;
+
+}
+
+}
+);
+
+}
+);
+
+
+return result;
+
+}
+
+
+async function startWorkout(index){
+
+activeDay =
+split.days[index];
+
+
+$("activeWorkoutName")
+.textContent =
+activeDay.name;
+
+
+$("activeExercises")
+.innerHTML =
+'<div class="loading">Loading...</div>';
+
+
+$("finishWorkout")
+.style.display =
+"none";
+
+
+screen(
+"workoutScreen"
+);
+
+
+previous =
+await previousFor(
+activeDay
+);
+
+
+$("activeExercises")
+.innerHTML =
+"";
+
+
+activeDay.exercises
+.forEach(
+makeWorkoutCard
+);
+
+}
+
+
+function makeWorkoutCard(exercise){
+
+const card =
+document.createElement(
+"div"
+);
+
+
+card.className =
+"card exerciseWorkout";
+
+
+card.dataset.finished =
+"false";
+
+
+const old =
+previous[
+exercise.name
+.toLowerCase()
+];
+
+
+let rows =
+"";
+
+
+for(
+let i = 0;
+i < exercise.sets;
+i++
+){
+
+rows += `
+
+<div class="setRow">
+
+<b>
+${i + 1}
+</b>
+
+<input
+class="weight"
+type="number"
+inputmode="decimal"
+value="${old?.sets?.[i]?.weight || ""}"
+placeholder="lb"
+>
+
+<input
+class="reps"
+type="number"
+inputmode="numeric"
+value="${old?.sets?.[i]?.reps || ""}"
+placeholder="${exercise.minReps}–${exercise.maxReps}"
+>
+
+</div>
+
+`;
+
+}
+
+
+card.innerHTML = `
+
+<div class="progress">
+
+<div class="muted">
+↑ PROGRESS
+</div>
+
+<strong></strong>
+
+<div class="muted">
+Since previous workout
+</div>
+
+</div>
+
+
+<h2>
+${esc(exercise.name)}
+</h2>
+
+<div class="muted">
+
+${exercise.sets} sets
+· Target
+${exercise.minReps}–${exercise.maxReps}
+
+</div>
+
+
+<div class="previous">
+
+<b>
+Previous
+</b>
+
+<br>
+
+${
+old?.sets
+?.map(
+(set,i) =>
+`Set ${i + 1}: ${set.weight} lb × ${set.reps}`
+)
+.join("<br>")
+||
+"No previous workout"
+}
+
+</div>
+
+
+<div class="setHeader">
+
+<span>SET</span>
+<span>WEIGHT</span>
+<span>REPS</span>
+
+</div>
+
+
+${rows}
+
+
+<button class="secondary finishEx">
+Finish Exercise
+</button>
+
+`;
+
+
+card
+.querySelector(
+".finishEx"
+)
+.onclick =
+() =>
+finishExercise(
+card,
+exercise
+);
+
+
+$("activeExercises")
+.appendChild(
+card
+);
+
+}
+
+
+const strength =
+(weight,reps) =>
+
+weight > 0 &&
+reps > 0
+
+? weight *
+(
+1 +
+reps / 30
+)
+
+: 0;
+
+
+const best =
+sets =>
+
+Math.max(
+
+0,
+
+...sets.map(
+set =>
+strength(
+Number(set.weight),
+Number(set.reps)
+)
+)
+
+);
+
+
+function finishExercise(
+card,
+exercise
+){
+
+const sets =
+[];
+
+
+for(
+const row
+of card.querySelectorAll(
+".setRow"
+)
+){
+
+const weight =
+Number(
+row
+.querySelector(
+".weight"
+)
+.value
+);
+
+
+const reps =
+Number(
+row
+.querySelector(
+".reps"
+)
+.value
+);
+
+
+if(
+weight <= 0 ||
+reps <= 0
+){
+
+alert(
+"Enter weight and reps for every set."
+);
+
+return;
+
+}
+
+
+sets.push({
+
+weight,
+
+reps
+
 });
 
 
-function setCalendarTabs() {
+row
+.querySelectorAll(
+"input"
+)
+.forEach(
+input =>
+input.disabled =
+true
+);
 
-    document
-        .querySelectorAll(
-            ".calendarTab"
-        )
-        .forEach(
-            button => {
+}
 
-                button.classList.toggle(
-                    "active",
-                    button.dataset.view ===
-                    calendarView
-                );
-            }
-        );
+
+card.dataset.finished =
+"true";
+
+
+card.currentSets =
+sets;
+
+
+card
+.querySelector(
+".finishEx"
+)
+.style.display =
+"none";
+
+
+const old =
+previous[
+exercise.name
+.toLowerCase()
+];
+
+
+if(
+old?.sets?.length
+){
+
+const oldBest =
+best(
+old.sets
+);
+
+
+const newBest =
+best(
+sets
+);
+
+
+if(
+newBest > oldBest &&
+oldBest > 0
+){
+
+const progress =
+card.querySelector(
+".progress"
+);
+
+
+progress
+.querySelector(
+"strong"
+)
+.textContent =
+
+`+${
+(
+(
+newBest -
+oldBest
+)
+/
+oldBest
+*
+100
+)
+.toFixed(1)
+}%`;
+
+
+progress
+.classList
+.add(
+"show"
+);
+
+}
+
+}
+
+
+if(
+
+[
+...document.querySelectorAll(
+".exerciseWorkout"
+)
+]
+.every(
+exerciseCard =>
+exerciseCard.dataset.finished ===
+"true"
+)
+
+){
+
+$("finishWorkout")
+.style.display =
+"block";
+
+}
+
+}
+
+
+$("finishWorkout").onclick =
+async () => {
+
+const cards =
+[
+...document.querySelectorAll(
+".exerciseWorkout"
+)
+];
+
+
+if(
+!cards.every(
+card =>
+card.dataset.finished ===
+"true"
+)
+){
+
+return;
+
+}
+
+
+const exercises =
+cards.map(
+(card,index) => ({
+
+name:
+activeDay
+.exercises[index]
+.name,
+
+sets:
+card.currentSets
+
+})
+);
+
+
+const data = {
+
+split:
+split.name,
+
+workout:
+activeDay.name,
+
+exercises,
+
+completedAt:
+serverTimestamp()
+
+};
+
+
+const saved =
+await addDoc(
+
+collection(
+db,
+"users",
+user.uid,
+"workouts"
+),
+
+data
+
+);
+
+
+await setDoc(
+
+doc(
+db,
+"sharedWorkouts",
+user.uid,
+"items",
+saved.id
+),
+
+data
+
+);
+
+
+activeDay =
+null;
+
+
+$("finishWorkout")
+.style.display =
+"none";
+
+
+screen(
+"homeScreen"
+);
+
+
+alert(
+"Workout saved!"
+);
+
+};
+
+
+$("exitWorkout").onclick =
+() => {
+
+if(
+confirm(
+"Exit workout? Unsaved progress will be lost."
+)
+){
+
+activeDay =
+null;
+
+screen(
+"homeScreen"
+);
+
+}
+
+};
+
+
+/* PERSONAL RECORDS */
+
+$("prButton").onclick =
+async () => {
+
+screen(
+"prScreen"
+);
+
+
+$("prDate")
+.value =
+dkey(
+new Date()
+);
+
+
+await loadPRs();
+
+};
+
+
+$("showAddPR").onclick =
+() => {
+
+$("prForm")
+.style.display =
+
+$("prForm")
+.style.display ===
+"none"
+
+? "block"
+: "none";
+
+};
+
+
+$("savePR").onclick =
+async () => {
+
+const exercise =
+$("prExercise")
+.value
+.trim();
+
+
+const weight =
+Number(
+$("prWeight")
+.value
+);
+
+
+const reps =
+Number(
+$("prReps")
+.value
+);
+
+
+const date =
+$("prDate")
+.value;
+
+
+if(
+!exercise ||
+weight <= 0 ||
+reps <= 0 ||
+!date
+){
+
+alert(
+"Complete all PR fields."
+);
+
+return;
+
+}
+
+
+await addDoc(
+
+collection(
+db,
+"users",
+user.uid,
+"prs"
+),
+
+{
+
+exercise,
+
+weight,
+
+reps,
+
+date,
+
+createdAt:
+serverTimestamp()
+
+}
+
+);
+
+
+$("prForm")
+.style.display =
+"none";
+
+
+await loadPRs();
+
+};
+
+
+async function loadPRs(){
+
+const container =
+$("prList");
+
+
+container.innerHTML =
+'<div class="loading">Loading...</div>';
+
+
+const snapshot =
+await getDocs(
+
+collection(
+db,
+"users",
+user.uid,
+"prs"
+)
+
+);
+
+
+const records =
+snapshot.docs
+.map(
+record => ({
+
+id:
+record.id,
+
+...record.data()
+
+})
+)
+.sort(
+(a,b) =>
+b.date.localeCompare(
+a.date
+)
+);
+
+
+container.innerHTML =
+records.length
+? ""
+: '<div class="card muted">No PRs yet.</div>';
+
+
+records.forEach(
+record => {
+
+const row =
+document.createElement(
+"div"
+);
+
+
+row.className =
+"card prRow";
+
+
+row.innerHTML = `
+
+<div>
+
+<b>
+${esc(record.exercise)}
+</b>
+
+<div class="muted">
+${esc(record.date)}
+</div>
+
+</div>
+
+
+<div>
+
+<b>
+${record.weight} lb × ${record.reps}
+</b>
+
+<br>
+
+<button
+class="deletePR secondary danger"
+style="width:auto;padding:6px 9px"
+>
+Delete
+</button>
+
+</div>
+
+`;
+
+
+row
+.querySelector(
+".deletePR"
+)
+.onclick =
+async () => {
+
+await deleteDoc(
+
+doc(
+db,
+"users",
+user.uid,
+"prs",
+record.id
+)
+
+);
+
+
+loadPRs();
+
+};
+
+
+container
+.appendChild(
+row
+);
+
+}
+);
+
+}
+
+
+/* FRIEND PRIVACY */
+
+async function savePrivacy(){
+
+profile.shareSplit =
+$("shareSplit")
+.checked;
+
+
+profile.shareWeights =
+$("shareWeights")
+.checked;
+
+
+profile.shareCalendar =
+$("shareCalendar")
+.checked;
+
+
+await setDoc(
+
+doc(
+db,
+"profiles",
+user.uid
+),
+
+profile
+
+);
+
+
+await syncSharedSplit();
+
+}
+
+
+[
+"shareSplit",
+"shareWeights",
+"shareCalendar"
+]
+.forEach(
+id => {
+
+$(id)
+.onchange =
+savePrivacy;
+
+}
+);
+
+
+/* FRIENDS */
+
+$("friendsButton").onclick =
+async () => {
+
+$("shareSplit")
+.checked =
+!!profile.shareSplit;
+
+
+$("shareWeights")
+.checked =
+!!profile.shareWeights;
+
+
+$("shareCalendar")
+.checked =
+!!profile.shareCalendar;
+
+
+screen(
+"friendsScreen"
+);
+
+
+await loadRequests();
+
+await loadFriends();
+
+};
+
+
+$("sendRequest").onclick =
+async () => {
+
+const email =
+normEmail(
+$("friendEmail")
+.value
+);
+
+
+if(!email){
+
+return;
+
+}
+
+
+if(
+email ===
+normEmail(
+user.email
+)
+){
+
+alert(
+"You can't add yourself."
+);
+
+return;
+
+}
+
+
+const lookup =
+await getDoc(
+
+doc(
+db,
+"emailLookup",
+await emailKey(email)
+)
+
+);
+
+
+if(
+!lookup.exists()
+){
+
+alert(
+"No account found."
+);
+
+return;
+
+}
+
+
+const friendUid =
+lookup.data().uid;
+
+
+const friendship =
+await getDoc(
+
+doc(
+db,
+"friendships",
+friendshipId(
+user.uid,
+friendUid
+)
+)
+
+);
+
+
+if(
+friendship.exists()
+){
+
+alert(
+"Already friends."
+);
+
+return;
+
+}
+
+
+const duplicate =
+await getDocs(
+
+query(
+
+collection(
+db,
+"friendRequests"
+),
+
+where(
+"fromUid",
+"==",
+user.uid
+),
+
+where(
+"toUid",
+"==",
+friendUid
+)
+
+)
+
+);
+
+
+if(
+!duplicate.empty
+){
+
+alert(
+"Request already sent."
+);
+
+return;
+
+}
+
+
+await addDoc(
+
+collection(
+db,
+"friendRequests"
+),
+
+{
+
+fromUid:
+user.uid,
+
+toUid:
+friendUid,
+
+status:
+"pending",
+
+createdAt:
+serverTimestamp()
+
+}
+
+);
+
+
+$("friendEmail")
+.value =
+"";
+
+
+alert(
+"Friend request sent!"
+);
+
+};
+
+
+async function loadRequests(){
+
+const container =
+$("requestsList");
+
+
+const snapshot =
+await getDocs(
+
+query(
+
+collection(
+db,
+"friendRequests"
+),
+
+where(
+"toUid",
+"==",
+user.uid
+)
+
+)
+
+);
+
+
+container.innerHTML =
+"";
+
+
+for(
+const requestDoc
+of snapshot.docs
+){
+
+const request =
+requestDoc.data();
+
+
+if(
+request.status !==
+"pending"
+){
+
+continue;
+
+}
+
+
+const profileSnapshot =
+await getDoc(
+
+doc(
+db,
+"profiles",
+request.fromUid
+)
+
+);
+
+
+if(
+!profileSnapshot.exists()
+){
+
+continue;
+
+}
+
+
+const friendProfile =
+profileSnapshot.data();
+
+
+const row =
+document.createElement(
+"div"
+);
+
+
+row.className =
+"friendRow";
+
+
+row.innerHTML = `
+
+<img
+class="avatar"
+src="${esc(friendProfile.photoURL)}"
+>
+
+<div class="friendInfo">
+
+<b>
+${esc(friendProfile.displayName)}
+</b>
+
+<div class="friendEmail">
+${esc(friendProfile.email)}
+</div>
+
+</div>
+
+<button class="secondary accept">
+Accept
+</button>
+
+<button class="secondary danger decline">
+Decline
+</button>
+
+`;
+
+
+row
+.querySelector(
+".accept"
+)
+.onclick =
+async () => {
+
+await setDoc(
+
+doc(
+db,
+"friendships",
+friendshipId(
+user.uid,
+request.fromUid
+)
+),
+
+{
+
+users: [
+user.uid,
+request.fromUid
+],
+
+createdAt:
+serverTimestamp()
+
+}
+
+);
+
+
+await deleteDoc(
+
+doc(
+db,
+"friendRequests",
+requestDoc.id
+)
+
+);
+
+
+loadRequests();
+
+loadFriends();
+
+};
+
+
+row
+.querySelector(
+".decline"
+)
+.onclick =
+async () => {
+
+await deleteDoc(
+
+doc(
+db,
+"friendRequests",
+requestDoc.id
+)
+
+);
+
+
+loadRequests();
+
+};
+
+
+container
+.appendChild(
+row
+);
+
+}
+
+
+if(
+!container.children.length
+){
+
+container.innerHTML =
+'<div class="muted">No requests</div>';
+
+}
+
+}
+
+
+async function loadFriends(){
+
+const container =
+$("friendsList");
+
+
+const snapshot =
+await getDocs(
+
+query(
+
+collection(
+db,
+"friendships"
+),
+
+where(
+"users",
+"array-contains",
+user.uid
+)
+
+)
+
+);
+
+
+container.innerHTML =
+"";
+
+
+for(
+const friendship
+of snapshot.docs
+){
+
+const friendUid =
+friendship
+.data()
+.users
+.find(
+id =>
+id !== user.uid
+);
+
+
+const profileSnapshot =
+await getDoc(
+
+doc(
+db,
+"profiles",
+friendUid
+)
+
+);
+
+
+if(
+!profileSnapshot.exists()
+){
+
+continue;
+
+}
+
+
+const friend = {
+
+...profileSnapshot.data(),
+
+friendshipId:
+friendship.id
+
+};
+
+
+const row =
+document.createElement(
+"div"
+);
+
+
+row.className =
+"friendRow";
+
+
+row.innerHTML = `
+
+<img
+class="avatar"
+src="${esc(friend.photoURL)}"
+>
+
+<div class="friendInfo">
+
+<b>
+${esc(friend.displayName)}
+</b>
+
+<div class="friendEmail">
+${esc(friend.email)}
+</div>
+
+</div>
+
+<button class="secondary view">
+View
+</button>
+
+`;
+
+
+row
+.querySelector(
+".view"
+)
+.onclick =
+() =>
+openFriend(
+friend
+);
+
+
+container
+.appendChild(
+row
+);
+
+}
+
+
+if(
+!container.children.length
+){
+
+container.innerHTML =
+'<div class="muted">No friends yet</div>';
+
+}
+
+}
+
+
+async function openFriend(friend){
+
+selectedFriend =
+friend;
+
+
+$("friendName")
+.textContent =
+friend.displayName;
+
+
+$("friendEmailLabel")
+.textContent =
+friend.email;
+
+
+$("friendPhoto")
+.src =
+friend.photoURL || "";
+
+
+$("friendCalendarButton")
+.style.display =
+friend.shareCalendar
+? "block"
+: "none";
+
+
+if(
+friend.shareSplit
+){
+
+try{
+
+const splitSnapshot =
+await getDoc(
+
+doc(
+db,
+"sharedSplits",
+friend.uid
+)
+
+);
+
+
+$("friendSplit")
+.innerHTML =
+
+splitSnapshot.exists()
+
+? `
+
+<div class="card">
+
+<div class="muted">
+CURRENT SPLIT
+</div>
+
+<h2>
+${esc(splitSnapshot.data().name)}
+</h2>
+
+${splitSnapshot
+.data()
+.days
+.map(
+day => `
+
+<div style="margin-top:15px">
+
+<b>
+${esc(day.name)}
+</b>
+
+${day.exercises
+.map(
+exercise => `
+
+<div class="exerciseSummary">
+
+${esc(exercise.name)}
+· ${exercise.sets} sets
+· ${exercise.minReps}–${exercise.maxReps}
+
+</div>
+
+`
+)
+.join("")}
+
+</div>
+
+`
+)
+.join("")}
+
+</div>
+
+`
+
+: '<div class="card muted">No shared split.</div>';
+
+}
+catch{
+
+$("friendSplit")
+.innerHTML =
+'<div class="card muted">Unable to load split.</div>';
+
+}
+
+}
+else{
+
+$("friendSplit")
+.innerHTML =
+'<div class="card muted">🔒 Workout split is private</div>';
+
+}
+
+
+screen(
+"friendProfileScreen"
+);
+
+}
+
+
+$("friendBack").onclick =
+() =>
+screen(
+"friendsScreen"
+);
+
+
+$("removeFriend").onclick =
+async () => {
+
+if(
+selectedFriend &&
+confirm(
+`Remove ${selectedFriend.displayName}?`
+)
+){
+
+await deleteDoc(
+
+doc(
+db,
+"friendships",
+friendshipId(
+user.uid,
+selectedFriend.uid
+)
+)
+
+);
+
+
+selectedFriend =
+null;
+
+
+screen(
+"friendsScreen"
+);
+
+
+loadFriends();
+
+}
+
+};
+
+
+/* CALENDAR */
+
+$("calendarButton").onclick =
+() =>
+openCalendar(null);
+
+
+$("friendCalendarButton").onclick =
+() =>
+openCalendar(
+selectedFriend
+);
+
+
+$("calendarBack").onclick =
+() =>
+screen(
+
+calendarFriend
+
+? "friendProfileScreen"
+
+: "homeScreen"
+
+);
+
+
+async function openCalendar(friend){
+
+calendarFriend =
+friend;
+
+
+calView =
+"week";
+
+
+calDate =
+new Date();
+
+
+$("calendarOwner")
+.textContent =
+
+friend
+
+? `${friend.displayName.toUpperCase()}'S ACTIVITY`
+
+: "YOUR ACTIVITY";
+
+
+document
+.querySelectorAll(
+"[data-calview]"
+)
+.forEach(
+button =>
+button.classList.toggle(
+"active",
+button.dataset.calview ===
+"week"
+)
+);
+
+
+screen(
+"calendarScreen"
+);
+
+
+await loadHistory();
+
+
+renderCalendar();
+
 }
 
 
 document
-.getElementById("calendarPrevious")
-.addEventListener(
-"click",
+.querySelectorAll(
+"[data-calview]"
+)
+.forEach(
+button => {
+
+button.onclick =
 () => {
 
-    if(calendarView === "week") {
-
-        calendarDate.setDate(
-            calendarDate.getDate() - 7
-        );
-    }
-
-    else if(
-        calendarView === "month"
-    ) {
-
-        calendarDate.setMonth(
-            calendarDate.getMonth() - 1
-        );
-    }
-
-    else {
-
-        calendarDate.setFullYear(
-            calendarDate.getFullYear() - 1
-        );
-    }
-
-
-    calendarDate =
-        new Date(
-            calendarDate
-        );
-
-
-    renderCalendar();
-});
+calView =
+button.dataset.calview;
 
 
 document
-.getElementById("calendarNext")
-.addEventListener(
-"click",
-() => {
-
-    if(calendarView === "week") {
-
-        calendarDate.setDate(
-            calendarDate.getDate() + 7
-        );
-    }
-
-    else if(
-        calendarView === "month"
-    ) {
-
-        calendarDate.setMonth(
-            calendarDate.getMonth() + 1
-        );
-    }
-
-    else {
-
-        calendarDate.setFullYear(
-            calendarDate.getFullYear() + 1
-        );
-    }
+.querySelectorAll(
+"[data-calview]"
+)
+.forEach(
+item =>
+item.classList.toggle(
+"active",
+item === button
+)
+);
 
 
-    calendarDate =
-        new Date(
-            calendarDate
-        );
+renderCalendar();
+
+};
+
+}
+);
 
 
-    renderCalendar();
+$("calPrev").onclick =
+() =>
+moveCal(-1);
+
+
+$("calNext").onclick =
+() =>
+moveCal(1);
+
+
+function moveCal(amount){
+
+if(
+calView ===
+"week"
+){
+
+calDate.setDate(
+calDate.getDate() +
+7 * amount
+);
+
+}
+else if(
+calView ===
+"month"
+){
+
+calDate.setMonth(
+calDate.getMonth() +
+amount
+);
+
+}
+else{
+
+calDate.setFullYear(
+calDate.getFullYear() +
+amount
+);
+
+}
+
+
+calDate =
+new Date(
+calDate
+);
+
+
+renderCalendar();
+
+}
+
+
+async function loadHistory(){
+
+history =
+[];
+
+
+const reference =
+
+calendarFriend
+
+? collection(
+db,
+"sharedWorkouts",
+calendarFriend.uid,
+"items"
+)
+
+: collection(
+db,
+"users",
+user.uid,
+"workouts"
+);
+
+
+try{
+
+const snapshot =
+await getDocs(
+
+query(
+
+reference,
+
+orderBy(
+"completedAt",
+"desc"
+),
+
+limit(500)
+
+)
+
+);
+
+
+snapshot.forEach(
+workoutDoc => {
+
+const workout =
+workoutDoc.data();
+
+
+if(
+workout.completedAt
+){
+
+history.push({
+
+id:
+workoutDoc.id,
+
+...workout,
+
+date:
+workout.completedAt
+.toDate()
+
 });
 
+}
 
-async function loadCalendarHistory() {
+}
+);
 
-    workoutHistory =
-        [];
+}
+catch(e){
 
+console.error(e);
 
-    let reference;
+}
 
-
-    if(calendarFriendUid) {
-
-        reference =
-            collection(
-                db,
-                "sharedWorkouts",
-                calendarFriendUid,
-                "items"
-            );
-    }
-
-    else {
-
-        reference =
-            collection(
-                db,
-                "users",
-                currentUser.uid,
-                "workouts"
-            );
-    }
-
-
-    try {
-
-        const snapshot =
-            await getDocs(
-
-                query(
-                    reference,
-                    orderBy(
-                        "completedAt",
-                        "desc"
-                    ),
-                    limit(500)
-                )
-            );
-
-
-        snapshot.forEach(
-            docSnap => {
-
-                const data =
-                    docSnap.data();
-
-
-                if(!data.completedAt) {
-                    return;
-                }
-
-
-                workoutHistory.push({
-
-                    id:
-                        docSnap.id,
-
-                    ...data,
-
-                    date:
-                        data.completedAt
-                            .toDate()
-                });
-            }
-        );
-    }
-
-    catch(error) {
-
-        console.error(error);
-    }
 }
 
 
-function workoutMap() {
+function historyMap(){
 
-    const map =
-        {};
-
-
-    workoutHistory.forEach(
-        workout => {
-
-            const key =
-                dateKey(
-                    workout.date
-                );
+const map =
+{};
 
 
-            if(!map[key]) {
-                map[key] = [];
-            }
+history.forEach(
+workout => {
+
+const key =
+dkey(
+workout.date
+);
 
 
-            map[key].push(
-                workout
-            );
-        }
-    );
+if(
+!map[key]
+){
 
+map[key] =
+[];
 
-    return map;
 }
 
 
-function dayStatus(
-    date,
-    map
-) {
+map[key]
+.push(
+workout
+);
 
-    const today =
-        startOfDay(
-            new Date()
-        );
+}
+);
 
 
-    const current =
-        startOfDay(
-            date
-        );
+return map;
 
-
-    if(
-        map[
-            dateKey(date)
-        ]?.length
-    ) {
-
-        return "workout";
-    }
-
-
-    if(
-        current > today
-    ) {
-
-        return "future";
-    }
-
-
-    return "missed";
 }
 
 
-function renderCalendar() {
+function calendarStatus(
+date,
+map
+){
 
-    document
-        .getElementById(
-            "workoutDetail"
-        )
-        .innerHTML =
-            "";
+if(
+map[
+dkey(date)
+]?.length
+){
 
+return "gym";
 
-    if(calendarView === "week") {
-
-        renderWeek();
-    }
-
-    else if(
-        calendarView === "month"
-    ) {
-
-        renderMonth();
-    }
-
-    else {
-
-        renderYear();
-    }
 }
 
 
-function dayBoxHTML(
-    date,
-    status
-) {
+return (
 
-    return `
+dayStart(date) >
+dayStart(
+new Date()
+)
 
-        <div
-            class="dayBox ${status} ${isToday(date) ? "today" : ""}"
-            data-date="${dateKey(date)}"
-        >
-            ${date.getDate()}
-        </div>
-    `;
+? "future"
+
+: "missed"
+
+);
+
 }
 
 
-function updateStats(
-    workouts,
-    days
-) {
+function renderCalendar(){
 
-    document
-        .getElementById(
-            "workoutCount"
-        )
-        .textContent =
-            workouts;
+if(
+calView ===
+"week"
+){
 
+renderWeek();
 
-    const percent =
-        days > 0
-            ? Math.round(
-                workouts /
-                days *
-                100
-            )
-            : 0;
+}
+else if(
+calView ===
+"month"
+){
 
+renderMonth();
 
-    document
-        .getElementById(
-            "attendancePercent"
-        )
-        .textContent =
-            `${percent}%`;
+}
+else{
+
+renderYear();
+
 }
 
 
-function renderWeek() {
+$("calendarDetail")
+.innerHTML =
+"";
 
-    const map =
-        workoutMap();
-
-
-    const selected =
-        new Date(
-            calendarDate
-        );
-
-
-    const day =
-        selected.getDay();
-
-
-    const difference =
-        day === 0
-            ? -6
-            : 1 - day;
-
-
-    const monday =
-        new Date(
-            selected.getFullYear(),
-            selected.getMonth(),
-            selected.getDate() +
-            difference
-        );
-
-
-    const sunday =
-        new Date(
-            monday.getFullYear(),
-            monday.getMonth(),
-            monday.getDate() + 6
-        );
-
-
-    const formatter =
-        new Intl.DateTimeFormat(
-            "en-US",
-            {
-                month:
-                    "short",
-
-                day:
-                    "numeric"
-            }
-        );
-
-
-    document
-        .getElementById(
-            "calendarTitle"
-        )
-        .textContent =
-            `${formatter.format(monday)} – ${formatter.format(sunday)}`;
-
-
-    let html = `
-
-        <div class="weekLabels">
-
-            ${[
-                "MON",
-                "TUE",
-                "WED",
-                "THU",
-                "FRI",
-                "SAT",
-                "SUN"
-            ]
-            .map(
-                name =>
-                    `<div class="weekLabel">${name}</div>`
-            )
-            .join("")}
-
-        </div>
-
-        <div class="weekGrid">
-    `;
-
-
-    let workouts =
-        0;
-
-    let days =
-        0;
-
-
-    for(
-        let i = 0;
-        i < 7;
-        i++
-    ) {
-
-        const date =
-            new Date(
-                monday.getFullYear(),
-                monday.getMonth(),
-                monday.getDate() + i
-            );
-
-
-        const status =
-            dayStatus(
-                date,
-                map
-            );
-
-
-        if(
-            status ===
-            "workout"
-        ) {
-            workouts++;
-        }
-
-
-        if(
-            status !==
-            "future"
-        ) {
-            days++;
-        }
-
-
-        html +=
-            dayBoxHTML(
-                date,
-                status
-            );
-    }
-
-
-    html +=
-        `</div>`;
-
-
-    document
-        .getElementById(
-            "calendarContent"
-        )
-        .innerHTML =
-            html;
-
-
-    updateStats(
-        workouts,
-        days
-    );
-
-
-    addCalendarListeners();
 }
 
 
-function renderMonth() {
+function calendarBox(
+date,
+status
+){
 
-    const map =
-        workoutMap();
+return `
 
+<div
+class="day ${status} ${today(date) ? "today" : ""}"
+data-date="${dkey(date)}"
+>
 
-    const year =
-        calendarDate.getFullYear();
+${date.getDate()}
 
+</div>
 
-    const month =
-        calendarDate.getMonth();
+`;
 
-
-    const first =
-        new Date(
-            year,
-            month,
-            1
-        );
-
-
-    const last =
-        new Date(
-            year,
-            month + 1,
-            0
-        );
-
-
-    document
-        .getElementById(
-            "calendarTitle"
-        )
-        .textContent =
-
-            new Intl.DateTimeFormat(
-                "en-US",
-                {
-                    month:
-                        "long",
-
-                    year:
-                        "numeric"
-                }
-            )
-            .format(first);
-
-
-    let html = `
-
-        <div class="weekLabels">
-
-            ${[
-                "SUN",
-                "MON",
-                "TUE",
-                "WED",
-                "THU",
-                "FRI",
-                "SAT"
-            ]
-            .map(
-                name =>
-                    `<div class="weekLabel">${name}</div>`
-            )
-            .join("")}
-
-        </div>
-
-        <div class="monthGrid">
-    `;
-
-
-    for(
-        let i = 0;
-        i < first.getDay();
-        i++
-    ) {
-
-        html +=
-            `<div class="dayBox blank"></div>`;
-    }
-
-
-    let workouts =
-        0;
-
-    let days =
-        0;
-
-
-    for(
-        let d = 1;
-        d <= last.getDate();
-        d++
-    ) {
-
-        const date =
-            new Date(
-                year,
-                month,
-                d
-            );
-
-
-        const status =
-            dayStatus(
-                date,
-                map
-            );
-
-
-        if(
-            status ===
-            "workout"
-        ) {
-            workouts++;
-        }
-
-
-        if(
-            status !==
-            "future"
-        ) {
-            days++;
-        }
-
-
-        html +=
-            dayBoxHTML(
-                date,
-                status
-            );
-    }
-
-
-    html +=
-        `</div>`;
-
-
-    document
-        .getElementById(
-            "calendarContent"
-        )
-        .innerHTML =
-            html;
-
-
-    updateStats(
-        workouts,
-        days
-    );
-
-
-    addCalendarListeners();
 }
 
 
-function renderYear() {
+function renderWeek(){
 
-    const map =
-        workoutMap();
-
-
-    const year =
-        calendarDate.getFullYear();
+const map =
+historyMap();
 
 
-    document
-        .getElementById(
-            "calendarTitle"
-        )
-        .textContent =
-            year;
+const selected =
+new Date(
+calDate
+);
 
 
-    let html =
-        `<div class="yearMonths">`;
+const difference =
+
+selected.getDay() === 0
+
+? -6
+
+: 1 -
+selected.getDay();
 
 
-    let workouts =
-        0;
+const monday =
+new Date(
 
-    let days =
-        0;
+selected.getFullYear(),
 
+selected.getMonth(),
 
-    for(
-        let month = 0;
-        month < 12;
-        month++
-    ) {
+selected.getDate() +
+difference
 
-        const first =
-            new Date(
-                year,
-                month,
-                1
-            );
+);
 
 
-        const last =
-            new Date(
-                year,
-                month + 1,
-                0
-            );
+const sunday =
+new Date(
+
+monday.getFullYear(),
+
+monday.getMonth(),
+
+monday.getDate() + 6
+
+);
 
 
-        html += `
+$("calTitle")
+.textContent =
 
-            <div class="miniMonth">
-
-                <div class="miniMonthTitle">
-
-                    ${new Intl.DateTimeFormat(
-                        "en-US",
-                        {
-                            month:
-                                "short"
-                        }
-                    )
-                    .format(first)}
-
-                </div>
-
-                <div class="miniGrid">
-        `;
+`${monday.toLocaleDateString(
+"en-US",
+{
+month:"short",
+day:"numeric"
+}
+)} – ${sunday.toLocaleDateString(
+"en-US",
+{
+month:"short",
+day:"numeric"
+}
+)}`;
 
 
-        for(
-            let i = 0;
-            i < first.getDay();
-            i++
-        ) {
+let html = `
 
-            html +=
-                `<div class="miniDay blank"></div>`;
-        }
+<div class="weeklabels">
 
+${[
+"MON",
+"TUE",
+"WED",
+"THU",
+"FRI",
+"SAT",
+"SUN"
+]
+.map(
+day =>
+`<div>${day}</div>`
+)
+.join("")}
 
-        for(
-            let d = 1;
-            d <= last.getDate();
-            d++
-        ) {
+</div>
 
-            const date =
-                new Date(
-                    year,
-                    month,
-                    d
-                );
+<div class="weekGrid">
 
-
-            const status =
-                dayStatus(
-                    date,
-                    map
-                );
+`;
 
 
-            if(
-                status ===
-                "workout"
-            ) {
-                workouts++;
-            }
+for(
+let i = 0;
+i < 7;
+i++
+){
+
+const date =
+new Date(
+
+monday.getFullYear(),
+
+monday.getMonth(),
+
+monday.getDate() + i
+
+);
 
 
-            if(
-                status !==
-                "future"
-            ) {
-                days++;
-            }
+html +=
+calendarBox(
 
+date,
 
-            html += `
+calendarStatus(
+date,
+map
+)
 
-                <div
-                    class="miniDay ${status}"
-                    data-date="${dateKey(date)}"
-                ></div>
-            `;
-        }
+);
 
-
-        html += `
-
-                </div>
-
-            </div>
-        `;
-    }
-
-
-    html +=
-        `</div>`;
-
-
-    document
-        .getElementById(
-            "calendarContent"
-        )
-        .innerHTML =
-            html;
-
-
-    updateStats(
-        workouts,
-        days
-    );
-
-
-    addCalendarListeners();
 }
 
 
-function addCalendarListeners() {
-
-    document
-        .querySelectorAll(
-            "[data-date]"
-        )
-        .forEach(
-            element => {
-
-                element.addEventListener(
-                    "click",
-                    () => {
-
-                        const key =
-                            element.dataset.date;
+html +=
+"</div>";
 
 
-                        const workouts =
-                            workoutHistory.filter(
-                                workout =>
-                                    dateKey(
-                                        workout.date
-                                    ) ===
-                                    key
-                            );
+$("calendarContent")
+.innerHTML =
+html;
 
 
-                        if(
-                            workouts.length
-                        ) {
+calendarListeners();
 
-                            showWorkoutDetail(
-                                key,
-                                workouts
-                            );
-                        }
-                    }
-                );
-            }
-        );
 }
 
 
-function showWorkoutDetail(
-    key,
-    workouts
-) {
+function renderMonth(){
 
-    const [
-        year,
-        month,
-        day
-    ] =
-        key
-            .split("-")
-            .map(Number);
+const map =
+historyMap();
 
 
-    const date =
-        new Date(
-            year,
-            month - 1,
-            day
-        );
+const year =
+calDate.getFullYear();
 
 
-    let html = `
-
-        <div class="card">
-
-            <div class="muted">
-                WORKOUT
-            </div>
-
-            <h2>
-
-                ${new Intl.DateTimeFormat(
-                    "en-US",
-                    {
-                        month:
-                            "long",
-
-                        day:
-                            "numeric",
-
-                        year:
-                            "numeric"
-                    }
-                )
-                .format(date)}
-
-            </h2>
-    `;
+const month =
+calDate.getMonth();
 
 
-    workouts.forEach(
-        workout => {
-
-            html += `
-
-                <div style="
-                    margin-top:18px;
-                    font-weight:700;
-                ">
-
-                    ${escapeHTML(
-                        workout.workout ||
-                        "Workout"
-                    )}
-
-                </div>
-            `;
+const first =
+new Date(
+year,
+month,
+1
+);
 
 
-            /*
-              For a friend's calendar:
-              only display weights if they enabled it.
-            */
-
-            const canShowWeights =
-                !calendarFriendProfile ||
-                calendarFriendProfile.shareWeights;
+const last =
+new Date(
+year,
+month + 1,
+0
+);
 
 
-            if(canShowWeights) {
+$("calTitle")
+.textContent =
 
-                workout.exercises
-                    ?.forEach(
-                        exercise => {
+first.toLocaleDateString(
 
-                            html += `
+"en-US",
 
-                                <div class="detailExercise">
+{
+month:"long",
+year:"numeric"
+}
 
-                                    <strong>
-                                        ${escapeHTML(exercise.name)}
-                                    </strong>
-
-                                    <div class="detailSets">
-
-                                        ${exercise.sets
-                                            ?.map(
-                                                (set, index) =>
-                                                    `Set ${index + 1}: ${set.weight} lb × ${set.reps}`
-                                            )
-                                            .join("<br>")
-                                            || ""}
-
-                                    </div>
-
-                                </div>
-                            `;
-                        }
-                    );
-            }
-
-            else {
-
-                html += `
-
-                    <div class="privateBox">
-
-                        🔒 Weights and reps are private
-
-                    </div>
-                `;
-            }
-        }
-    );
+);
 
 
-    html +=
-        `</div>`;
+let html = `
+
+<div class="weeklabels">
+
+${[
+"SUN",
+"MON",
+"TUE",
+"WED",
+"THU",
+"FRI",
+"SAT"
+]
+.map(
+day =>
+`<div>${day}</div>`
+)
+.join("")}
+
+</div>
+
+<div class="calendarGrid">
+
+`;
 
 
-    const detail =
-        document.getElementById(
-            "workoutDetail"
-        );
+for(
+let i = 0;
+i < first.getDay();
+i++
+){
+
+html +=
+'<div class="day blank"></div>';
+
+}
 
 
-    detail.innerHTML =
-        html;
+for(
+let day = 1;
+day <= last.getDate();
+day++
+){
+
+const date =
+new Date(
+year,
+month,
+day
+);
 
 
-    detail.scrollIntoView({
-        behavior:
-            "smooth",
+html +=
+calendarBox(
 
-        block:
-            "start"
-    });
+date,
+
+calendarStatus(
+date,
+map
+)
+
+);
+
+}
+
+
+html +=
+"</div>";
+
+
+$("calendarContent")
+.innerHTML =
+html;
+
+
+calendarListeners();
+
+}
+
+
+function renderYear(){
+
+const map =
+historyMap();
+
+
+const year =
+calDate.getFullYear();
+
+
+$("calTitle")
+.textContent =
+year;
+
+
+let html =
+'<div class="yearGrid">';
+
+
+for(
+let month = 0;
+month < 12;
+month++
+){
+
+const first =
+new Date(
+year,
+month,
+1
+);
+
+
+const last =
+new Date(
+year,
+month + 1,
+0
+);
+
+
+html += `
+
+<div class="miniMonth">
+
+<div class="miniTitle">
+
+${first.toLocaleDateString(
+"en-US",
+{
+month:"short"
+}
+)}
+
+</div>
+
+<div class="miniGrid">
+
+`;
+
+
+for(
+let i = 0;
+i < first.getDay();
+i++
+){
+
+html +=
+"<div></div>";
+
+}
+
+
+for(
+let day = 1;
+day <= last.getDate();
+day++
+){
+
+const date =
+new Date(
+year,
+month,
+day
+);
+
+
+html += `
+
+<div
+class="miniDay ${calendarStatus(date,map)}"
+data-date="${dkey(date)}"
+></div>
+
+`;
+
+}
+
+
+html += `
+
+</div>
+
+</div>
+
+`;
+
+}
+
+
+html +=
+"</div>";
+
+
+$("calendarContent")
+.innerHTML =
+html;
+
+
+calendarListeners();
+
+}
+
+
+function calendarListeners(){
+
+document
+.querySelectorAll(
+"[data-date]"
+)
+.forEach(
+element => {
+
+element.onclick =
+() => {
+
+const workouts =
+history.filter(
+workout =>
+dkey(
+workout.date
+) ===
+element.dataset.date
+);
+
+
+if(
+workouts.length
+){
+
+showCalendarDay(
+
+element.dataset.date,
+
+workouts
+
+);
+
+}
+
+};
+
+}
+);
+
+}
+
+
+function showCalendarDay(
+key,
+workouts
+){
+
+let html = `
+
+<div class="card">
+
+<h2>
+${esc(key)}
+</h2>
+
+`;
+
+
+workouts.forEach(
+workout => {
+
+html += `
+
+<h3>
+${esc(
+workout.workout ||
+"Workout"
+)}
+</h3>
+
+`;
+
+
+if(
+!calendarFriend ||
+calendarFriend.shareWeights
+){
+
+workout.exercises
+?.forEach(
+exercise => {
+
+html += `
+
+<div class="detailExercise">
+
+<b>
+${esc(exercise.name)}
+</b>
+
+<div class="detailSets">
+
+${exercise.sets
+?.map(
+(set,index) =>
+`Set ${index + 1}: ${set.weight} lb × ${set.reps}`
+)
+.join("<br>")
+||
+""}
+
+</div>
+
+</div>
+
+`;
+
+}
+);
+
+}
+else{
+
+html += `
+
+<p>
+🔒 Weights and reps are private.
+</p>
+
+`;
+
+}
+
+}
+);
+
+
+html +=
+"</div>";
+
+
+$("calendarDetail")
+.innerHTML =
+html;
+
+}
+
+
+/* AI MUSCLE ANALYSIS */
+
+async function openOverview(
+dayIndex = null
+){
+
+if(!split){
+
+return;
+
+}
+
+
+selectedMuscle =
+null;
+
+
+analysis =
+null;
+
+
+$("analysisSummary")
+.style.display =
+"none";
+
+
+$("muscleInfo")
+.innerHTML = `
+
+<div class="muted">
+
+Tap Analyze with AI,
+then tap a highlighted muscle.
+
+</div>
+
+`;
+
+
+$("analysisStatus")
+.textContent =
+"";
+
+
+const selector =
+$("analysisSelector");
+
+
+selector.innerHTML = `
+
+<option value="all">
+Entire Split
+</option>
+
+${split.days
+.map(
+(day,index) =>
+`<option value="${index}">${esc(day.name)}</option>`
+)
+.join("")}
+
+`;
+
+
+if(
+dayIndex !== null
+){
+
+selector.value =
+String(
+dayIndex
+);
+
+}
+
+
+resetMuscles();
+
+
+screen(
+"overviewScreen"
+);
+
+}
+
+
+function resetMuscles(){
+
+document
+.querySelectorAll(
+".muscle"
+)
+.forEach(
+muscle => {
+
+muscle.classList.remove(
+"i1",
+"i2",
+"i3",
+"selected"
+);
+
+}
+);
+
+}
+
+
+$("analyzeButton").onclick =
+async () => {
+
+const selected =
+$("analysisSelector")
+.value;
+
+
+const target =
+
+selected ===
+"all"
+
+? split
+
+: {
+
+name:
+split.days[
+Number(selected)
+].name,
+
+days: [
+split.days[
+Number(selected)
+]
+]
+
+};
+
+
+$("analysisStatus")
+.textContent =
+"AI is analyzing your exercises...";
+
+
+resetMuscles();
+
+
+try{
+
+const response =
+await fetch(
+
+AI_URL,
+
+{
+
+method:
+"POST",
+
+headers: {
+"Content-Type":
+"application/json"
+},
+
+body:
+JSON.stringify({
+
+type:
+"analyzeSplit",
+
+split:
+target
+
+})
+
+}
+
+);
+
+
+const data =
+await response.json();
+
+
+if(
+!response.ok ||
+data.error
+){
+
+throw new Error(
+data.error ||
+"Analysis failed"
+);
+
+}
+
+
+analysis =
+data;
+
+
+$("analysisStatus")
+.textContent =
+"Tap any highlighted muscle.";
+
+
+for(
+const [
+name,
+muscleData
+]
+of Object.entries(
+data.muscles ||
+{}
+)
+){
+
+document
+.querySelectorAll(
+`[data-muscle="${name}"]`
+)
+.forEach(
+muscle => {
+
+muscle.classList.add(
+
+`i${Math.max(
+1,
+Math.min(
+3,
+Number(
+muscleData.intensity
+) || 1
+)
+)}`
+
+);
+
+}
+);
+
+}
+
+
+$("analysisSummary")
+.style.display =
+"block";
+
+
+$("analysisSummary")
+.innerHTML = `
+
+<h2>
+Coverage Summary
+</h2>
+
+<p>
+${esc(
+data.summary ||
+""
+)}
+</p>
+
+${
+data.missing?.length
+
+? `
+
+<div class="muted">
+
+Low / missing:
+${data.missing
+.map(
+prettyMuscle
+)
+.join(", ")}
+
+</div>
+
+`
+
+: ""
+}
+
+`;
+
+}
+catch(e){
+
+$("analysisStatus")
+.textContent =
+
+"Could not analyze: " +
+e.message;
+
+}
+
+};
+
+
+function prettyMuscle(
+muscle
+){
+
+return String(muscle)
+
+.replaceAll(
+"_",
+" "
+)
+
+.replace(
+/\b\w/g,
+character =>
+character.toUpperCase()
+);
+
+}
+
+
+document
+.querySelectorAll(
+".muscle"
+)
+.forEach(
+element => {
+
+element.onclick =
+() => {
+
+if(!analysis){
+
+return;
+
+}
+
+
+const name =
+element.dataset.muscle;
+
+
+const data =
+analysis.muscles?.[
+name
+];
+
+
+if(!data){
+
+return;
+
+}
+
+
+selectedMuscle =
+name;
+
+
+document
+.querySelectorAll(
+".muscle"
+)
+.forEach(
+muscle =>
+muscle.classList.remove(
+"selected"
+)
+);
+
+
+document
+.querySelectorAll(
+`[data-muscle="${name}"]`
+)
+.forEach(
+muscle =>
+muscle.classList.add(
+"selected"
+)
+);
+
+
+$("muscleInfo")
+.innerHTML = `
+
+<div class="muted">
+SELECTED MUSCLE
+</div>
+
+<h2>
+${prettyMuscle(name)}
+</h2>
+
+<p>
+
+${
+data.intensity === 3
+? "High"
+
+: data.intensity === 2
+? "Moderate"
+
+: "Light"
+}
+
+involvement
+
+</p>
+
+
+<h3>
+Targeted by
+</h3>
+
+
+${
+(data.exercises || [])
+.map(
+exercise => `
+
+<div class="prRow">
+
+<span>
+${esc(exercise.name)}
+</span>
+
+<span class="role">
+${esc(exercise.role)}
+</span>
+
+</div>
+
+`
+)
+.join("")
+
+||
+
+"<p>No exercise details.</p>"
+}
+
+
+<button
+id="askMuscle"
+class="primary"
+>
+
+✦ Ask AI about
+${prettyMuscle(name)}
+
+</button>
+
+`;
+
+
+$("askMuscle")
+.onclick =
+() => {
+
+openChat();
+
+
+$("chatQuestion")
+.value =
+
+`Tell me about my ${prettyMuscle(name)} training. Am I covering it well, and what would you change?`;
+
+};
+
+};
+
+}
+);
+
+
+/* AI CHAT */
+
+$("aiFab")
+.onclick =
+openChat;
+
+
+$("closeChat")
+.onclick =
+() =>
+$("chatPanel")
+.classList.remove(
+"show"
+);
+
+
+function openChat(){
+
+$("chatPanel")
+.classList.add(
+"show"
+);
+
+
+setTimeout(
+() =>
+$("chatQuestion")
+.focus(),
+50
+);
+
+}
+
+
+$("sendChat")
+.onclick =
+sendChat;
+
+
+$("chatQuestion")
+.addEventListener(
+"keydown",
+event => {
+
+if(
+event.key ===
+"Enter"
+){
+
+sendChat();
+
+}
+
+}
+);
+
+
+async function sendChat(){
+
+const question =
+$("chatQuestion")
+.value
+.trim();
+
+
+if(!question){
+
+return;
+
+}
+
+
+$("chatQuestion")
+.value =
+"";
+
+
+addBubble(
+question,
+"user"
+);
+
+
+const thinking =
+addBubble(
+"Thinking…",
+"ai"
+);
+
+
+const context = {
+
+split,
+
+activeWorkout:
+activeDay?.name ||
+null,
+
+selectedMuscle,
+
+selectedMuscleAnalysis:
+
+selectedMuscle
+
+? analysis?.muscles?.[
+selectedMuscle
+]
+
+: null
+
+};
+
+
+try{
+
+const response =
+await fetch(
+
+AI_URL,
+
+{
+
+method:
+"POST",
+
+headers: {
+"Content-Type":
+"application/json"
+},
+
+body:
+JSON.stringify({
+
+type:
+"chat",
+
+question,
+
+context
+
+})
+
+}
+
+);
+
+
+const data =
+await response.json();
+
+
+thinking.textContent =
+
+data.answer ||
+data.error ||
+"I couldn't answer that.";
+
+}
+catch(e){
+
+thinking.textContent =
+
+"AI connection failed: " +
+e.message;
+
+}
+
+}
+
+
+function addBubble(
+text,
+type
+){
+
+const bubble =
+document.createElement(
+"div"
+);
+
+
+bubble.className =
+`bubble ${type}`;
+
+
+bubble.textContent =
+text;
+
+
+$("chatMessages")
+.appendChild(
+bubble
+);
+
+
+$("chatMessages")
+.scrollTop =
+$("chatMessages")
+.scrollHeight;
+
+
+return bubble;
+
 }
 
 </script>
