@@ -6027,13 +6027,12 @@ const data =
 await response.json();
 
 
-thinking.textContent =
-
-data.answer ||
-data.error ||
-"I couldn't answer that.";
-
-}
+thinking.innerHTML =
+formatAIResponse(
+    data.answer ||
+    data.error ||
+    "I couldn't answer that."
+);
 catch(e){
 
 thinking.textContent =
