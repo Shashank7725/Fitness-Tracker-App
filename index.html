@@ -1,317 +1,969 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0a0a0a">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#080808">
 
-  <title>Fitness Tracker</title>
+<title>Fitness Tracker</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<style>
+* {
+    box-sizing: border-box;
+}
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #0a0a0a;
-      color: white;
-      min-height: 100vh;
-    }
+body {
+    margin: 0;
+    background: #080808;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
 
-    #loginPage {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 30px;
-      max-width: 500px;
-      margin: auto;
-    }
+.screen {
+    display: none;
+    max-width: 520px;
+    min-height: 100vh;
+    margin: auto;
+    padding: 28px 20px 110px;
+}
 
-    .logo {
-      font-size: 55px;
-      margin-bottom: 20px;
-    }
+.screen.active {
+    display: block;
+}
 
-    h1 {
-      font-size: 42px;
-      line-height: 1.05;
-      margin-bottom: 15px;
-    }
+h1 {
+    font-size: 34px;
+    margin: 10px 0;
+}
 
-    .subtitle {
-      color: #999;
-      font-size: 17px;
-      line-height: 1.5;
-      margin-bottom: 45px;
-    }
+h2 {
+    margin: 0 0 8px;
+}
 
-    #googleButton {
-      width: 100%;
-      border: none;
-      border-radius: 16px;
-      padding: 17px;
-      font-size: 17px;
-      font-weight: 600;
-      cursor: pointer;
-      background: white;
-      color: black;
-    }
+p {
+    color: #999;
+}
 
-    #googleButton:active {
-      transform: scale(.98);
-    }
+.card {
+    background: #151515;
+    border: 1px solid #252525;
+    border-radius: 20px;
+    padding: 18px;
+    margin: 14px 0;
+}
 
-    #appPage {
-      display: none;
-      max-width: 500px;
-      margin: auto;
-      padding: 25px;
-    }
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
 
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 40px;
-    }
+.primary {
+    width: 100%;
+    padding: 16px;
+    border: 0;
+    border-radius: 15px;
+    background: white;
+    color: black;
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 10px;
+}
 
-    .profile {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+.secondary {
+    width: 100%;
+    padding: 15px;
+    border-radius: 15px;
+    background: #1d1d1d;
+    color: white;
+    border: 1px solid #333;
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 10px;
+}
 
-    #profilePicture {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-    }
+input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 13px;
+    border: 1px solid #333;
+    background: #111;
+    color: white;
+    font-size: 16px;
+    outline: none;
+}
 
-    .small {
-      color: #888;
-      font-size: 13px;
-    }
+label {
+    display: block;
+    color: #999;
+    font-size: 13px;
+    margin: 15px 0 7px;
+}
 
-    .card {
-      background: #171717;
-      border: 1px solid #252525;
-      border-radius: 22px;
-      padding: 22px;
-      margin-top: 15px;
-    }
+.back {
+    background: none;
+    color: #aaa;
+    border: none;
+    padding: 0;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
 
-    .card h2 {
-      margin-bottom: 7px;
-    }
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-    .card p {
-      color: #999;
-    }
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
-    .primaryButton {
-      width: 100%;
-      background: #ffffff;
-      color: #000;
-      border: none;
-      border-radius: 15px;
-      padding: 16px;
-      margin-top: 18px;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-    }
+.profile img {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+}
 
-    .secondaryButton {
-      width: 100%;
-      background: #1c1c1c;
-      color: white;
-      border: 1px solid #333;
-      border-radius: 15px;
-      padding: 16px;
-      margin-top: 12px;
-      font-size: 16px;
-      font-weight: 600;
-    }
+.logout {
+    border: none;
+    background: none;
+    color: #888;
+}
 
-    #logoutButton {
-      background: none;
-      border: none;
-      color: #888;
-      cursor: pointer;
-    }
-  </style>
+.workoutCard {
+    background: #151515;
+    border: 1px solid #252525;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 14px 0;
+}
+
+.workoutCard h2 {
+    font-size: 21px;
+}
+
+.exercise {
+    padding: 14px 0;
+    border-bottom: 1px solid #292929;
+}
+
+.exercise:last-child {
+    border-bottom: 0;
+}
+
+.exerciseTop {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.exerciseName {
+    font-weight: 700;
+}
+
+.setCount {
+    color: #888;
+    font-size: 14px;
+}
+
+.delete {
+    background: none;
+    border: none;
+    color: #ff5c5c;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 45px 1fr 1fr;
+    gap: 8px;
+    align-items: center;
+    margin: 9px 0;
+}
+
+.row input {
+    text-align: center;
+}
+
+.headerRow {
+    color: #777;
+    font-size: 12px;
+    text-align: center;
+}
+
+.progress {
+    color: #64d981;
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+.muted {
+    color: #777;
+    font-size: 14px;
+}
+
+.logo {
+    font-size: 55px;
+    margin-top: 100px;
+}
+
+#loginScreen h1 {
+    font-size: 44px;
+    line-height: 1.02;
+}
+
+#loginScreen p {
+    font-size: 17px;
+    line-height: 1.5;
+    margin-bottom: 40px;
+}
+
+.dayBuilder {
+    margin-top: 20px;
+}
+
+.smallButton {
+    background: #262626;
+    color: white;
+    border: 0;
+    padding: 10px 13px;
+    border-radius: 11px;
+}
+
+.finish {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px);
+    max-width: 480px;
+}
+</style>
 </head>
 
 <body>
 
-  <!-- LOGIN -->
+<!-- LOGIN -->
 
-  <div id="loginPage">
+<div id="loginScreen" class="screen active">
 
     <div class="logo">🏋️</div>
 
     <h1>Train.<br>Track.<br>Progress.</h1>
 
-    <p class="subtitle">
-      Build your workout split, track every set,
-      and see how much stronger you're getting.
+    <p>
+        Build your training split, log your workouts
+        and see how much stronger you're getting.
     </p>
 
-    <button id="googleButton">
-      Continue with Google
+    <button id="googleLogin" class="primary">
+        Continue with Google
     </button>
 
-  </div>
+</div>
 
 
-  <!-- MAIN APP -->
+<!-- HOME -->
 
-  <div id="appPage">
+<div id="homeScreen" class="screen">
 
-    <div class="topbar">
+    <div class="top">
 
-      <div class="profile">
-        <img id="profilePicture">
+        <div class="profile">
+            <img id="profilePhoto">
 
-        <div>
-          <div class="small">WELCOME BACK</div>
-          <strong id="userName"></strong>
+            <div>
+                <div class="muted">WELCOME BACK</div>
+                <strong id="profileName">Athlete</strong>
+            </div>
         </div>
-      </div>
 
-      <button id="logoutButton">
-        Log out
-      </button>
+        <button id="logout" class="logout">
+            Log out
+        </button>
 
     </div>
-
 
     <h1>Your Training</h1>
 
-    <div class="card">
+    <div id="splitContainer"></div>
 
-      <h2>No workout split yet</h2>
-
-      <p>
-        Create your own training split or start
-        with a prebuilt program.
-      </p>
-
-      <button class="primaryButton">
+    <button id="createSplitButton" class="primary">
         + Create Workout Split
-      </button>
+    </button>
 
-      <button class="secondaryButton">
-        Browse Prebuilt Splits
-      </button>
-
-    </div>
-
-  </div>
+</div>
 
 
-  <script type="module">
+<!-- SPLIT BUILDER -->
 
-    import { initializeApp }
-    from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+<div id="builderScreen" class="screen">
 
-    import {
-      getAuth,
-      GoogleAuthProvider,
-      signInWithPopup,
-      signOut,
-      onAuthStateChanged
-    }
-    from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+    <button class="back" onclick="showScreen('homeScreen')">
+        ← Back
+    </button>
 
+    <h1>Create Split</h1>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBtPjGGV8n_1y58m4yLRVFAEahxtT-HbM0",
-      authDomain: "fitness-tracker-d235f.firebaseapp.com",
-      projectId: "fitness-tracker-d235f",
-      storageBucket: "fitness-tracker-d235f.firebasestorage.app",
-      messagingSenderId: "786431774975",
-      appId: "1:786431774975:web:d037c915f88d771e00fcca"
-    };
+    <p>
+        Sets created here will be locked during your workouts.
+    </p>
 
+    <label>Split name</label>
 
-    const app = initializeApp(firebaseConfig);
+    <input
+        id="splitName"
+        placeholder="Example: Upper / Lower"
+    >
 
-    const auth = getAuth(app);
+    <div id="daysBuilder"></div>
 
-    const provider = new GoogleAuthProvider();
+    <button id="addDay" class="secondary">
+        + Add Workout Day
+    </button>
 
+    <button id="saveSplit" class="primary">
+        Save Split
+    </button>
 
-    const loginPage =
-      document.getElementById("loginPage");
-
-    const appPage =
-      document.getElementById("appPage");
-
-    const googleButton =
-      document.getElementById("googleButton");
-
-    const logoutButton =
-      document.getElementById("logoutButton");
-
-    const userName =
-      document.getElementById("userName");
-
-    const profilePicture =
-      document.getElementById("profilePicture");
+</div>
 
 
-    googleButton.addEventListener("click", async () => {
+<!-- ACTIVE WORKOUT -->
 
-      try {
+<div id="workoutScreen" class="screen">
+
+    <button class="back" onclick="showScreen('homeScreen')">
+        ← Exit
+    </button>
+
+    <div class="muted">ACTIVE WORKOUT</div>
+
+    <h1 id="activeWorkoutName"></h1>
+
+    <div id="activeExercises"></div>
+
+    <button id="finishWorkout" class="primary finish">
+        Finish Workout
+    </button>
+
+</div>
+
+
+<script type="module">
+
+import {
+    initializeApp
+}
+from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+
+import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+import {
+    getFirestore,
+    doc,
+    setDoc,
+    getDoc,
+    collection,
+    addDoc,
+    serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBtPjGGV8n_1y58m4yLRVFAEahxtT-HbM0",
+    authDomain: "fitness-tracker-d235f.firebaseapp.com",
+    projectId: "fitness-tracker-d235f",
+    storageBucket: "fitness-tracker-d235f.firebasestorage.app",
+    messagingSenderId: "786431774975",
+    appId: "1:786431774975:web:d037c915f88d771e00fcca"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const provider = new GoogleAuthProvider();
+
+let currentUser = null;
+let currentSplit = null;
+let activeDay = null;
+
+
+/* -------------------------
+   NAVIGATION
+------------------------- */
+
+window.showScreen = function(screen) {
+
+    document.querySelectorAll(".screen")
+        .forEach(s => s.classList.remove("active"));
+
+    document.getElementById(screen)
+        .classList.add("active");
+}
+
+
+/* -------------------------
+   LOGIN
+------------------------- */
+
+document.getElementById("googleLogin")
+.addEventListener("click", async () => {
+
+    try {
 
         await signInWithPopup(auth, provider);
 
-      } catch (error) {
+    } catch(error) {
 
-        console.error(error);
+        alert(error.message);
 
-        alert("Google login failed: " + error.message);
+    }
 
-      }
+});
+
+
+document.getElementById("logout")
+.addEventListener("click", () => signOut(auth));
+
+
+onAuthStateChanged(auth, async user => {
+
+    if(user) {
+
+        currentUser = user;
+
+        document.getElementById("profileName").textContent =
+            user.displayName || "Athlete";
+
+        document.getElementById("profilePhoto").src =
+            user.photoURL || "";
+
+        showScreen("homeScreen");
+
+        await loadSplit();
+
+    }
+
+    else {
+
+        currentUser = null;
+
+        showScreen("loginScreen");
+
+    }
+
+});
+
+
+/* -------------------------
+   CREATE SPLIT
+------------------------- */
+
+document.getElementById("createSplitButton")
+.addEventListener("click", () => {
+
+    document.getElementById("splitName").value = "";
+    document.getElementById("daysBuilder").innerHTML = "";
+
+    addWorkoutDay();
+
+    showScreen("builderScreen");
+
+});
+
+
+document.getElementById("addDay")
+.addEventListener("click", addWorkoutDay);
+
+
+function addWorkoutDay() {
+
+    const container = document.createElement("div");
+
+    container.className = "card dayBuilder";
+
+    container.innerHTML = `
+
+        <label>Workout name</label>
+
+        <input
+            class="dayName"
+            placeholder="Example: Upper A"
+        >
+
+        <div class="exerciseBuilder"></div>
+
+        <button class="secondary addExercise">
+            + Add Exercise
+        </button>
+
+    `;
+
+    container.querySelector(".addExercise")
+        .addEventListener("click", () => {
+
+            addExercise(
+                container.querySelector(".exerciseBuilder")
+            );
+
+        });
+
+    document.getElementById("daysBuilder")
+        .appendChild(container);
+
+    addExercise(
+        container.querySelector(".exerciseBuilder")
+    );
+
+}
+
+
+function addExercise(container) {
+
+    const exercise = document.createElement("div");
+
+    exercise.className = "exercise";
+
+    exercise.innerHTML = `
+
+        <label>Exercise</label>
+
+        <input
+            class="exerciseInput"
+            placeholder="Example: Bench Press"
+        >
+
+        <label>Number of sets</label>
+
+        <input
+            class="setsInput"
+            type="number"
+            value="3"
+            min="1"
+            max="10"
+        >
+
+        <button class="delete">
+            Remove exercise
+        </button>
+
+    `;
+
+    exercise.querySelector(".delete")
+        .addEventListener("click", () => exercise.remove());
+
+    container.appendChild(exercise);
+
+}
+
+
+/* -------------------------
+   SAVE SPLIT
+------------------------- */
+
+document.getElementById("saveSplit")
+.addEventListener("click", async () => {
+
+    const splitName =
+        document.getElementById("splitName").value.trim();
+
+    if(!splitName) {
+
+        alert("Enter a split name.");
+        return;
+
+    }
+
+    const days = [];
+
+    document.querySelectorAll(".dayBuilder")
+    .forEach(dayElement => {
+
+        const name =
+            dayElement.querySelector(".dayName")
+            .value.trim();
+
+        if(!name) return;
+
+        const exercises = [];
+
+        dayElement.querySelectorAll(".exercise")
+        .forEach(exerciseElement => {
+
+            const name =
+                exerciseElement
+                .querySelector(".exerciseInput")
+                .value.trim();
+
+            const sets =
+                Number(
+                    exerciseElement
+                    .querySelector(".setsInput")
+                    .value
+                );
+
+            if(name) {
+
+                exercises.push({
+                    name,
+                    sets
+                });
+
+            }
+
+        });
+
+        days.push({
+            name,
+            exercises
+        });
 
     });
 
 
-    logoutButton.addEventListener("click", async () => {
+    currentSplit = {
+        name: splitName,
+        days
+    };
 
-      await signOut(auth);
+
+    await setDoc(
+
+        doc(
+            db,
+            "users",
+            currentUser.uid,
+            "data",
+            "split"
+        ),
+
+        currentSplit
+
+    );
+
+
+    renderSplit();
+
+    showScreen("homeScreen");
+
+});
+
+
+/* -------------------------
+   LOAD SPLIT
+------------------------- */
+
+async function loadSplit() {
+
+    const ref = doc(
+        db,
+        "users",
+        currentUser.uid,
+        "data",
+        "split"
+    );
+
+    const snapshot = await getDoc(ref);
+
+
+    if(snapshot.exists()) {
+
+        currentSplit = snapshot.data();
+
+    }
+
+    else {
+
+        currentSplit = null;
+
+    }
+
+
+    renderSplit();
+
+}
+
+
+/* -------------------------
+   DISPLAY SPLIT
+------------------------- */
+
+function renderSplit() {
+
+    const container =
+        document.getElementById("splitContainer");
+
+    container.innerHTML = "";
+
+
+    if(!currentSplit) {
+
+        container.innerHTML = `
+
+            <div class="card">
+
+                <h2>No workout split yet</h2>
+
+                <p>
+                    Create a split to start tracking
+                    your workouts.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const title = document.createElement("div");
+
+    title.innerHTML = `
+
+        <p class="muted">CURRENT SPLIT</p>
+
+        <h2>${currentSplit.name}</h2>
+
+    `;
+
+    container.appendChild(title);
+
+
+    currentSplit.days.forEach((day, index) => {
+
+        const card = document.createElement("div");
+
+        card.className = "workoutCard";
+
+
+        let exerciseText =
+            day.exercises
+            .map(e => `${e.name} · ${e.sets} sets`)
+            .join("<br>");
+
+
+        card.innerHTML = `
+
+            <h2>${day.name}</h2>
+
+            <p>${exerciseText}</p>
+
+            <button class="primary">
+                Start Workout
+            </button>
+
+        `;
+
+
+        card.querySelector("button")
+        .addEventListener("click", () => {
+
+            startWorkout(index);
+
+        });
+
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+/* -------------------------
+   START WORKOUT
+------------------------- */
+
+function startWorkout(dayIndex) {
+
+    activeDay = currentSplit.days[dayIndex];
+
+    document.getElementById("activeWorkoutName")
+        .textContent = activeDay.name;
+
+
+    const container =
+        document.getElementById("activeExercises");
+
+    container.innerHTML = "";
+
+
+    activeDay.exercises.forEach((exercise, exerciseIndex) => {
+
+        const card = document.createElement("div");
+
+        card.className = "card";
+
+        card.dataset.exercise = exerciseIndex;
+
+
+        let rows = "";
+
+
+        for(let i = 0; i < exercise.sets; i++) {
+
+            rows += `
+
+                <div class="row setRow">
+
+                    <strong>${i + 1}</strong>
+
+                    <input
+                        class="weight"
+                        type="number"
+                        inputmode="decimal"
+                        placeholder="lb"
+                    >
+
+                    <input
+                        class="reps"
+                        type="number"
+                        inputmode="numeric"
+                        placeholder="reps"
+                    >
+
+                </div>
+
+            `;
+
+        }
+
+
+        card.innerHTML = `
+
+            <h2>${exercise.name}</h2>
+
+            <div class="muted previous">
+                No previous workout
+            </div>
+
+            <div class="row headerRow">
+
+                <span>SET</span>
+                <span>WEIGHT</span>
+                <span>REPS</span>
+
+            </div>
+
+            ${rows}
+
+            <div class="progress"></div>
+
+        `;
+
+
+        container.appendChild(card);
 
     });
 
 
-    onAuthStateChanged(auth, (user) => {
+    showScreen("workoutScreen");
 
-      if (user) {
+}
 
-        loginPage.style.display = "none";
-        appPage.style.display = "block";
 
-        userName.textContent =
-          user.displayName || "Athlete";
+/* -------------------------
+   FINISH WORKOUT
+------------------------- */
 
-        profilePicture.src =
-          user.photoURL || "";
+document.getElementById("finishWorkout")
+.addEventListener("click", async () => {
 
-      } else {
+    if(!activeDay) return;
 
-        loginPage.style.display = "flex";
-        appPage.style.display = "none";
 
-      }
+    const exercises = [];
+
+
+    document.querySelectorAll(
+        "#activeExercises .card"
+    )
+    .forEach((card, index) => {
+
+        const exercise =
+            activeDay.exercises[index];
+
+
+        const sets = [];
+
+
+        card.querySelectorAll(".setRow")
+        .forEach(row => {
+
+            sets.push({
+
+                weight:
+                    Number(
+                        row.querySelector(".weight").value
+                    ) || 0,
+
+                reps:
+                    Number(
+                        row.querySelector(".reps").value
+                    ) || 0
+
+            });
+
+        });
+
+
+        exercises.push({
+
+            name: exercise.name,
+            sets
+
+        });
 
     });
 
-  </script>
+
+    await addDoc(
+
+        collection(
+            db,
+            "users",
+            currentUser.uid,
+            "workouts"
+        ),
+
+        {
+
+            split: currentSplit.name,
+
+            workout: activeDay.name,
+
+            exercises,
+
+            completedAt: serverTimestamp()
+
+        }
+
+    );
+
+
+    alert("Workout saved!");
+
+    activeDay = null;
+
+    showScreen("homeScreen");
+
+});
+
+</script>
 
 </body>
 </html>
