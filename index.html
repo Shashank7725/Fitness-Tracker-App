@@ -2,16 +2,17 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
 <meta name="theme-color" content="#f5f5f7">
 
 <title>Fitness Tracker</title>
 
 <style>
-
-/* =========================
-   BASE
-========================= */
 
 * {
     box-sizing: border-box;
@@ -20,36 +21,40 @@
 :root {
     --bg: #f5f5f7;
     --card: #ffffff;
-    --card-secondary: #f0f0f2;
-    --border: #e5e5e7;
+    --soft: #f0f0f2;
+    --border: #e4e4e7;
 
     --text: #111111;
     --secondary: #77777d;
 
     --primary: #111111;
-    --primary-text: #ffffff;
+    --primaryText: #ffffff;
 
     --input: #f3f3f5;
 
-    --green: #25a65a;
-    --red: #e34b4b;
+    --green: #1f9d55;
+    --greenSoft: #e8f7ee;
+
+    --red: #e5484d;
 }
 
 body.dark {
     --bg: #09090b;
     --card: #161618;
-    --card-secondary: #202023;
+    --soft: #202023;
     --border: #29292d;
 
     --text: #f5f5f7;
     --secondary: #8e8e93;
 
     --primary: #f5f5f7;
-    --primary-text: #111111;
+    --primaryText: #111111;
 
     --input: #202023;
 
     --green: #4bd477;
+    --greenSoft: #14291c;
+
     --red: #ff6666;
 }
 
@@ -59,6 +64,8 @@ html {
 
 body {
     margin: 0;
+
+    min-height: 100vh;
 
     background: var(--bg);
     color: var(--text);
@@ -71,16 +78,12 @@ body {
         sans-serif;
 
     transition:
-        background .2s ease,
-        color .2s ease;
-
-    min-height: 100vh;
+        background .2s,
+        color .2s;
 }
 
 
-/* =========================
-   SCREENS
-========================= */
+/* SCREENS */
 
 .screen {
     display: none;
@@ -103,58 +106,47 @@ body {
 }
 
 
-/* =========================
-   TYPOGRAPHY
-========================= */
+/* TEXT */
 
 h1 {
     font-size: 34px;
     letter-spacing: -1.3px;
-
-    margin: 12px 0 8px;
-
     line-height: 1.08;
+
+    margin: 10px 0;
 }
 
 h2 {
     font-size: 21px;
+    letter-spacing: -.4px;
 
     margin: 0 0 7px;
-
-    letter-spacing: -.4px;
 }
 
 p {
     color: var(--secondary);
-
     line-height: 1.5;
 }
 
 .muted {
     color: var(--secondary);
-
     font-size: 13px;
 }
 
 
-/* =========================
-   TOP BAR
-========================= */
+/* TOP BAR */
 
 .topbar {
     display: flex;
-
     align-items: center;
     justify-content: space-between;
 
-    margin-bottom: 35px;
+    margin-bottom: 34px;
 }
 
 .profile {
     display: flex;
-
     align-items: center;
-
     gap: 11px;
 }
 
@@ -166,7 +158,7 @@ p {
 
     object-fit: cover;
 
-    background: var(--card-secondary);
+    background: var(--soft);
 }
 
 .profileName {
@@ -175,16 +167,78 @@ p {
 
 .topActions {
     display: flex;
-
     align-items: center;
-
-    gap: 8px;
+    gap: 7px;
 }
 
 
-/* =========================
-   THEME
-========================= */
+/* CARDS */
+
+.card,
+.workoutCard {
+    background: var(--card);
+
+    border: 1px solid var(--border);
+
+    border-radius: 20px;
+
+    padding: 19px;
+
+    margin: 14px 0;
+}
+
+.workoutCard p {
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+
+/* BUTTONS */
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.primary {
+    width: 100%;
+
+    padding: 15px;
+
+    border: 0;
+    border-radius: 14px;
+
+    background: var(--primary);
+    color: var(--primaryText);
+
+    font-size: 15px;
+    font-weight: 700;
+
+    margin-top: 10px;
+}
+
+.primary:active,
+.secondary:active {
+    transform: scale(.985);
+}
+
+.secondary {
+    width: 100%;
+
+    padding: 14px;
+
+    border-radius: 14px;
+
+    border: 1px solid var(--border);
+
+    background: var(--soft);
+    color: var(--text);
+
+    font-size: 15px;
+    font-weight: 600;
+
+    margin-top: 9px;
+}
 
 .iconButton {
     width: 42px;
@@ -200,148 +254,45 @@ p {
     font-size: 18px;
 
     display: flex;
-
     align-items: center;
     justify-content: center;
-
-    cursor: pointer;
 }
 
 .logout {
     background: none;
-
-    border: none;
+    border: 0;
 
     color: var(--secondary);
 
     font-size: 14px;
-
-    cursor: pointer;
 }
 
-
-/* =========================
-   CARDS
-========================= */
-
-.card,
-.workoutCard {
-
-    background: var(--card);
-
-    border: 1px solid var(--border);
-
-    border-radius: 20px;
-
-    padding: 19px;
-
-    margin: 14px 0;
-}
-
-.workoutCard p {
-
-    font-size: 14px;
-
-    line-height: 1.8;
-
-    margin-bottom: 15px;
-}
-
-
-/* =========================
-   BUTTONS
-========================= */
-
-button {
-    font-family: inherit;
-}
-
-.primary {
-
-    width: 100%;
-
-    padding: 15px;
-
+.back {
+    background: none;
     border: 0;
 
-    border-radius: 14px;
+    color: var(--secondary);
 
-    background: var(--primary);
-    color: var(--primary-text);
-
-    font-size: 15px;
-    font-weight: 700;
-
-    cursor: pointer;
-
-    margin-top: 10px;
-
-    transition:
-        transform .1s ease,
-        opacity .1s ease;
-}
-
-.primary:active {
-    transform: scale(.98);
-    opacity: .9;
-}
-
-.secondary {
-
-    width: 100%;
-
-    padding: 14px;
-
-    border-radius: 14px;
-
-    background: var(--card-secondary);
-    color: var(--text);
-
-    border: 1px solid var(--border);
+    padding: 0;
 
     font-size: 15px;
-    font-weight: 600;
 
-    cursor: pointer;
-
-    margin-top: 9px;
-}
-
-.smallButton {
-
-    background: var(--card-secondary);
-
-    color: var(--text);
-
-    border: 1px solid var(--border);
-
-    border-radius: 11px;
-
-    padding: 9px 12px;
-
-    cursor: pointer;
+    margin-bottom: 25px;
 }
 
 .delete {
-
     background: none;
-
     border: 0;
 
     color: var(--red);
 
     padding: 12px 0 0;
-
-    cursor: pointer;
 }
 
 
-/* =========================
-   INPUTS
-========================= */
+/* INPUTS */
 
 label {
-
     display: block;
 
     color: var(--secondary);
@@ -352,7 +303,6 @@ label {
 }
 
 input {
-
     width: 100%;
 
     padding: 14px;
@@ -370,61 +320,58 @@ input {
 }
 
 input:focus {
-
     border-color: var(--secondary);
 }
 
+input:disabled {
+    opacity: .65;
+}
 
-/* =========================
-   LOGIN
-========================= */
+
+/* LOGIN */
 
 #loginScreen {
-
-    display: none;
-
     flex-direction: column;
-
     justify-content: center;
 
-    min-height: 100vh;
+    position: relative;
 }
 
 #loginScreen.active {
     display: flex;
 }
 
-.loginIcon {
+.loginTheme {
+    position: absolute;
 
+    right: 20px;
+    top: max(22px, env(safe-area-inset-top));
+}
+
+.loginIcon {
     width: 62px;
     height: 62px;
 
     border-radius: 18px;
 
     background: var(--primary);
-    color: var(--primary-text);
+    color: var(--primaryText);
 
     display: flex;
-
     align-items: center;
     justify-content: center;
 
-    font-size: 29px;
+    font-size: 30px;
 
     margin-bottom: 25px;
 }
 
 #loginScreen h1 {
-
-    font-size: 45px;
-
+    font-size: 46px;
     letter-spacing: -2px;
-
-    max-width: 350px;
 }
 
 #loginScreen > p {
-
     font-size: 16px;
 
     max-width: 380px;
@@ -432,125 +379,202 @@ input:focus {
     margin-bottom: 35px;
 }
 
-.loginTheme {
 
-    position: absolute;
+/* BUILDER */
 
-    right: 22px;
-
-    top: max(22px, env(safe-area-inset-top));
-}
-
-
-/* =========================
-   SPLIT
-========================= */
-
-.sectionHeader {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    margin-top: 30px;
-}
-
-.currentSplit {
-
-    margin-top: 30px;
-}
-
-.exercise {
-
+.exerciseBuilderItem {
     padding: 15px 0;
 
     border-bottom: 1px solid var(--border);
 }
 
-.exercise:last-child {
-
+.exerciseBuilderItem:last-child {
     border-bottom: 0;
 }
 
-.dayBuilder {
+.repGrid {
+    display: grid;
 
-    margin-top: 20px;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
 }
 
 
-/* =========================
-   WORKOUT LOGGER
-========================= */
+/* HOME */
 
-.back {
+.currentSplit {
+    margin-top: 30px;
+}
 
-    background: none;
+.exerciseSummary {
+    color: var(--secondary);
+
+    font-size: 14px;
+
+    margin: 6px 0;
+}
+
+.cardActions {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 9px;
+
+    margin-top: 12px;
+}
+
+
+/* WORKOUT */
+
+.exerciseWorkout {
+    position: relative;
+}
+
+.exerciseHeading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 10px;
+}
+
+.targetBadge {
+    display: inline-block;
+
+    background: var(--soft);
+
+    border-radius: 8px;
+
+    padding: 5px 8px;
 
     color: var(--secondary);
 
-    border: 0;
+    font-size: 12px;
 
-    padding: 0;
-
-    font-size: 15px;
-
-    cursor: pointer;
-
-    margin-bottom: 25px;
+    white-space: nowrap;
 }
 
-.row {
-
+.setRow {
     display: grid;
 
-    grid-template-columns: 40px 1fr 1fr;
+    grid-template-columns: 38px 1fr 1fr;
 
-    gap: 9px;
+    gap: 8px;
 
     align-items: center;
 
     margin: 9px 0;
 }
 
-.row input {
-
+.setRow input {
     text-align: center;
 
     padding: 12px 7px;
 }
 
 .headerRow {
+    display: grid;
+
+    grid-template-columns: 38px 1fr 1fr;
+
+    gap: 8px;
+
+    text-align: center;
 
     color: var(--secondary);
 
     font-size: 11px;
 
-    text-align: center;
-
-    margin-top: 18px;
+    margin-top: 20px;
 }
 
-.progress {
+.setNumber {
+    text-align: center;
+
+    font-weight: 700;
+}
+
+.previousBox {
+    background: var(--soft);
+
+    border-radius: 12px;
+
+    padding: 12px;
+
+    margin-top: 14px;
+
+    font-size: 13px;
+
+    color: var(--secondary);
+}
+
+.previousSets {
+    margin-top: 6px;
+
+    color: var(--text);
+
+    line-height: 1.6;
+}
+
+.progressCard {
+    display: none;
+
+    background: var(--greenSoft);
+
+    border-radius: 15px;
+
+    padding: 16px;
+
+    margin-bottom: 18px;
+}
+
+.progressCard.visible {
+    display: block;
+}
+
+.progressLabel {
+    color: var(--green);
+
+    font-size: 12px;
+    font-weight: 700;
+
+    letter-spacing: .5px;
+}
+
+.progressPercent {
+    color: var(--green);
+
+    font-size: 31px;
+    font-weight: 800;
+
+    margin: 3px 0;
+}
+
+.finishedBadge {
+    display: none;
 
     color: var(--green);
 
+    font-size: 13px;
     font-weight: 700;
 
-    font-size: 14px;
-
-    margin-top: 12px;
+    margin-top: 10px;
 }
 
-.previous {
-
-    margin-top: 5px;
+.finishedBadge.visible {
+    display: block;
 }
 
-.finish {
+.finishWorkout {
+    display: none;
 
     position: fixed;
+
+    left: 50%;
+
+    transform: translateX(-50%);
 
     bottom:
         max(
@@ -558,16 +582,23 @@ input:focus {
             env(safe-area-inset-bottom)
         );
 
-    left: 50%;
-
-    transform: translateX(-50%);
-
     width: calc(100% - 40px);
 
     max-width: 480px;
 
     box-shadow:
-        0 5px 25px rgba(0,0,0,.15);
+        0 8px 30px rgba(0,0,0,.15);
+}
+
+
+/* LOADING */
+
+.loading {
+    text-align: center;
+
+    color: var(--secondary);
+
+    padding: 25px 0;
 }
 
 </style>
@@ -577,14 +608,16 @@ input:focus {
 <body>
 
 
-<!-- ======================
-     LOGIN
-====================== -->
+<!-- LOGIN -->
 
-<div id="loginScreen" class="screen active">
+<div
+    id="loginScreen"
+    class="screen active"
+>
 
     <button
-        class="iconButton loginTheme themeButton">
+        class="iconButton loginTheme themeButton"
+    >
         ☾
     </button>
 
@@ -597,27 +630,27 @@ input:focus {
     </h1>
 
     <p>
-        Build your training split, log every workout,
-        and see your progress over time.
+        Build your training split, track every set
+        and see how much stronger you're getting.
     </p>
 
     <button
         id="googleLogin"
-        class="primary">
-
+        class="primary"
+    >
         Continue with Google
-
     </button>
 
 </div>
 
 
 
-<!-- ======================
-     HOME
-====================== -->
+<!-- HOME -->
 
-<div id="homeScreen" class="screen">
+<div
+    id="homeScreen"
+    class="screen"
+>
 
     <div class="topbar">
 
@@ -633,10 +666,9 @@ input:focus {
 
                 <div
                     id="profileName"
-                    class="profileName">
-
+                    class="profileName"
+                >
                     Athlete
-
                 </div>
 
             </div>
@@ -647,18 +679,16 @@ input:focus {
         <div class="topActions">
 
             <button
-                class="iconButton themeButton">
-
+                class="iconButton themeButton"
+            >
                 ☾
-
             </button>
 
             <button
                 id="logout"
-                class="logout">
-
+                class="logout"
+            >
                 Log out
-
             </button>
 
         </div>
@@ -675,7 +705,7 @@ input:focus {
     </h1>
 
     <p>
-        Choose a workout and keep moving forward.
+        Choose today's workout and keep moving forward.
     </p>
 
 
@@ -684,42 +714,40 @@ input:focus {
 
     <button
         id="createSplitButton"
-        class="primary">
-
+        class="primary"
+    >
         + Create Workout Split
-
     </button>
 
 </div>
 
 
 
-<!-- ======================
-     SPLIT BUILDER
-====================== -->
+<!-- SPLIT BUILDER -->
 
-<div id="builderScreen" class="screen">
+<div
+    id="builderScreen"
+    class="screen"
+>
 
     <button
+        id="builderBack"
         class="back"
-        onclick="showScreen('homeScreen')">
-
+    >
         ← Back
-
     </button>
-
 
     <div class="muted">
         WORKOUT BUILDER
     </div>
 
-    <h1>
+    <h1 id="builderTitle">
         Create Split
     </h1>
 
     <p>
-        Set up your workout structure. The number
-        of sets will stay locked while training.
+        Sets and target reps are locked during your workout.
+        You can edit them here whenever you want.
     </p>
 
 
@@ -729,7 +757,8 @@ input:focus {
 
     <input
         id="splitName"
-        placeholder="Upper / Lower">
+        placeholder="Example: Upper / Lower"
+    >
 
 
     <div id="daysBuilder"></div>
@@ -737,39 +766,36 @@ input:focus {
 
     <button
         id="addDay"
-        class="secondary">
-
+        class="secondary"
+    >
         + Add Workout Day
-
     </button>
 
 
     <button
         id="saveSplit"
-        class="primary">
-
+        class="primary"
+    >
         Save Split
-
     </button>
 
 </div>
 
 
 
-<!-- ======================
-     ACTIVE WORKOUT
-====================== -->
+<!-- ACTIVE WORKOUT -->
 
-<div id="workoutScreen" class="screen">
+<div
+    id="workoutScreen"
+    class="screen"
+>
 
     <button
+        id="exitWorkout"
         class="back"
-        onclick="showScreen('homeScreen')">
-
+    >
         ← Exit Workout
-
     </button>
-
 
     <div class="muted">
         ACTIVE WORKOUT
@@ -777,16 +803,19 @@ input:focus {
 
     <h1 id="activeWorkoutName"></h1>
 
+    <p>
+        Enter the weight and reps you actually complete.
+    </p>
+
 
     <div id="activeExercises"></div>
 
 
     <button
         id="finishWorkout"
-        class="primary finish">
-
+        class="primary finishWorkout"
+    >
         Finish Workout
-
     </button>
 
 </div>
@@ -823,6 +852,10 @@ import {
     getDoc,
     collection,
     addDoc,
+    getDocs,
+    query,
+    orderBy,
+    limit,
     serverTimestamp
 }
 from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
@@ -854,14 +887,11 @@ const firebaseConfig = {
 const app =
     initializeApp(firebaseConfig);
 
-
 const auth =
     getAuth(app);
 
-
 const db =
     getFirestore(app);
-
 
 const provider =
     new GoogleAuthProvider();
@@ -872,6 +902,10 @@ let currentUser = null;
 let currentSplit = null;
 
 let activeDay = null;
+
+let previousExerciseData = {};
+
+let editingSplit = false;
 
 
 
@@ -914,27 +948,31 @@ updateThemeIcons();
 
 themeButtons.forEach(button => {
 
-    button.addEventListener("click", () => {
+    button.addEventListener(
+        "click",
+        () => {
 
-        document.body.classList.toggle("dark");
-
-
-        const dark =
-            document.body.classList.contains("dark");
-
-
-        localStorage.setItem(
-
-            "fitnessTheme",
-
-            dark ? "dark" : "light"
-
-        );
+            document.body
+                .classList
+                .toggle("dark");
 
 
-        updateThemeIcons();
+            const dark =
+                document.body
+                    .classList
+                    .contains("dark");
 
-    });
+
+            localStorage.setItem(
+                "fitnessTheme",
+                dark ? "dark" : "light"
+            );
+
+
+            updateThemeIcons();
+
+        }
+    );
 
 });
 
@@ -944,35 +982,37 @@ themeButtons.forEach(button => {
    NAVIGATION
 ========================= */
 
-window.showScreen = function(screen) {
+function showScreen(screenId) {
 
     document
         .querySelectorAll(".screen")
-        .forEach(element => {
+        .forEach(screen => {
 
-            element.classList.remove("active");
+            screen.classList.remove("active");
 
         });
 
 
     document
-        .getElementById(screen)
+        .getElementById(screenId)
         .classList.add("active");
 
 
     window.scrollTo(0, 0);
 
-};
+}
 
 
 
 /* =========================
-   GOOGLE LOGIN
+   LOGIN
 ========================= */
 
 document
 .getElementById("googleLogin")
-.addEventListener("click", async () => {
+.addEventListener(
+"click",
+async () => {
 
     try {
 
@@ -997,15 +1037,15 @@ document
 });
 
 
-
 document
 .getElementById("logout")
-.addEventListener("click", async () => {
+.addEventListener(
+"click",
+async () => {
 
     await signOut(auth);
 
 });
-
 
 
 onAuthStateChanged(
@@ -1020,28 +1060,21 @@ async user => {
         document
             .getElementById("profileName")
             .textContent =
-
-            user.displayName ||
-            "Athlete";
-
-
-        const photo =
-            document.getElementById(
-                "profilePhoto"
-            );
+                user.displayName ||
+                "Athlete";
 
 
         if(user.photoURL) {
 
-            photo.src =
-                user.photoURL;
+            document
+                .getElementById("profilePhoto")
+                .src =
+                    user.photoURL;
 
         }
 
 
-        showScreen(
-            "homeScreen"
-        );
+        showScreen("homeScreen");
 
 
         await loadSplit();
@@ -1054,9 +1087,7 @@ async user => {
 
         currentSplit = null;
 
-        showScreen(
-            "loginScreen"
-        );
+        showScreen("loginScreen");
 
     }
 
@@ -1065,54 +1096,81 @@ async user => {
 
 
 /* =========================
-   CREATE SPLIT
+   BUILDER OPEN
 ========================= */
 
 document
 .getElementById("createSplitButton")
-.addEventListener("click", () => {
+.addEventListener(
+"click",
+() => {
+
+    editingSplit = false;
+
+    document
+        .getElementById("builderTitle")
+        .textContent =
+            "Create Split";
+
 
     document
         .getElementById("splitName")
-        .value = "";
+        .value =
+            "";
 
 
     document
         .getElementById("daysBuilder")
-        .innerHTML = "";
+        .innerHTML =
+            "";
 
 
     addWorkoutDay();
 
 
-    showScreen(
-        "builderScreen"
-    );
+    showScreen("builderScreen");
 
 });
 
+
+document
+.getElementById("builderBack")
+.addEventListener(
+"click",
+() => {
+
+    showScreen("homeScreen");
+
+});
 
 
 document
 .getElementById("addDay")
 .addEventListener(
-    "click",
-    addWorkoutDay
-);
+"click",
+() => {
+
+    addWorkoutDay();
+
+});
 
 
 
-function addWorkoutDay() {
+/* =========================
+   ADD WORKOUT DAY
+========================= */
 
-    const container =
+function addWorkoutDay(dayData = null) {
+
+    const day =
         document.createElement("div");
 
 
-    container.className =
+    day.className =
         "card dayBuilder";
 
 
-    container.innerHTML = `
+    day.innerHTML = `
 
         <label>
             Workout name
@@ -1120,36 +1178,66 @@ function addWorkoutDay() {
 
         <input
             class="dayName"
-            placeholder="Example: Upper A">
+            placeholder="Example: Upper A"
+        >
 
-        <div
-            class="exerciseBuilder">
-        </div>
+
+        <div class="exerciseBuilder"></div>
+
 
         <button
-            class="secondary addExercise">
-
+            class="secondary addExercise"
+        >
             + Add Exercise
+        </button>
 
+
+        <button
+            class="delete removeDay"
+        >
+            Remove workout day
         </button>
 
     `;
 
 
-    container
+    if(dayData) {
+
+        day
+            .querySelector(".dayName")
+            .value =
+                dayData.name || "";
+
+    }
+
+
+    const exerciseContainer =
+        day.querySelector(
+            ".exerciseBuilder"
+        );
+
+
+    day
         .querySelector(".addExercise")
         .addEventListener(
             "click",
             () => {
 
                 addExercise(
-
-                    container
-                        .querySelector(
-                            ".exerciseBuilder"
-                        )
-
+                    exerciseContainer
                 );
+
+            }
+        );
+
+
+    day
+        .querySelector(".removeDay")
+        .addEventListener(
+            "click",
+            () => {
+
+                day.remove();
 
             }
         );
@@ -1157,30 +1245,55 @@ function addWorkoutDay() {
 
     document
         .getElementById("daysBuilder")
-        .appendChild(container);
+        .appendChild(day);
 
 
-    addExercise(
+    if(
+        dayData &&
+        dayData.exercises &&
+        dayData.exercises.length
+    ) {
 
-        container
-            .querySelector(
-                ".exerciseBuilder"
-            )
+        dayData.exercises.forEach(
+            exercise => {
 
-    );
+                addExercise(
+                    exerciseContainer,
+                    exercise
+                );
+
+            }
+        );
+
+    }
+
+    else {
+
+        addExercise(
+            exerciseContainer
+        );
+
+    }
 
 }
 
 
 
-function addExercise(container) {
+/* =========================
+   ADD EXERCISE
+========================= */
+
+function addExercise(
+    container,
+    exerciseData = null
+) {
 
     const exercise =
         document.createElement("div");
 
 
     exercise.className =
-        "exercise";
+        "exerciseBuilderItem";
 
 
     exercise.innerHTML = `
@@ -1190,34 +1303,97 @@ function addExercise(container) {
         </label>
 
         <input
-            class="exerciseInput"
-            placeholder="Example: Chest Press">
+            class="exerciseName"
+            placeholder="Example: Chest Press"
+        >
 
 
         <label>
-            Sets
+            Number of sets
         </label>
 
         <input
-            class="setsInput"
+            class="exerciseSets"
             type="number"
-            value="3"
             min="1"
-            max="10">
+            max="10"
+            value="3"
+        >
 
 
-        <button
-            class="delete">
+        <div class="repGrid">
 
+            <div>
+
+                <label>
+                    Minimum reps
+                </label>
+
+                <input
+                    class="minReps"
+                    type="number"
+                    min="1"
+                    value="6"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label>
+                    Maximum reps
+                </label>
+
+                <input
+                    class="maxReps"
+                    type="number"
+                    min="1"
+                    value="10"
+                >
+
+            </div>
+
+        </div>
+
+
+        <button class="delete removeExercise">
             Remove exercise
-
         </button>
 
     `;
 
 
+    if(exerciseData) {
+
+        exercise
+            .querySelector(".exerciseName")
+            .value =
+                exerciseData.name || "";
+
+
+        exercise
+            .querySelector(".exerciseSets")
+            .value =
+                exerciseData.sets || 3;
+
+
+        exercise
+            .querySelector(".minReps")
+            .value =
+                exerciseData.minReps || 6;
+
+
+        exercise
+            .querySelector(".maxReps")
+            .value =
+                exerciseData.maxReps || 10;
+
+    }
+
+
     exercise
-        .querySelector(".delete")
+        .querySelector(".removeExercise")
         .addEventListener(
             "click",
             () => {
@@ -1247,7 +1423,6 @@ document
 async () => {
 
     const splitName =
-
         document
             .getElementById("splitName")
             .value
@@ -1268,82 +1443,155 @@ async () => {
     const days = [];
 
 
-    document
-        .querySelectorAll(".dayBuilder")
-        .forEach(dayElement => {
+    const dayElements =
+        document
+            .querySelectorAll(
+                ".dayBuilder"
+            );
 
+
+    for(
+        const dayElement
+        of dayElements
+    ) {
+
+        const dayName =
+            dayElement
+                .querySelector(".dayName")
+                .value
+                .trim();
+
+
+        if(!dayName) {
+
+            alert(
+                "Give every workout day a name."
+            );
+
+            return;
+
+        }
+
+
+        const exercises = [];
+
+
+        const exerciseElements =
+            dayElement
+                .querySelectorAll(
+                    ".exerciseBuilderItem"
+                );
+
+
+        for(
+            const exerciseElement
+            of exerciseElements
+        ) {
 
             const name =
-
-                dayElement
-                    .querySelector(".dayName")
+                exerciseElement
+                    .querySelector(".exerciseName")
                     .value
                     .trim();
 
 
-            if(!name) {
-                return;
-            }
-
-
-            const exercises = [];
-
-
-            dayElement
-                .querySelectorAll(".exercise")
-                .forEach(
-                    exerciseElement => {
-
-
-                        const name =
-
-                            exerciseElement
-                                .querySelector(
-                                    ".exerciseInput"
-                                )
-                                .value
-                                .trim();
-
-
-                        const sets =
-
-                            Number(
-
-                                exerciseElement
-                                    .querySelector(
-                                        ".setsInput"
-                                    )
-                                    .value
-
-                            );
-
-
-                        if(name) {
-
-                            exercises.push({
-
-                                name:
-                                    name,
-
-                                sets:
-                                    sets || 1
-
-                            });
-
-                        }
-
-                    }
+            const sets =
+                Number(
+                    exerciseElement
+                        .querySelector(".exerciseSets")
+                        .value
                 );
 
 
-            days.push({
+            const minReps =
+                Number(
+                    exerciseElement
+                        .querySelector(".minReps")
+                        .value
+                );
+
+
+            const maxReps =
+                Number(
+                    exerciseElement
+                        .querySelector(".maxReps")
+                        .value
+                );
+
+
+            if(!name) {
+
+                alert(
+                    "Give every exercise a name."
+                );
+
+                return;
+
+            }
+
+
+            if(
+                !sets ||
+                sets < 1
+            ) {
+
+                alert(
+                    "Sets must be at least 1."
+                );
+
+                return;
+
+            }
+
+
+            if(
+                !minReps ||
+                !maxReps ||
+                minReps > maxReps
+            ) {
+
+                alert(
+                    "Check the recommended rep range."
+                );
+
+                return;
+
+            }
+
+
+            exercises.push({
 
                 name,
-                exercises
+                sets,
+                minReps,
+                maxReps
 
             });
 
+        }
+
+
+        if(
+            exercises.length === 0
+        ) {
+
+            alert(
+                "Each workout needs at least one exercise."
+            );
+
+            return;
+
+        }
+
+
+        days.push({
+
+            name: dayName,
+            exercises
+
         });
+
+    }
 
 
     if(days.length === 0) {
@@ -1359,11 +1607,8 @@ async () => {
 
     currentSplit = {
 
-        name:
-            splitName,
-
-        days:
-            days
+        name: splitName,
+        days
 
     };
 
@@ -1417,8 +1662,7 @@ async function loadSplit() {
 
     try {
 
-        const reference =
-
+        const splitReference =
             doc(
                 db,
                 "users",
@@ -1429,9 +1673,8 @@ async function loadSplit() {
 
 
         const snapshot =
-
             await getDoc(
-                reference
+                splitReference
             );
 
 
@@ -1444,8 +1687,7 @@ async function loadSplit() {
 
         else {
 
-            currentSplit =
-                null;
+            currentSplit = null;
 
         }
 
@@ -1469,13 +1711,12 @@ async function loadSplit() {
 
 
 /* =========================
-   DISPLAY SPLIT
+   RENDER HOME
 ========================= */
 
 function renderSplit() {
 
     const container =
-
         document
             .getElementById(
                 "splitContainer"
@@ -1501,8 +1742,7 @@ function renderSplit() {
 
                 <p>
                     Create your first split
-                    and start tracking your
-                    training.
+                    to start tracking your training.
                 </p>
 
             </div>
@@ -1510,20 +1750,36 @@ function renderSplit() {
         `;
 
 
+        document
+            .getElementById(
+                "createSplitButton"
+            )
+            .style.display =
+                "block";
+
+
         return;
 
     }
 
 
-    const title =
+    document
+        .getElementById(
+            "createSplitButton"
+        )
+        .style.display =
+            "none";
+
+
+    const header =
         document.createElement("div");
 
 
-    title.className =
+    header.className =
         "currentSplit";
 
 
-    title.innerHTML = `
+    header.innerHTML = `
 
         <div class="muted">
             CURRENT SPLIT
@@ -1533,17 +1789,30 @@ function renderSplit() {
             ${escapeHTML(currentSplit.name)}
         </h2>
 
+        <button
+            class="secondary editSplit"
+        >
+            Edit Split
+        </button>
+
     `;
 
 
+    header
+        .querySelector(".editSplit")
+        .addEventListener(
+            "click",
+            openEditSplit
+        );
+
+
     container.appendChild(
-        title
+        header
     );
 
 
     currentSplit.days.forEach(
-    (day, index) => {
-
+    (day, dayIndex) => {
 
         const card =
             document.createElement("div");
@@ -1553,16 +1822,28 @@ function renderSplit() {
             "workoutCard";
 
 
-        const exerciseText =
+        let exerciseHTML = "";
 
-            day.exercises
-                .map(exercise =>
 
-                    `${escapeHTML(exercise.name)}
-                    · ${exercise.sets} sets`
+        day.exercises.forEach(
+            exercise => {
 
-                )
-                .join("<br>");
+                exerciseHTML += `
+
+                    <div class="exerciseSummary">
+
+                        ${escapeHTML(exercise.name)}
+
+                        · ${exercise.sets} sets
+
+                        · ${exercise.minReps || 6}–${exercise.maxReps || 10} reps
+
+                    </div>
+
+                `;
+
+            }
+        );
 
 
         card.innerHTML = `
@@ -1571,27 +1852,23 @@ function renderSplit() {
                 ${escapeHTML(day.name)}
             </h2>
 
-            <p>
-                ${exerciseText}
-            </p>
+            ${exerciseHTML}
 
-            <button class="primary">
-
+            <button class="primary startWorkout">
                 Start Workout
-
             </button>
 
         `;
 
 
         card
-            .querySelector("button")
+            .querySelector(".startWorkout")
             .addEventListener(
                 "click",
                 () => {
 
                     startWorkout(
-                        index
+                        dayIndex
                     );
 
                 }
@@ -1609,10 +1886,176 @@ function renderSplit() {
 
 
 /* =========================
+   EDIT SPLIT
+========================= */
+
+function openEditSplit() {
+
+    if(!currentSplit) {
+        return;
+    }
+
+
+    editingSplit = true;
+
+
+    document
+        .getElementById("builderTitle")
+        .textContent =
+            "Edit Split";
+
+
+    document
+        .getElementById("splitName")
+        .value =
+            currentSplit.name;
+
+
+    const daysBuilder =
+        document
+            .getElementById(
+                "daysBuilder"
+            );
+
+
+    daysBuilder.innerHTML = "";
+
+
+    currentSplit.days.forEach(
+        day => {
+
+            addWorkoutDay(
+                day
+            );
+
+        }
+    );
+
+
+    showScreen(
+        "builderScreen"
+    );
+
+}
+
+
+
+/* =========================
+   PREVIOUS WORKOUT DATA
+========================= */
+
+async function getPreviousExerciseData(
+    day
+) {
+
+    const results = {};
+
+
+    day.exercises.forEach(
+        exercise => {
+
+            results[
+                exercise.name
+                    .toLowerCase()
+            ] = null;
+
+        }
+    );
+
+
+    try {
+
+        const workoutQuery =
+            query(
+
+                collection(
+                    db,
+                    "users",
+                    currentUser.uid,
+                    "workouts"
+                ),
+
+                orderBy(
+                    "completedAt",
+                    "desc"
+                ),
+
+                limit(50)
+
+            );
+
+
+        const snapshot =
+            await getDocs(
+                workoutQuery
+            );
+
+
+        snapshot.forEach(
+            documentSnapshot => {
+
+                const workout =
+                    documentSnapshot.data();
+
+
+                if(
+                    !workout.exercises
+                ) {
+                    return;
+                }
+
+
+                workout.exercises.forEach(
+                    exercise => {
+
+                        const key =
+                            String(
+                                exercise.name
+                            )
+                            .toLowerCase();
+
+
+                        if(
+                            key in results &&
+                            results[key] === null
+                        ) {
+
+                            results[key] =
+                                exercise;
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "Could not load previous workouts:",
+            error
+        );
+
+    }
+
+
+    return results;
+
+}
+
+
+
+/* =========================
    START WORKOUT
 ========================= */
 
-function startWorkout(dayIndex) {
+async function startWorkout(
+    dayIndex
+) {
 
     activeDay =
         currentSplit.days[
@@ -1629,11 +2072,38 @@ function startWorkout(dayIndex) {
 
 
     const container =
-
         document
             .getElementById(
                 "activeExercises"
             );
+
+
+    container.innerHTML = `
+
+        <div class="loading">
+            Loading previous workout...
+        </div>
+
+    `;
+
+
+    document
+        .getElementById(
+            "finishWorkout"
+        )
+        .style.display =
+            "none";
+
+
+    showScreen(
+        "workoutScreen"
+    );
+
+
+    previousExerciseData =
+        await getPreviousExerciseData(
+            activeDay
+        );
 
 
     container.innerHTML = "";
@@ -1642,103 +2112,599 @@ function startWorkout(dayIndex) {
     activeDay.exercises.forEach(
     (exercise, exerciseIndex) => {
 
-
-        const card =
-            document.createElement("div");
-
-
-        card.className =
-            "card";
-
-
-        card.dataset.exercise =
-            exerciseIndex;
-
-
-        let rows = "";
-
-
-        for(
-            let i = 0;
-            i < exercise.sets;
-            i++
-        ) {
-
-            rows += `
-
-                <div class="row setRow">
-
-                    <strong>
-                        ${i + 1}
-                    </strong>
-
-                    <input
-                        class="weight"
-                        type="number"
-                        inputmode="decimal"
-                        placeholder="lb">
-
-                    <input
-                        class="reps"
-                        type="number"
-                        inputmode="numeric"
-                        placeholder="reps">
-
-                </div>
-
-            `;
-
-        }
-
-
-        card.innerHTML = `
-
-            <h2>
-                ${escapeHTML(
-                    exercise.name
-                )}
-            </h2>
-
-            <div
-                class="muted previous">
-
-                No previous workout
-
-            </div>
-
-
-            <div
-                class="row headerRow">
-
-                <span>SET</span>
-
-                <span>WEIGHT</span>
-
-                <span>REPS</span>
-
-            </div>
-
-
-            ${rows}
-
-
-            <div
-                class="progress">
-            </div>
-
-        `;
-
-
-        container.appendChild(
-            card
+        createWorkoutExerciseCard(
+            container,
+            exercise,
+            exerciseIndex
         );
 
     });
 
+}
 
-    showScreen(
-        "workoutScreen"
+
+
+/* =========================
+   WORKOUT EXERCISE CARD
+========================= */
+
+function createWorkoutExerciseCard(
+    container,
+    exercise,
+    exerciseIndex
+) {
+
+    const card =
+        document.createElement("div");
+
+
+    card.className =
+        "card exerciseWorkout";
+
+
+    card.dataset.finished =
+        "false";
+
+
+    card.dataset.exerciseIndex =
+        exerciseIndex;
+
+
+    const previous =
+        previousExerciseData[
+            exercise.name
+                .toLowerCase()
+        ];
+
+
+    let previousHTML =
+        "No previous workout";
+
+
+    if(
+        previous &&
+        previous.sets
+    ) {
+
+        previousHTML =
+            previous.sets
+                .map(
+                    (set, index) => {
+
+                        return `Set ${index + 1}: ${set.weight} lb × ${set.reps}`;
+
+                    }
+                )
+                .join("<br>");
+
+    }
+
+
+    let setRows = "";
+
+
+    for(
+        let setIndex = 0;
+        setIndex < exercise.sets;
+        setIndex++
+    ) {
+
+        let previousWeight = "";
+
+        let previousReps = "";
+
+
+        if(
+            previous &&
+            previous.sets &&
+            previous.sets[
+                setIndex
+            ]
+        ) {
+
+            previousWeight =
+                previous
+                    .sets[
+                        setIndex
+                    ]
+                    .weight || "";
+
+
+            previousReps =
+                previous
+                    .sets[
+                        setIndex
+                    ]
+                    .reps || "";
+
+        }
+
+
+        setRows += `
+
+            <div class="setRow">
+
+                <div class="setNumber">
+                    ${setIndex + 1}
+                </div>
+
+                <input
+                    class="weight"
+                    type="number"
+                    inputmode="decimal"
+                    min="0"
+                    step="0.5"
+                    placeholder="lb"
+                    value="${previousWeight}"
+                >
+
+                <input
+                    class="reps"
+                    type="number"
+                    inputmode="numeric"
+                    min="0"
+                    placeholder="${exercise.minReps || 6}–${exercise.maxReps || 10}"
+                    value="${previousReps}"
+                >
+
+            </div>
+
+        `;
+
+    }
+
+
+    card.innerHTML = `
+
+        <div class="progressCard">
+
+            <div class="progressLabel">
+                ↑ PROGRESS
+            </div>
+
+            <div class="progressPercent">
+            </div>
+
+            <div class="muted">
+                Since your previous workout
+            </div>
+
+        </div>
+
+
+        <div class="exerciseHeading">
+
+            <h2>
+                ${escapeHTML(exercise.name)}
+            </h2>
+
+            <span class="targetBadge">
+
+                ${exercise.sets} sets
+                · ${exercise.minReps || 6}–${exercise.maxReps || 10}
+
+            </span>
+
+        </div>
+
+
+        <div class="previousBox">
+
+            <strong>
+                Previous
+            </strong>
+
+            <div class="previousSets">
+                ${previousHTML}
+            </div>
+
+        </div>
+
+
+        <div class="headerRow">
+
+            <span>
+                SET
+            </span>
+
+            <span>
+                WEIGHT
+            </span>
+
+            <span>
+                REPS
+            </span>
+
+        </div>
+
+
+        ${setRows}
+
+
+        <div class="finishedBadge">
+            ✓ Exercise completed
+        </div>
+
+
+        <button
+            class="secondary finishExercise"
+        >
+            Finish Exercise
+        </button>
+
+    `;
+
+
+    card
+        .querySelector(
+            ".finishExercise"
+        )
+        .addEventListener(
+            "click",
+            () => {
+
+                finishExercise(
+                    card,
+                    exercise
+                );
+
+            }
+        );
+
+
+    container.appendChild(
+        card
     );
+
+}
+
+
+
+/* =========================
+   ESTIMATED STRENGTH
+========================= */
+
+/*
+   Epley estimated 1-rep max:
+
+   weight × (1 + reps / 30)
+
+   This allows both more weight
+   AND more reps to count as progress.
+*/
+
+function estimatedStrength(
+    weight,
+    reps
+) {
+
+    weight =
+        Number(weight);
+
+    reps =
+        Number(reps);
+
+
+    if(
+        weight <= 0 ||
+        reps <= 0
+    ) {
+
+        return 0;
+
+    }
+
+
+    return (
+        weight *
+        (
+            1 +
+            reps / 30
+        )
+    );
+
+}
+
+
+
+/* =========================
+   BEST SET SCORE
+========================= */
+
+function bestStrengthFromSets(
+    sets
+) {
+
+    let best = 0;
+
+
+    sets.forEach(set => {
+
+        const score =
+            estimatedStrength(
+                set.weight,
+                set.reps
+            );
+
+
+        if(score > best) {
+
+            best = score;
+
+        }
+
+    });
+
+
+    return best;
+
+}
+
+
+
+/* =========================
+   FINISH EXERCISE
+========================= */
+
+function finishExercise(
+    card,
+    exercise
+) {
+
+    if(
+        card.dataset.finished ===
+        "true"
+    ) {
+
+        return;
+
+    }
+
+
+    const rows =
+        card
+            .querySelectorAll(
+                ".setRow"
+            );
+
+
+    const currentSets = [];
+
+
+    let valid = true;
+
+
+    rows.forEach(row => {
+
+        const weightInput =
+            row.querySelector(
+                ".weight"
+            );
+
+
+        const repsInput =
+            row.querySelector(
+                ".reps"
+            );
+
+
+        const weight =
+            Number(
+                weightInput.value
+            );
+
+
+        const reps =
+            Number(
+                repsInput.value
+            );
+
+
+        if(
+            weightInput.value === "" ||
+            repsInput.value === "" ||
+            weight <= 0 ||
+            reps <= 0
+        ) {
+
+            valid = false;
+
+        }
+
+
+        currentSets.push({
+
+            weight,
+            reps
+
+        });
+
+    });
+
+
+    if(!valid) {
+
+        alert(
+            "Enter the weight and reps for every set before finishing the exercise."
+        );
+
+        return;
+
+    }
+
+
+    /*
+       LOCK WEIGHT + REPS
+    */
+
+    rows.forEach(row => {
+
+        row
+            .querySelector(".weight")
+            .disabled =
+                true;
+
+
+        row
+            .querySelector(".reps")
+            .disabled =
+                true;
+
+    });
+
+
+    card.dataset.finished =
+        "true";
+
+
+    card.currentSets =
+        currentSets;
+
+
+    const finishButton =
+        card.querySelector(
+            ".finishExercise"
+        );
+
+
+    finishButton.style.display =
+        "none";
+
+
+    card
+        .querySelector(
+            ".finishedBadge"
+        )
+        .classList
+        .add("visible");
+
+
+    /*
+       PROGRESS CALCULATION
+    */
+
+    const previous =
+        previousExerciseData[
+            exercise.name
+                .toLowerCase()
+        ];
+
+
+    if(
+        previous &&
+        previous.sets &&
+        previous.sets.length
+    ) {
+
+        const oldStrength =
+            bestStrengthFromSets(
+                previous.sets
+            );
+
+
+        const newStrength =
+            bestStrengthFromSets(
+                currentSets
+            );
+
+
+        if(
+            oldStrength > 0 &&
+            newStrength > oldStrength
+        ) {
+
+            const percentage =
+                (
+                    (
+                        newStrength -
+                        oldStrength
+                    )
+                    /
+                    oldStrength
+                )
+                *
+                100;
+
+
+            const progressCard =
+                card.querySelector(
+                    ".progressCard"
+                );
+
+
+            progressCard
+                .querySelector(
+                    ".progressPercent"
+                )
+                .textContent =
+                    "+" +
+                    percentage.toFixed(1) +
+                    "%";
+
+
+            progressCard
+                .classList
+                .add("visible");
+
+        }
+
+    }
+
+
+    checkAllExercisesFinished();
+
+}
+
+
+
+/* =========================
+   CHECK COMPLETION
+========================= */
+
+function checkAllExercisesFinished() {
+
+    const cards =
+        document
+            .querySelectorAll(
+                ".exerciseWorkout"
+            );
+
+
+    if(cards.length === 0) {
+
+        return;
+
+    }
+
+
+    let allFinished =
+        true;
+
+
+    cards.forEach(card => {
+
+        if(
+            card.dataset.finished !==
+            "true"
+        ) {
+
+            allFinished = false;
+
+        }
+
+    });
+
+
+    if(allFinished) {
+
+        document
+            .getElementById(
+                "finishWorkout"
+            )
+            .style.display =
+                "block";
+
+    }
 
 }
 
@@ -1754,79 +2720,86 @@ document
 "click",
 async () => {
 
-
     if(!activeDay) {
+
         return;
+
     }
+
+
+    const cards =
+        document
+            .querySelectorAll(
+                ".exerciseWorkout"
+            );
 
 
     const exercises = [];
 
 
-    document
-        .querySelectorAll(
-            "#activeExercises .card"
-        )
-        .forEach(
-        (card, index) => {
+    let allFinished =
+        true;
 
 
-            const exercise =
+    cards.forEach(
+    (card, index) => {
 
-                activeDay.exercises[
-                    index
-                ];
+        if(
+            card.dataset.finished !==
+            "true"
+        ) {
 
+            allFinished = false;
 
-            const sets = [];
+            return;
 
-
-            card
-                .querySelectorAll(
-                    ".setRow"
-                )
-                .forEach(row => {
+        }
 
 
-                    sets.push({
+        exercises.push({
 
-                        weight:
-                            Number(
-                                row
-                                    .querySelector(
-                                        ".weight"
-                                    )
-                                    .value
-                            ) || 0,
+            name:
+                activeDay
+                    .exercises[
+                        index
+                    ]
+                    .name,
 
-                        reps:
-                            Number(
-                                row
-                                    .querySelector(
-                                        ".reps"
-                                    )
-                                    .value
-                            ) || 0
-
-                    });
-
-                });
-
-
-            exercises.push({
-
-                name:
-                    exercise.name,
-
-                sets:
-                    sets
-
-            });
+            sets:
+                card.currentSets
 
         });
 
+    });
+
+
+    if(!allFinished) {
+
+        alert(
+            "Finish every exercise first."
+        );
+
+        return;
+
+    }
+
 
     try {
+
+        const finishButton =
+            document
+                .getElementById(
+                    "finishWorkout"
+                );
+
+
+        finishButton.disabled =
+            true;
+
+
+        finishButton.textContent =
+            "Saving...";
+
 
         await addDoc(
 
@@ -1845,8 +2818,7 @@ async () => {
                 workout:
                     activeDay.name,
 
-                exercises:
-                    exercises,
+                exercises,
 
                 completedAt:
                     serverTimestamp()
@@ -1857,6 +2829,20 @@ async () => {
 
 
         activeDay = null;
+
+        previousExerciseData = {};
+
+
+        finishButton.disabled =
+            false;
+
+
+        finishButton.textContent =
+            "Finish Workout";
+
+
+        finishButton.style.display =
+            "none";
 
 
         showScreen(
@@ -1874,6 +2860,22 @@ async () => {
 
         console.error(error);
 
+
+        const finishButton =
+            document
+                .getElementById(
+                    "finishWorkout"
+                );
+
+
+        finishButton.disabled =
+            false;
+
+
+        finishButton.textContent =
+            "Finish Workout";
+
+
         alert(
             "Could not save workout: " +
             error.message
@@ -1886,7 +2888,51 @@ async () => {
 
 
 /* =========================
-   SECURITY
+   EXIT WORKOUT
+========================= */
+
+document
+.getElementById("exitWorkout")
+.addEventListener(
+"click",
+() => {
+
+    const leave =
+        confirm(
+            "Exit this workout? Unsaved progress will be lost."
+        );
+
+
+    if(!leave) {
+
+        return;
+
+    }
+
+
+    activeDay = null;
+
+    previousExerciseData = {};
+
+
+    document
+        .getElementById(
+            "finishWorkout"
+        )
+        .style.display =
+            "none";
+
+
+    showScreen(
+        "homeScreen"
+    );
+
+});
+
+
+
+/* =========================
+   SECURITY / HTML ESCAPE
 ========================= */
 
 function escapeHTML(value) {
