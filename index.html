@@ -1,614 +1,1341 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#111214">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<meta
+name="theme-color"
+content="#111214"
+>
+
 <title>Fitness Tracker</title>
 
 <style>
-*{box-sizing:border-box}
-
-:root{
---bg:#f3f1ed;
---card:#fbfaf7;
---soft:#ebe8e2;
---border:#dedad3;
---text:#1a1a1b;
---secondary:#77746f;
---primary:#dca47e;
---primaryText:#171513;
---input:#eeebe6;
---green:#78966f;
---greenSoft:#e3ebe0;
---red:#a96666;
---redSoft:#efe1df;
---future:#e5e2dc
-}
-
-body.dark{
---bg:#111214;
---card:#1a1b1e;
---soft:#232427;
---border:#2c2d31;
---text:#f2f1ee;
---secondary:#8d8e93;
---primary:#e8b38f;
---primaryText:#171719;
---input:#222326;
---green:#83a879;
---greenSoft:#202b20;
---red:#a95f5f;
---redSoft:#302020;
---future:#25262a
-}
-
-html,body{
-margin:0;
-background:var(--bg);
-color:var(--text);
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-min-height:100%
-}
-
-.screen{
-display:none;
-max-width:560px;
-min-height:100vh;
-margin:auto;
-padding:max(24px,env(safe-area-inset-top)) 20px 110px
-}
-
-.screen.active{display:block}
-
-h1{
-font-size:34px;
-letter-spacing:-1.4px;
-margin:8px 0
-}
-
-h2{
-font-size:21px;
-margin:0 0 8px
+
+* {
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   COLORS
+========================= */
+
+:root {
+
+    --bg: #f3f1ed;
+
+    --card: #fbfaf7;
+
+    --soft: #ebe8e2;
+
+    --border: #dedad3;
+
+    --text: #1a1a1b;
+
+    --secondary: #77746f;
+
+    --primary: #dca47e;
+
+    --primaryText: #171513;
+
+    --input: #eeebe6;
+
+    --green: #78966f;
+
+    --greenSoft: #e3ebe0;
+
+    --red: #a96666;
+
+    --redSoft: #efe1df;
+
+    --future: #e5e2dc;
+}
+
+
+body.dark {
+
+    --bg: #111214;
+
+    --card: #1a1b1e;
+
+    --soft: #232427;
+
+    --border: #2c2d31;
+
+    --text: #f2f1ee;
+
+    --secondary: #8d8e93;
+
+    --primary: #e8b38f;
+
+    --primaryText: #171719;
+
+    --input: #222326;
+
+    --green: #83a879;
+
+    --greenSoft: #202b20;
+
+    --red: #a95f5f;
+
+    --redSoft: #302020;
+
+    --future: #25262a;
+}
+
+
+/* =========================
+   BASE
+========================= */
+
+html,
+body {
+
+    margin: 0;
+
+    min-height: 100%;
+
+    background: var(--bg);
+
+    color: var(--text);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+
+.screen {
+
+    display: none;
+
+    max-width: 560px;
+
+    min-height: 100vh;
+
+    margin: auto;
+
+    padding:
+        max(24px, env(safe-area-inset-top))
+        20px
+        110px;
+}
+
+
+.screen.active {
+
+    display: block;
+}
+
+
+h1 {
+
+    font-size: 34px;
+
+    letter-spacing: -1.4px;
+
+    margin: 8px 0;
+}
+
+
+h2 {
+
+    font-size: 21px;
+
+    margin: 0 0 8px;
+}
+
+
+h3 {
+
+    margin: 0 0 8px;
+}
+
+
+p,
+.muted {
+
+    color: var(--secondary);
+}
+
+
+.muted {
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+
+    background: var(--card);
+
+    border: 1px solid var(--border);
+
+    border-radius: 20px;
+
+    padding: 18px;
+
+    margin: 14px 0;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+button,
+input,
+select,
+textarea {
+
+    font: inherit;
+}
+
+
+button {
+
+    cursor: pointer;
+}
+
+
+.primary,
+.secondary {
+
+    width: 100%;
+
+    border-radius: 14px;
+
+    padding: 14px;
+
+    font-weight: 700;
+
+    margin-top: 9px;
+}
+
+
+.primary {
+
+    border: 0;
+
+    background: var(--primary);
+
+    color: var(--primaryText);
+}
+
+
+.secondary {
+
+    border: 1px solid var(--border);
+
+    background: var(--soft);
+
+    color: var(--text);
+}
+
+
+button:active {
+
+    transform: scale(.98);
+}
+
+
+.icon {
+
+    width: 42px;
+
+    height: 42px;
+
+    flex: 0 0 42px;
+
+    border-radius: 50%;
+
+    border: 1px solid var(--border);
+
+    background: var(--card);
+
+    color: var(--text);
+
+    display: grid;
+
+    place-items: center;
+}
+
+
+.back {
+
+    border: 0;
+
+    background: none;
+
+    color: var(--secondary);
+
+    padding: 0;
+
+    margin-bottom: 22px;
+}
+
+
+.danger {
+
+    color: var(--red);
+}
+
+
+.dangerButton {
+
+    background: var(--redSoft);
+
+    color: var(--red);
+
+    border: 1px solid var(--red);
+
+    margin-top: 25px;
+}
+
+
+/* =========================
+   INPUTS
+========================= */
+
+input,
+select,
+textarea {
+
+    width: 100%;
+
+    padding: 13px;
+
+    border-radius: 12px;
+
+    border: 1px solid var(--border);
+
+    background: var(--input);
+
+    color: var(--text);
+
+    font-size: 16px;
+
+    outline: none;
+}
+
+
+input:focus,
+select:focus,
+textarea:focus {
+
+    border-color: var(--primary);
+}
+
+
+label {
+
+    display: block;
+
+    font-size: 13px;
+
+    color: var(--secondary);
+
+    margin: 14px 0 6px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.topbar {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 30px;
+}
+
+
+.profile {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    min-width: 0;
+}
+
+
+.profile img,
+.avatar {
+
+    width: 42px;
+
+    height: 42px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    background: var(--soft);
+}
+
+
+.profileName {
+
+    font-weight: 750;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+.actions {
+
+    display: flex;
+
+    gap: 5px;
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+#loginScreen.active {
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    position: relative;
+}
+
+
+.loginTheme {
+
+    position: absolute;
+
+    right: 20px;
+
+    top:
+        max(
+            22px,
+            env(safe-area-inset-top)
+        );
+}
+
+
+.logo {
+
+    width: 62px;
+
+    height: 62px;
+
+    border-radius: 18px;
+
+    background: var(--primary);
+
+    color: var(--primaryText);
+
+    display: grid;
+
+    place-items: center;
+
+    font-size: 29px;
+
+    margin-bottom: 22px;
+}
+
+
+#loginScreen h1 {
+
+    font-size: 46px;
+}
+
+
+/* =========================
+   SPLIT BUILDER
+========================= */
+
+.exerciseSummary {
+
+    font-size: 14px;
+
+    color: var(--secondary);
+
+    margin: 7px 0;
+}
+
+
+.builderExercise {
+
+    padding: 14px 0;
+
+    border-bottom: 1px solid var(--border);
+}
+
+
+.grid2 {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
 }
+
+
+/* =========================
+   WORKOUT
+========================= */
+
+.setRow,
+.setHeader {
+
+    display: grid;
+
+    grid-template-columns:
+        38px 1fr 1fr;
+
+    gap: 8px;
+
+    align-items: center;
+}
+
+
+.setHeader {
+
+    font-size: 11px;
+
+    color: var(--secondary);
+
+    text-align: center;
+
+    margin-top: 18px;
+}
+
+
+.setRow {
+
+    margin: 8px 0;
+}
+
+
+.setRow input {
+
+    text-align: center;
+}
+
+
+.previous {
+
+    background: var(--soft);
+
+    padding: 12px;
+
+    border-radius: 12px;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    margin: 12px 0;
+}
+
+
+.progress {
+
+    display: none;
+
+    background: var(--greenSoft);
+
+    padding: 14px;
+
+    border-radius: 14px;
 
-h3{margin:0 0 8px}
+    margin-bottom: 14px;
+}
 
-.muted,p{color:var(--secondary)}
 
-.muted{font-size:13px}
+.progress.show {
 
-.card{
-background:var(--card);
-border:1px solid var(--border);
-border-radius:20px;
-padding:18px;
-margin:14px 0
+    display: block;
 }
 
-button,input,select,textarea{font:inherit}
 
-button{cursor:pointer}
+.progress strong {
 
-.primary,.secondary{
-width:100%;
-border-radius:14px;
-padding:14px;
-font-weight:700;
-margin-top:9px
-}
+    font-size: 28px;
 
-.primary{
-border:0;
-background:var(--primary);
-color:var(--primaryText)
+    color: var(--green);
 }
 
-.secondary{
-border:1px solid var(--border);
-background:var(--soft);
-color:var(--text)
-}
 
-.icon{
-width:42px;
-height:42px;
-border-radius:50%;
-border:1px solid var(--border);
-background:var(--card);
-color:var(--text);
-display:grid;
-place-items:center
-}
+/* =========================
+   CALENDAR
+========================= */
 
-.back{
-border:0;
-background:none;
-color:var(--secondary);
-padding:0;
-margin-bottom:22px
-}
+.tabs {
 
-input,select,textarea{
-width:100%;
-padding:13px;
-border-radius:12px;
-border:1px solid var(--border);
-background:var(--input);
-color:var(--text);
-font-size:16px
-}
+    display: grid;
 
-label{
-display:block;
-font-size:13px;
-color:var(--secondary);
-margin:14px 0 6px
-}
+    grid-template-columns:
+        repeat(3, 1fr);
 
-.topbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px;
-margin-bottom:30px
-}
+    background: var(--soft);
 
-.profile{
-display:flex;
-align-items:center;
-gap:10px;
-min-width:0
+    padding: 4px;
+
+    border-radius: 13px;
+
+    margin: 20px 0;
 }
+
+
+.tab {
+
+    border: 0;
+
+    background: transparent;
+
+    color: var(--secondary);
+
+    padding: 10px;
 
-.profile img,.avatar{
-width:42px;
-height:42px;
-border-radius:50%;
-object-fit:cover;
-background:var(--soft)
+    border-radius: 10px;
+
+    font-weight: 700;
 }
+
+
+.tab.active {
+
+    background: var(--card);
 
-.actions{
-display:flex;
-gap:5px
+    color: var(--text);
 }
+
+
+.calnav {
+
+    display: grid;
+
+    grid-template-columns:
+        42px 1fr 42px;
 
-.profileName{
-font-weight:750;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis
+    align-items: center;
+
+    margin-bottom: 15px;
 }
+
+
+.calnav button {
+
+    width: 38px;
+
+    height: 38px;
+
+    border-radius: 50%;
+
+    border: 1px solid var(--border);
+
+    background: var(--card);
 
-#loginScreen.active{
-display:flex;
-flex-direction:column;
-justify-content:center;
-position:relative
+    color: var(--text);
 }
 
-.loginTheme{
-position:absolute;
-right:20px;
-top:max(22px,env(safe-area-inset-top))
+
+.calTitle {
+
+    text-align: center;
+
+    font-weight: 800;
 }
+
 
-.logo{
-width:62px;
-height:62px;
-border-radius:18px;
-background:var(--primary);
-color:var(--primaryText);
-display:grid;
-place-items:center;
-font-size:29px;
-margin-bottom:22px
+.weeklabels,
+.calendarGrid,
+.weekGrid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, 1fr);
+
+    gap: 6px;
 }
+
 
-#loginScreen h1{font-size:46px}
+.weeklabels div {
 
-.exerciseSummary{
-font-size:14px;
-color:var(--secondary);
-margin:7px 0
+    text-align: center;
+
+    color: var(--secondary);
+
+    font-size: 10px;
+
+    font-weight: 700;
 }
+
+
+.day {
+
+    aspect-ratio: 1;
+
+    border-radius: 10px;
+
+    display: grid;
 
-.builderExercise{
-padding:14px 0;
-border-bottom:1px solid var(--border)
+    place-items: center;
+
+    font-size: 12px;
+
+    font-weight: 750;
 }
+
+
+.day.gym {
 
-.grid2{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px
+    background: var(--green);
+
+    color: white;
+
+    cursor: pointer;
 }
+
+
+.day.missed {
 
-.danger{color:var(--red)}
+    background: var(--red);
 
-.dangerButton{
-background:var(--redSoft);
-color:var(--red);
-border:1px solid var(--red);
-margin-top:25px
+    color: white;
 }
 
-.setRow,.setHeader{
-display:grid;
-grid-template-columns:38px 1fr 1fr;
-gap:8px;
-align-items:center
+
+.day.future {
+
+    background: var(--future);
+
+    color: var(--secondary);
 }
+
 
-.setHeader{
-font-size:11px;
-color:var(--secondary);
-text-align:center;
-margin-top:18px
+.day.today {
+
+    outline:
+        2px solid var(--text);
+
+    outline-offset: 2px;
 }
 
-.setRow{margin:8px 0}
 
-.setRow input{text-align:center}
+.day.blank {
 
-.previous{
-background:var(--soft);
-padding:12px;
-border-radius:12px;
-font-size:13px;
-line-height:1.6;
-margin:12px 0
+    background: transparent;
 }
+
+
+.yearGrid {
 
-.progress{
-display:none;
-background:var(--greenSoft);
-padding:14px;
-border-radius:14px;
-margin-bottom:14px
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 9px;
 }
+
+
+.miniMonth {
 
-.progress.show{display:block}
+    background: var(--card);
 
-.progress strong{
-font-size:28px;
-color:var(--green)
+    border: 1px solid var(--border);
+
+    padding: 8px;
+
+    border-radius: 13px;
 }
+
+
+.miniTitle {
 
-.tabs{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-background:var(--soft);
-padding:4px;
-border-radius:13px;
-margin:20px 0
+    text-align: center;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    margin-bottom: 6px;
 }
+
 
-.tab{
-border:0;
-background:transparent;
-color:var(--secondary);
-padding:10px;
-border-radius:10px;
-font-weight:700
+.miniGrid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, 1fr);
+
+    gap: 2px;
 }
+
 
-.tab.active{
-background:var(--card);
-color:var(--text)
+.miniDay {
+
+    aspect-ratio: 1;
+
+    border-radius: 3px;
 }
+
+
+.miniDay.gym {
 
-.calnav{
-display:grid;
-grid-template-columns:42px 1fr 42px;
-align-items:center;
-margin-bottom:15px
+    background: var(--green);
+
+    cursor: pointer;
 }
+
 
-.calnav button{
-width:38px;
-height:38px;
-border-radius:50%;
-border:1px solid var(--border);
-background:var(--card);
-color:var(--text)
+.miniDay.missed {
+
+    background: var(--red);
 }
+
 
-.calTitle{
-text-align:center;
-font-weight:800
+.miniDay.future {
+
+    background: var(--future);
 }
+
+
+/* =========================
+   FRIENDS
+========================= */
+
+.friendRow {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 12px 0;
 
-.weeklabels,.calendarGrid,.weekGrid{
-display:grid;
-grid-template-columns:repeat(7,1fr);
-gap:6px
+    border-bottom:
+        1px solid var(--border);
 }
 
-.weeklabels div{
-text-align:center;
-color:var(--secondary);
-font-size:10px;
-font-weight:700
+
+.friendInfo {
+
+    flex: 1;
+
+    min-width: 0;
 }
+
+
+.friendEmail {
+
+    font-size: 12px;
+
+    color: var(--secondary);
+
+    overflow: hidden;
 
-.day{
-aspect-ratio:1;
-border-radius:10px;
-display:grid;
-place-items:center;
-font-size:12px;
-font-weight:750
+    text-overflow: ellipsis;
 }
 
-.day.gym{
-background:var(--green);
-color:white
+
+.friendRow button {
+
+    width: auto;
+
+    margin: 0;
+
+    padding: 9px;
 }
+
+
+.toggleRow {
+
+    display: flex;
+
+    justify-content: space-between;
 
-.day.missed{
-background:var(--red);
-color:white
+    gap: 15px;
+
+    padding: 14px 0;
+
+    border-bottom:
+        1px solid var(--border);
 }
+
+
+.toggleRow input {
 
-.day.future{
-background:var(--future);
-color:var(--secondary)
+    width: 24px;
+
+    height: 24px;
 }
+
+
+/* =========================
+   PR
+========================= */
+
+.prRow {
 
-.day.today{
-outline:2px solid var(--text);
-outline-offset:2px
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 13px 0;
+
+    border-bottom:
+        1px solid var(--border);
 }
+
+
+/* =========================
+   AI CHAT
+========================= */
+
+.fab {
 
-.day.blank{background:transparent}
+    position: fixed;
 
-.yearGrid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:9px
+    right: 20px;
+
+    bottom:
+        max(
+            22px,
+            env(safe-area-inset-bottom)
+        );
+
+    width: 54px;
+
+    height: 54px;
+
+    border-radius: 50%;
+
+    border: 0;
+
+    background: var(--primary);
+
+    color: var(--primaryText);
+
+    font-size: 22px;
+
+    font-weight: 900;
+
+    box-shadow:
+        0 8px 24px
+        rgba(0,0,0,.2);
+
+    display: none;
+
+    z-index: 15;
 }
 
-.miniMonth{
-background:var(--card);
-border:1px solid var(--border);
-padding:8px;
-border-radius:13px
+
+.fab.show {
+
+    display: block;
 }
+
+
+.chatPanel {
 
-.miniTitle{
-text-align:center;
-font-size:11px;
-font-weight:800;
-margin-bottom:6px
+    position: fixed;
+
+    right: 16px;
+
+    bottom: 88px;
+
+    width:
+        min(
+            390px,
+            calc(100% - 32px)
+        );
+
+    max-height: 70vh;
+
+    background: var(--card);
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 20px;
+
+    display: none;
+
+    flex-direction: column;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 14px 40px
+        rgba(0,0,0,.25);
+
+    z-index: 20;
 }
 
-.miniGrid{
-display:grid;
-grid-template-columns:repeat(7,1fr);
-gap:2px
+
+.chatPanel.show {
+
+    display: flex;
 }
+
+
+.chatHead {
 
-.miniDay{
-aspect-ratio:1;
-border-radius:3px
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 15px;
+
+    border-bottom:
+        1px solid var(--border);
 }
+
+
+.chatMessages {
+
+    padding: 14px;
+
+    overflow-y: auto;
 
-.miniDay.gym{background:var(--green)}
-.miniDay.missed{background:var(--red)}
-.miniDay.future{background:var(--future)}
+    min-height: 220px;
 
-.friendRow{
-display:flex;
-align-items:center;
-gap:10px;
-padding:12px 0;
-border-bottom:1px solid var(--border)
+    max-height: 430px;
 }
+
+
+.bubble {
+
+    padding: 12px 14px;
+
+    border-radius: 14px;
+
+    margin: 9px 0;
+
+    max-width: 90%;
+
+    line-height: 1.55;
+
+    font-size: 14px;
 
-.friendInfo{
-flex:1;
-min-width:0
+    white-space: normal;
+
+    word-wrap: break-word;
 }
+
+
+.bubble.user {
+
+    margin-left: auto;
 
-.friendEmail{
-font-size:12px;
-color:var(--secondary);
-overflow:hidden;
-text-overflow:ellipsis
+    background: var(--primary);
+
+    color: var(--primaryText);
 }
+
+
+.bubble.ai {
+
+    background: var(--soft);
 
-.friendRow button{
-width:auto;
-margin:0;
-padding:9px
+    color: var(--text);
 }
 
-.toggleRow{
-display:flex;
-justify-content:space-between;
-gap:15px;
-padding:14px 0;
-border-bottom:1px solid var(--border)
+
+.bubble.ai strong {
+
+    color: var(--text);
+
+    font-weight: 800;
 }
+
 
-.toggleRow input{
-width:24px;
-height:24px
+.bubble.ai h3 {
+
+    color: var(--text);
+
+    font-size: 15px;
+
+    margin:
+        15px 0 5px;
 }
+
 
-.prRow{
-display:flex;
-justify-content:space-between;
-gap:12px;
-padding:13px 0;
-border-bottom:1px solid var(--border)
+.bubble.ai h3:first-child {
+
+    margin-top: 0;
 }
+
+
+.aiBullet {
+
+    display: flex;
 
-.fab{
-position:fixed;
-right:20px;
-bottom:max(22px,env(safe-area-inset-bottom));
-width:54px;
-height:54px;
-border-radius:50%;
-border:0;
-background:var(--primary);
-color:var(--primaryText);
-font-size:22px;
-font-weight:900;
-box-shadow:0 8px 24px rgba(0,0,0,.2);
-display:none
+    gap: 8px;
+
+    margin: 6px 0;
 }
+
+
+.aiBulletDot {
+
+    flex: 0 0 auto;
 
-.fab.show{display:block}
+    color: var(--primary);
 
-.chatPanel{
-position:fixed;
-right:16px;
-bottom:88px;
-width:min(390px,calc(100% - 32px));
-max-height:70vh;
-background:var(--card);
-border:1px solid var(--border);
-border-radius:20px;
-display:none;
-flex-direction:column;
-overflow:hidden;
-box-shadow:0 14px 40px rgba(0,0,0,.25);
-z-index:20
+    font-weight: 900;
 }
 
-.chatPanel.show{display:flex}
 
-.chatHead{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:15px;
-border-bottom:1px solid var(--border)
+.chatInput {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 46px;
+
+    gap: 7px;
+
+    padding: 12px;
+
+    border-top:
+        1px solid var(--border);
 }
+
+
+/* =========================
+   MUSCLE MODEL
+========================= */
+
+.modelWrap {
 
-.chatMessages{
-padding:14px;
-overflow:auto;
-min-height:220px
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 12px;
+
+    margin-top: 16px;
 }
+
 
-.bubble{
-padding:11px 13px;
-border-radius:14px;
-margin:8px 0;
-max-width:88%;
-line-height:1.4;
-font-size:14px
+.bodyModel {
+
+    background: var(--soft);
+
+    border-radius: 18px;
+
+    padding: 10px;
 }
+
 
-.bubble.user{
-margin-left:auto;
-background:var(--primary);
-color:var(--primaryText)
+.bodyModel svg {
+
+    width: 100%;
+
+    height: auto;
 }
+
+
+.bodyBase {
 
-.bubble.ai{background:var(--soft)}
+    fill: #68686c;
 
-.chatInput{
-display:grid;
-grid-template-columns:1fr 46px;
-gap:7px;
-padding:12px;
-border-top:1px solid var(--border)
+    opacity: .38;
 }
+
+
+.muscle {
+
+    fill: #777;
+
+    stroke: transparent;
 
-.modelWrap{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-margin-top:16px
+    stroke-width: 2;
+
+    cursor: pointer;
+
+    transition: .2s;
 }
+
+
+.muscle.i1 {
 
-.bodyModel{
-background:var(--soft);
-border-radius:18px;
-padding:10px
+    fill: #b56d61;
 }
 
-.bodyModel svg{
-width:100%;
-height:auto
+
+.muscle.i2 {
+
+    fill: #d85f4f;
 }
+
+
+.muscle.i3 {
 
-.muscle{
-fill:#777;
-stroke:transparent;
-stroke-width:2;
-cursor:pointer;
-transition:.2s
+    fill: #f04f35;
 }
 
-.muscle.i1{fill:#b56d61}
-.muscle.i2{fill:#d85f4f}
-.muscle.i3{fill:#f04f35}
 
-.muscle.selected{
-stroke:#fff;
-stroke-width:3
+.muscle.selected {
+
+    stroke: white;
+
+    stroke-width: 3;
 }
+
+
+.muscleInfo {
 
-.bodyBase{
-fill:#68686c;
-opacity:.38
+    margin-top: 14px;
 }
+
+
+.role {
+
+    font-size: 11px;
+
+    padding: 3px 7px;
 
-.muscleInfo{margin-top:14px}
+    border-radius: 8px;
 
-.role{
-font-size:11px;
-padding:3px 7px;
-border-radius:8px;
-background:var(--soft);
-color:var(--secondary)
+    background: var(--soft);
+
+    color: var(--secondary);
 }
+
+
+.loading {
+
+    text-align: center;
 
-.loading{
-text-align:center;
-color:var(--secondary);
-padding:20px
+    color: var(--secondary);
+
+    padding: 20px;
 }
+
+
+@media(max-width:390px) {
+
+    .yearGrid {
 
-@media(max-width:390px){
-.yearGrid{grid-template-columns:repeat(2,1fr)}
-.actions{gap:3px}
-.icon{width:38px;height:38px}
-.modelWrap{gap:7px}
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .actions {
+
+        gap: 3px;
+    }
+
+    .icon {
+
+        width: 38px;
+
+        height: 38px;
+
+        flex-basis: 38px;
+    }
+
+    .modelWrap {
+
+        gap: 7px;
+    }
 }
+
 </style>
+
 </head>
 
 <body>
 
-<div id="loginScreen" class="screen active">
 
-<button class="icon loginTheme themeBtn">☾</button>
+<!-- =========================
+     LOGIN
+========================= -->
 
-<div class="logo">↑</div>
+<div
+id="loginScreen"
+class="screen active"
+>
 
-<h1>Train smarter.</h1>
+<button
+class="icon loginTheme themeBtn"
+>
+☾
+</button>
+
+<div class="logo">
+↑
+</div>
+
+<h1>
+Train smarter.
+</h1>
 
 <p>
 Track every set, understand your program,
 and see yourself get stronger.
 </p>
 
-<button id="googleLogin" class="primary">
+<button
+id="googleLogin"
+class="primary"
+>
 Continue with Google
 </button>
 
 </div>
 
 
-<div id="homeScreen" class="screen">
+<!-- =========================
+     HOME
+========================= -->
+
+<div
+id="homeScreen"
+class="screen"
+>
 
 <div class="topbar">
 
@@ -617,26 +1344,68 @@ Continue with Google
 <img id="profilePhoto">
 
 <div>
-<div class="muted">WELCOME BACK</div>
-<div id="profileName" class="profileName">Athlete</div>
+
+<div class="muted">
+WELCOME BACK
+</div>
+
+<div
+id="profileName"
+class="profileName"
+>
+Athlete
 </div>
 
 </div>
+
+</div>
+
 
 <div class="actions">
 
-<button id="prButton" class="icon">🏆</button>
-<button id="friendsButton" class="icon">👥</button>
-<button id="calendarButton" class="icon">📅</button>
-<button class="icon themeBtn">☾</button>
+<button
+id="prButton"
+class="icon"
+title="Personal Records"
+>
+🏆
+</button>
+
+<button
+id="friendsButton"
+class="icon"
+title="Friends"
+>
+👥
+</button>
+
+<button
+id="calendarButton"
+class="icon"
+title="Calendar"
+>
+📅
+</button>
+
+<button
+class="icon themeBtn"
+title="Theme"
+>
+☾
+</button>
 
 </div>
 
 </div>
 
-<div class="muted">FITNESS TRACKER</div>
 
-<h1>Your Training</h1>
+<div class="muted">
+FITNESS TRACKER
+</div>
+
+<h1>
+Your Training
+</h1>
 
 <p>
 Choose today's workout or inspect your program.
@@ -644,20 +1413,36 @@ Choose today's workout or inspect your program.
 
 <div id="splitContainer"></div>
 
-<button id="createSplitButton" class="primary">
+<button
+id="createSplitButton"
+class="primary"
+>
 + Create Workout Split
 </button>
 
-<button id="logout" class="secondary">
+<button
+id="logout"
+class="secondary"
+>
 Log out
 </button>
 
 </div>
 
 
-<div id="builderScreen" class="screen">
+<!-- =========================
+     BUILDER
+========================= -->
 
-<button class="back" data-home>
+<div
+id="builderScreen"
+class="screen"
+>
+
+<button
+class="back"
+data-home
+>
 ← Back
 </button>
 
@@ -669,7 +1454,14 @@ WORKOUT BUILDER
 Create Split
 </h1>
 
-<label>Split name</label>
+<p>
+Sets and target reps are part of your split.
+During a workout, only weight and actual reps can be changed.
+</p>
+
+<label>
+Split name
+</label>
 
 <input
 id="splitName"
@@ -678,11 +1470,17 @@ placeholder="Upper / Lower"
 
 <div id="daysBuilder"></div>
 
-<button id="addDay" class="secondary">
+<button
+id="addDay"
+class="secondary"
+>
 + Add Workout Day
 </button>
 
-<button id="saveSplit" class="primary">
+<button
+id="saveSplit"
+class="primary"
+>
 Save Split
 </button>
 
@@ -697,9 +1495,19 @@ Delete Split
 </div>
 
 
-<div id="workoutScreen" class="screen">
+<!-- =========================
+     ACTIVE WORKOUT
+========================= -->
 
-<button id="exitWorkout" class="back">
+<div
+id="workoutScreen"
+class="screen"
+>
+
+<button
+id="exitWorkout"
+class="back"
+>
 ← Exit Workout
 </button>
 
@@ -708,6 +1516,10 @@ ACTIVE WORKOUT
 </div>
 
 <h1 id="activeWorkoutName"></h1>
+
+<p>
+Enter the weight and actual reps you complete.
+</p>
 
 <div id="activeExercises"></div>
 
@@ -722,9 +1534,19 @@ Finish Workout
 </div>
 
 
-<div id="calendarScreen" class="screen">
+<!-- =========================
+     CALENDAR
+========================= -->
 
-<button id="calendarBack" class="back">
+<div
+id="calendarScreen"
+class="screen"
+>
+
+<button
+id="calendarBack"
+class="back"
+>
 ← Back
 </button>
 
@@ -735,7 +1557,9 @@ class="muted"
 YOUR ACTIVITY
 </div>
 
-<h1>Gym Calendar</h1>
+<h1>
+Gym Calendar
+</h1>
 
 <div class="tabs">
 
@@ -762,6 +1586,7 @@ Year
 
 </div>
 
+
 <div class="calnav">
 
 <button id="calPrev">
@@ -779,6 +1604,7 @@ class="calTitle"
 
 </div>
 
+
 <div id="calendarContent"></div>
 
 <div id="calendarDetail"></div>
@@ -786,9 +1612,19 @@ class="calTitle"
 </div>
 
 
-<div id="friendsScreen" class="screen">
+<!-- =========================
+     FRIENDS
+========================= -->
 
-<button class="back" data-home>
+<div
+id="friendsScreen"
+class="screen"
+>
+
+<button
+class="back"
+data-home
+>
 ← Back
 </button>
 
@@ -796,13 +1632,24 @@ class="calTitle"
 SOCIAL
 </div>
 
-<h1>Friends</h1>
+<h1>
+Friends
+</h1>
+
 
 <div class="card">
 
-<h2>Add Friend</h2>
+<h2>
+Add Friend
+</h2>
 
-<label>Google email</label>
+<p>
+Enter the Google email they use for Fitness Tracker.
+</p>
+
+<label>
+Google email
+</label>
 
 <input
 id="friendEmail"
@@ -822,7 +1669,9 @@ Send Friend Request
 
 <div class="card">
 
-<h2>Requests</h2>
+<h2>
+Requests
+</h2>
 
 <div
 id="requestsList"
@@ -836,7 +1685,9 @@ No requests
 
 <div class="card">
 
-<h2>Your Friends</h2>
+<h2>
+Your Friends
+</h2>
 
 <div
 id="friendsList"
@@ -850,15 +1701,22 @@ No friends yet
 
 <div class="card">
 
-<h2>Privacy</h2>
+<h2>
+Privacy
+</h2>
 
 <div class="toggleRow">
 
 <div>
-<b>Share workout split</b>
+
+<b>
+Share workout split
+</b>
+
 <div class="muted">
 Friends can view your split.
 </div>
+
 </div>
 
 <input
@@ -872,10 +1730,15 @@ type="checkbox"
 <div class="toggleRow">
 
 <div>
-<b>Share weights & reps</b>
+
+<b>
+Share weights & reps
+</b>
+
 <div class="muted">
 Friends can view lifting details.
 </div>
+
 </div>
 
 <input
@@ -889,10 +1752,15 @@ type="checkbox"
 <div class="toggleRow">
 
 <div>
-<b>Share gym calendar</b>
+
+<b>
+Share gym calendar
+</b>
+
 <div class="muted">
-Friends can view days you trained.
+Friends can view the days you trained.
 </div>
+
 </div>
 
 <input
@@ -907,7 +1775,14 @@ type="checkbox"
 </div>
 
 
-<div id="friendProfileScreen" class="screen">
+<!-- =========================
+     FRIEND PROFILE
+========================= -->
+
+<div
+id="friendProfileScreen"
+class="screen"
+>
 
 <button
 id="friendBack"
@@ -955,9 +1830,19 @@ Remove Friend
 </div>
 
 
-<div id="prScreen" class="screen">
+<!-- =========================
+     PERSONAL RECORDS
+========================= -->
 
-<button class="back" data-home>
+<div
+id="prScreen"
+class="screen"
+>
+
+<button
+class="back"
+data-home
+>
 ← Back
 </button>
 
@@ -965,7 +1850,9 @@ Remove Friend
 PERSONAL RECORDS
 </div>
 
-<h1>PRs</h1>
+<h1>
+PRs
+</h1>
 
 <button
 id="showAddPR"
@@ -974,24 +1861,30 @@ class="primary"
 + Add PR
 </button>
 
+
 <div
 id="prForm"
 class="card"
 style="display:none"
 >
 
-<label>Exercise</label>
+<label>
+Exercise
+</label>
 
 <input
 id="prExercise"
 placeholder="Chest Press"
 >
 
+
 <div class="grid2">
 
 <div>
 
-<label>Weight (lb)</label>
+<label>
+Weight (lb)
+</label>
 
 <input
 id="prWeight"
@@ -1000,9 +1893,12 @@ type="number"
 
 </div>
 
+
 <div>
 
-<label>Reps</label>
+<label>
+Reps
+</label>
 
 <input
 id="prReps"
@@ -1013,12 +1909,16 @@ type="number"
 
 </div>
 
-<label>Date</label>
+
+<label>
+Date
+</label>
 
 <input
 id="prDate"
 type="date"
 >
+
 
 <button
 id="savePR"
@@ -1034,9 +1934,19 @@ Save PR
 </div>
 
 
-<div id="overviewScreen" class="screen">
+<!-- =========================
+     MUSCLE ANALYSIS
+========================= -->
 
-<button class="back" data-home>
+<div
+id="overviewScreen"
+class="screen"
+>
+
+<button
+class="back"
+data-home
+>
 ← Back
 </button>
 
@@ -1044,11 +1954,15 @@ Save PR
 AI MUSCLE ANALYSIS
 </div>
 
-<h1>Muscle Coverage</h1>
+<h1>
+Muscle Coverage
+</h1>
 
-<select
-id="analysisSelector"
-></select>
+<p>
+AI analyzes your exercises and highlights the muscles your program trains.
+</p>
+
+<select id="analysisSelector"></select>
 
 <button
 id="analyzeButton"
@@ -1065,6 +1979,8 @@ style="margin-top:10px"
 
 
 <div class="modelWrap">
+
+<!-- FRONT -->
 
 <div class="bodyModel">
 
@@ -1277,6 +2193,8 @@ d="M120 305 Q107 294 99 315 L103 380 Q114 390 121 370Z"
 
 </div>
 
+
+<!-- BACK -->
 
 <div class="bodyModel">
 
@@ -1533,6 +2451,10 @@ Tap a highlighted muscle to see what targets it.
 </div>
 
 
+<!-- =========================
+     AI COACH
+========================= -->
+
 <button
 id="aiFab"
 class="fab"
@@ -1550,7 +2472,9 @@ class="chatPanel"
 
 <div>
 
-<b>✦ AI Coach</b>
+<b>
+✦ AI Coach
+</b>
 
 <div class="muted">
 Ask about your training
@@ -1603,253 +2527,270 @@ class="icon"
 <script type="module">
 
 import {
-initializeApp
+    initializeApp
 }
 from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
 
 
 import {
-getAuth,
-GoogleAuthProvider,
-signInWithPopup,
-signOut,
-onAuthStateChanged
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged
 }
 from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
 
 import {
-getFirestore,
-doc,
-setDoc,
-getDoc,
-deleteDoc,
-collection,
-addDoc,
-getDocs,
-query,
-where,
-orderBy,
-limit,
-serverTimestamp
+    getFirestore,
+    doc,
+    setDoc,
+    getDoc,
+    deleteDoc,
+    collection,
+    addDoc,
+    getDocs,
+    query,
+    where,
+    orderBy,
+    limit,
+    serverTimestamp
 }
 from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
 
 const firebaseConfig = {
 
-apiKey:
-"AIzaSyBtPjGGV8n_1y58m4yLRVFAEahxtT-HbM0",
+    apiKey:
+        "AIzaSyBtPjGGV8n_1y58m4yLRVFAEahxtT-HbM0",
 
-authDomain:
-"fitness-tracker-d235f.firebaseapp.com",
+    authDomain:
+        "fitness-tracker-d235f.firebaseapp.com",
 
-projectId:
-"fitness-tracker-d235f",
+    projectId:
+        "fitness-tracker-d235f",
 
-storageBucket:
-"fitness-tracker-d235f.firebasestorage.app",
+    storageBucket:
+        "fitness-tracker-d235f.firebasestorage.app",
 
-messagingSenderId:
-"786431774975",
+    messagingSenderId:
+        "786431774975",
 
-appId:
-"1:786431774975:web:d037c915f88d771e00fcca"
-
+    appId:
+        "1:786431774975:web:d037c915f88d771e00fcca"
 };
 
 
 const AI_URL =
-"https://fitness-tracker-ai.shashank-vennam.workers.dev";
+    "https://fitness-tracker-ai.shashank-vennam.workers.dev";
 
 
 const app =
-initializeApp(firebaseConfig);
+    initializeApp(firebaseConfig);
+
 
 const auth =
-getAuth(app);
+    getAuth(app);
+
 
 const db =
-getFirestore(app);
+    getFirestore(app);
+
 
 const provider =
-new GoogleAuthProvider();
+    new GoogleAuthProvider();
 
 
 let user = null;
+
 let profile = null;
+
 let split = null;
+
 let activeDay = null;
+
 let previous = {};
+
 let history = [];
+
 let selectedFriend = null;
+
 let calendarFriend = null;
 
-let calView =
-"week";
+let calView = "week";
 
-let calDate =
-new Date();
+let calDate = new Date();
 
-let analysis =
-null;
+let analysis = null;
 
-let selectedMuscle =
-null;
+let selectedMuscle = null;
 
 
 const $ =
-id =>
-document.getElementById(id);
+    id =>
+        document.getElementById(id);
 
 
-function esc(v){
+/* =========================
+   HELPERS
+========================= */
 
-return String(v ?? "")
+function esc(value) {
 
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
+    return String(value ?? "")
 
+        .replaceAll("&", "&amp;")
+
+        .replaceAll("<", "&lt;")
+
+        .replaceAll(">", "&gt;")
+
+        .replaceAll('"', "&quot;")
+
+        .replaceAll("'", "&#039;");
 }
 
 
-function screen(id){
+function screen(id) {
 
-document
-.querySelectorAll(".screen")
-.forEach(
-x =>
-x.classList.remove("active")
-);
+    document
+        .querySelectorAll(".screen")
+        .forEach(
+            element =>
+                element
+                    .classList
+                    .remove("active")
+        );
 
-$(id)
-.classList.add("active");
 
-window.scrollTo(0,0);
+    $(id)
+        .classList
+        .add("active");
 
-$("aiFab")
-.classList
-.toggle(
-"show",
-id !== "loginScreen"
-);
 
+    window.scrollTo(0, 0);
+
+
+    $("aiFab")
+        .classList
+        .toggle(
+            "show",
+            id !== "loginScreen"
+        );
 }
 
 
-function normEmail(e){
+function normEmail(email) {
 
-return String(e || "")
-.trim()
-.toLowerCase();
-
+    return String(email || "")
+        .trim()
+        .toLowerCase();
 }
 
 
-async function emailKey(e){
+async function emailKey(email) {
 
-const bytes =
-new TextEncoder()
-.encode(
-normEmail(e)
-);
+    const bytes =
+        new TextEncoder()
+            .encode(
+                normEmail(email)
+            );
 
-const digest =
-await crypto.subtle.digest(
-"SHA-256",
-bytes
-);
 
-return [
-...new Uint8Array(digest)
-]
-.map(
-x =>
-x.toString(16)
-.padStart(2,"0")
-)
-.join("");
+    const digest =
+        await crypto.subtle.digest(
+            "SHA-256",
+            bytes
+        );
 
+
+    return [
+        ...new Uint8Array(digest)
+    ]
+        .map(
+            value =>
+                value
+                    .toString(16)
+                    .padStart(2, "0")
+        )
+        .join("");
 }
 
 
-function friendshipId(a,b){
+function friendshipId(a, b) {
 
-return [a,b]
-.sort()
-.join("_");
-
+    return [a, b]
+        .sort()
+        .join("_");
 }
 
 
-function dkey(d){
+function dkey(date) {
 
-return (
-`${d.getFullYear()}-` +
-`${String(d.getMonth()+1).padStart(2,"0")}-` +
-`${String(d.getDate()).padStart(2,"0")}`
-);
-
+    return (
+        `${date.getFullYear()}-` +
+        `${String(date.getMonth() + 1).padStart(2, "0")}-` +
+        `${String(date.getDate()).padStart(2, "0")}`
+    );
 }
 
 
-function dayStart(d){
+function dayStart(date) {
 
-return new Date(
-d.getFullYear(),
-d.getMonth(),
-d.getDate()
-);
-
+    return new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate()
+    );
 }
 
 
-function today(d){
+function today(date) {
 
-return (
-dkey(d) ===
-dkey(new Date())
-);
-
+    return (
+        dkey(date) ===
+        dkey(new Date())
+    );
 }
 
 
-/* THEME */
+/* =========================
+   THEME
+========================= */
 
-if(
-localStorage.getItem(
-"fitnessTheme"
-) === "dark"
-){
+if (
+    localStorage.getItem(
+        "fitnessTheme"
+    ) === "dark"
+) {
 
-document.body
-.classList
-.add("dark");
-
+    document.body
+        .classList
+        .add("dark");
 }
 
 
-function themeIcons(){
+function themeIcons() {
 
-document
-.querySelectorAll(
-".themeBtn"
-)
-.forEach(
-b =>
+    document
+        .querySelectorAll(
+            ".themeBtn"
+        )
+        .forEach(
+            button => {
 
-b.textContent =
-document.body
-.classList
-.contains("dark")
-? "☀"
-: "☾"
+                button.textContent =
 
-);
+                    document.body
+                        .classList
+                        .contains("dark")
 
+                        ? "☀"
+
+                        : "☾";
+            }
+        );
 }
 
 
@@ -1857,4230 +2798,4471 @@ themeIcons();
 
 
 document
-.querySelectorAll(
-".themeBtn"
-)
-.forEach(
-b => {
+    .querySelectorAll(
+        ".themeBtn"
+    )
+    .forEach(
+        button => {
 
-b.onclick =
-() => {
+            button.onclick =
+                () => {
 
-document.body
-.classList
-.toggle("dark");
+                    document.body
+                        .classList
+                        .toggle("dark");
 
-localStorage
-.setItem(
 
-"fitnessTheme",
+                    localStorage.setItem(
 
-document.body
-.classList
-.contains("dark")
-? "dark"
-: "light"
+                        "fitnessTheme",
 
-);
+                        document.body
+                            .classList
+                            .contains("dark")
 
-themeIcons();
+                            ? "dark"
 
-};
+                            : "light"
 
-}
-);
+                    );
+
+
+                    themeIcons();
+                };
+        }
+    );
 
 
 document
-.querySelectorAll(
-"[data-home]"
-)
-.forEach(
-b =>
-b.onclick =
-() =>
-screen("homeScreen")
-);
+    .querySelectorAll(
+        "[data-home]"
+    )
+    .forEach(
+        button => {
+
+            button.onclick =
+                () =>
+                    screen(
+                        "homeScreen"
+                    );
+        }
+    );
 
 
-/* LOGIN */
+/* =========================
+   LOGIN
+========================= */
 
 $("googleLogin")
-.onclick =
-async () => {
+    .onclick =
+    async () => {
 
-try{
+        try {
 
-await signInWithPopup(
-auth,
-provider
-);
+            await signInWithPopup(
+                auth,
+                provider
+            );
 
-}
-catch(e){
+        }
 
-alert(e.message);
+        catch (error) {
 
-}
-
-};
+            alert(
+                error.message
+            );
+        }
+    };
 
 
 $("logout")
-.onclick =
-() =>
-signOut(auth);
+    .onclick =
+    () =>
+        signOut(auth);
 
 
 onAuthStateChanged(
-auth,
-async u => {
+    auth,
+    async currentUser => {
 
-if(!u){
+        if (!currentUser) {
 
-user = null;
-profile = null;
-split = null;
+            user = null;
 
-screen(
-"loginScreen"
+            profile = null;
+
+            split = null;
+
+
+            screen(
+                "loginScreen"
+            );
+
+
+            return;
+        }
+
+
+        user =
+            currentUser;
+
+
+        $("profileName")
+            .textContent =
+
+                user.displayName ||
+                "Athlete";
+
+
+        if (user.photoURL) {
+
+            $("profilePhoto")
+                .src =
+                    user.photoURL;
+        }
+
+
+        await ensureProfile();
+
+        await loadSplit();
+
+
+        screen(
+            "homeScreen"
+        );
+    }
 );
 
-return;
 
+async function ensureProfile() {
+
+    const reference =
+        doc(
+            db,
+            "profiles",
+            user.uid
+        );
+
+
+    const snapshot =
+        await getDoc(
+            reference
+        );
+
+
+    const old =
+        snapshot.exists()
+
+            ? snapshot.data()
+
+            : {};
+
+
+    profile = {
+
+        uid:
+            user.uid,
+
+        displayName:
+            user.displayName ||
+            "Athlete",
+
+        email:
+            normEmail(
+                user.email
+            ),
+
+        photoURL:
+            user.photoURL || "",
+
+        shareSplit:
+            old.shareSplit ??
+            false,
+
+        shareWeights:
+            old.shareWeights ??
+            false,
+
+        shareCalendar:
+            old.shareCalendar ??
+            false
+    };
+
+
+    await setDoc(
+        reference,
+        profile
+    );
+
+
+    await setDoc(
+
+        doc(
+            db,
+            "emailLookup",
+            await emailKey(
+                user.email
+            )
+        ),
+
+        {
+            uid:
+                user.uid
+        }
+
+    );
 }
 
 
-user = u;
+/* =========================
+   LOAD SPLIT
+========================= */
+
+async function loadSplit() {
+
+    const snapshot =
+        await getDoc(
+
+            doc(
+                db,
+                "users",
+                user.uid,
+                "data",
+                "split"
+            )
+
+        );
 
 
-$("profileName")
-.textContent =
-u.displayName ||
-"Athlete";
+    split =
+        snapshot.exists()
+
+            ? snapshot.data()
+
+            : null;
 
 
-if(u.photoURL){
-
-$("profilePhoto")
-.src =
-u.photoURL;
-
+    renderSplit();
 }
 
 
-await ensureProfile();
+function renderSplit() {
 
-await loadSplit();
+    const container =
+        $("splitContainer");
 
-screen(
-"homeScreen"
-);
 
+    container.innerHTML =
+        "";
+
+
+    if (!split) {
+
+        $("createSplitButton")
+            .style.display =
+                "block";
+
+
+        container.innerHTML = `
+
+            <div class="card">
+
+                <h2>
+                    No workout split yet
+                </h2>
+
+                <p>
+                    Create your first split to start tracking.
+                </p>
+
+            </div>
+        `;
+
+
+        return;
+    }
+
+
+    $("createSplitButton")
+        .style.display =
+            "none";
+
+
+    const header =
+        document.createElement(
+            "div"
+        );
+
+
+    header.className =
+        "card";
+
+
+    header.innerHTML = `
+
+        <div class="muted">
+            CURRENT SPLIT
+        </div>
+
+        <h2>
+            ${esc(split.name)}
+        </h2>
+
+        <button class="secondary overview">
+            View Muscle Coverage
+        </button>
+
+        <button class="secondary edit">
+            Edit Split
+        </button>
+    `;
+
+
+    header
+        .querySelector(
+            ".overview"
+        )
+        .onclick =
+            () =>
+                openOverview();
+
+
+    header
+        .querySelector(
+            ".edit"
+        )
+        .onclick =
+            openEdit;
+
+
+    container
+        .appendChild(
+            header
+        );
+
+
+    split.days
+        .forEach(
+            (day, index) => {
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                card.className =
+                    "card";
+
+
+                card.innerHTML = `
+
+                    <h2>
+                        ${esc(day.name)}
+                    </h2>
+
+                    ${day.exercises
+                        .map(
+                            exercise => `
+
+                                <div class="exerciseSummary">
+
+                                    ${esc(exercise.name)}
+
+                                    · ${exercise.sets} sets
+
+                                    · ${exercise.minReps}–${exercise.maxReps} reps
+
+                                </div>
+                            `
+                        )
+                        .join("")}
+
+                    <button class="secondary dayOverview">
+                        Muscle Coverage
+                    </button>
+
+                    <button class="primary start">
+                        Start Workout
+                    </button>
+                `;
+
+
+                card
+                    .querySelector(
+                        ".start"
+                    )
+                    .onclick =
+                        () =>
+                            startWorkout(
+                                index
+                            );
+
+
+                card
+                    .querySelector(
+                        ".dayOverview"
+                    )
+                    .onclick =
+                        () =>
+                            openOverview(
+                                index
+                            );
+
+
+                container
+                    .appendChild(
+                        card
+                    );
+            }
+        );
 }
-);
 
 
-async function ensureProfile(){
-
-const ref =
-doc(
-db,
-"profiles",
-user.uid
-);
-
-
-const snap =
-await getDoc(ref);
-
-
-const old =
-snap.exists()
-? snap.data()
-: {};
-
-
-profile = {
-
-uid:
-user.uid,
-
-displayName:
-user.displayName ||
-"Athlete",
-
-email:
-normEmail(
-user.email
-),
-
-photoURL:
-user.photoURL || "",
-
-shareSplit:
-old.shareSplit ??
-false,
-
-shareWeights:
-old.shareWeights ??
-false,
-
-shareCalendar:
-old.shareCalendar ??
-false
-
-};
-
-
-await setDoc(
-ref,
-profile
-);
-
-
-await setDoc(
-
-doc(
-db,
-"emailLookup",
-await emailKey(
-user.email
-)
-),
-
-{
-uid:
-user.uid
-}
-
-);
-
-}
-
-
-/* SPLITS */
-
-async function loadSplit(){
-
-const snap =
-await getDoc(
-
-doc(
-db,
-"users",
-user.uid,
-"data",
-"split"
-)
-
-);
-
-
-split =
-snap.exists()
-? snap.data()
-: null;
-
-
-renderSplit();
-
-}
-
-
-function renderSplit(){
-
-const container =
-$("splitContainer");
-
-
-container.innerHTML =
-"";
-
-
-if(!split){
+/* =========================
+   BUILDER
+========================= */
 
 $("createSplitButton")
-.style.display =
-"block";
+    .onclick =
+    () => {
+
+        prepareBuilder(
+            null
+        );
 
 
-container.innerHTML = `
+        screen(
+            "builderScreen"
+        );
+    };
 
-<div class="card">
 
-<h2>
-No workout split yet
-</h2>
+function prepareBuilder(data) {
 
-<p>
-Create your first split to start tracking.
-</p>
+    $("builderTitle")
+        .textContent =
 
-</div>
+            data
 
-`;
+                ? "Edit Split"
 
-return;
+                : "Create Split";
 
+
+    $("splitName")
+        .value =
+            data?.name || "";
+
+
+    $("daysBuilder")
+        .innerHTML =
+            "";
+
+
+    (
+        data?.days ||
+        [null]
+    )
+        .forEach(
+            addDay
+        );
+
+
+    $("deleteSplit")
+        .style.display =
+
+            data
+
+                ? "block"
+
+                : "none";
 }
 
 
-$("createSplitButton")
-.style.display =
-"none";
+function openEdit() {
+
+    prepareBuilder(
+        split
+    );
 
 
-const head =
-document.createElement(
-"div"
-);
-
-
-head.className =
-"card";
-
-
-head.innerHTML = `
-
-<div class="muted">
-CURRENT SPLIT
-</div>
-
-<h2>
-${esc(split.name)}
-</h2>
-
-<button class="secondary overview">
-View Muscle Coverage
-</button>
-
-<button class="secondary edit">
-Edit Split
-</button>
-
-`;
-
-
-head
-.querySelector(
-".overview"
-)
-.onclick =
-openOverview;
-
-
-head
-.querySelector(
-".edit"
-)
-.onclick =
-openEdit;
-
-
-container
-.appendChild(head);
-
-
-split.days
-.forEach(
-(day,i) => {
-
-const card =
-document.createElement(
-"div"
-);
-
-
-card.className =
-"card";
-
-
-card.innerHTML = `
-
-<h2>
-${esc(day.name)}
-</h2>
-
-${day.exercises
-.map(
-e => `
-
-<div class="exerciseSummary">
-
-${esc(e.name)}
-· ${e.sets} sets
-· ${e.minReps}–${e.maxReps} reps
-
-</div>
-
-`
-)
-.join("")}
-
-<button class="secondary dayOverview">
-Muscle Coverage
-</button>
-
-<button class="primary start">
-Start Workout
-</button>
-
-`;
-
-
-card
-.querySelector(
-".start"
-)
-.onclick =
-() =>
-startWorkout(i);
-
-
-card
-.querySelector(
-".dayOverview"
-)
-.onclick =
-() =>
-openOverview(i);
-
-
-container
-.appendChild(card);
-
-}
-);
-
-}
-
-
-$("createSplitButton")
-.onclick =
-() => {
-
-prepareBuilder(null);
-
-screen(
-"builderScreen"
-);
-
-};
-
-
-function prepareBuilder(data){
-
-$("builderTitle")
-.textContent =
-data
-? "Edit Split"
-: "Create Split";
-
-
-$("splitName")
-.value =
-data?.name || "";
-
-
-$("daysBuilder")
-.innerHTML =
-"";
-
-
-(
-data?.days ||
-[null]
-)
-.forEach(
-addDay
-);
-
-
-$("deleteSplit")
-.style.display =
-data
-? "block"
-: "none";
-
-}
-
-
-function openEdit(){
-
-prepareBuilder(
-split
-);
-
-screen(
-"builderScreen"
-);
-
+    screen(
+        "builderScreen"
+    );
 }
 
 
 $("addDay")
-.onclick =
-() =>
-addDay(null);
+    .onclick =
+    () =>
+        addDay(
+            null
+        );
 
 
-function addDay(data){
+function addDay(data) {
 
-const el =
-document.createElement(
-"div"
-);
-
-
-el.className =
-"card dayBuilder";
+    const element =
+        document.createElement(
+            "div"
+        );
 
 
-el.innerHTML = `
-
-<label>
-Workout name
-</label>
-
-<input
-class="dayName"
-placeholder="Upper A"
->
-
-<div class="exerciseBuilder">
-</div>
-
-<button class="secondary addEx">
-+ Add Exercise
-</button>
-
-<button class="secondary danger removeDay">
-Remove Day
-</button>
-
-`;
+    element.className =
+        "card dayBuilder";
 
 
-el
-.querySelector(
-".dayName"
-)
-.value =
-data?.name || "";
+    element.innerHTML = `
+
+        <label>
+            Workout name
+        </label>
+
+        <input
+            class="dayName"
+            placeholder="Upper A"
+        >
+
+        <div class="exerciseBuilder"></div>
+
+        <button class="secondary addEx">
+            + Add Exercise
+        </button>
+
+        <button class="secondary danger removeDay">
+            Remove Day
+        </button>
+    `;
 
 
-const exerciseContainer =
-el.querySelector(
-".exerciseBuilder"
-);
+    element
+        .querySelector(
+            ".dayName"
+        )
+        .value =
+            data?.name || "";
 
 
-el
-.querySelector(
-".addEx"
-)
-.onclick =
-() =>
-addExercise(
-exerciseContainer
-);
+    const exerciseContainer =
+        element
+            .querySelector(
+                ".exerciseBuilder"
+            );
 
 
-el
-.querySelector(
-".removeDay"
-)
-.onclick =
-() =>
-el.remove();
+    element
+        .querySelector(
+            ".addEx"
+        )
+        .onclick =
+            () =>
+                addExercise(
+                    exerciseContainer
+                );
 
 
-$("daysBuilder")
-.appendChild(el);
+    element
+        .querySelector(
+            ".removeDay"
+        )
+        .onclick =
+            () =>
+                element.remove();
 
 
-(
-data?.exercises ||
-[null]
-)
-.forEach(
-x =>
-addExercise(
-exerciseContainer,
-x
-)
-);
+    $("daysBuilder")
+        .appendChild(
+            element
+        );
 
+
+    (
+        data?.exercises ||
+        [null]
+    )
+        .forEach(
+            exercise =>
+                addExercise(
+                    exerciseContainer,
+                    exercise
+                )
+        );
 }
 
 
 function addExercise(
-container,
-data = null
-){
+    container,
+    data = null
+) {
 
-const exercise =
-document.createElement(
-"div"
-);
-
-
-exercise.className =
-"builderExercise";
+    const exercise =
+        document.createElement(
+            "div"
+        );
 
 
-exercise.innerHTML = `
-
-<label>
-Exercise
-</label>
-
-<input
-class="exName"
-placeholder="Chest Press"
->
-
-<label>
-Sets
-</label>
-
-<input
-class="exSets"
-type="number"
-min="1"
-value="3"
->
-
-<div class="grid2">
-
-<div>
-
-<label>
-Min reps
-</label>
-
-<input
-class="minReps"
-type="number"
-min="1"
-value="6"
->
-
-</div>
-
-<div>
-
-<label>
-Max reps
-</label>
-
-<input
-class="maxReps"
-type="number"
-min="1"
-value="10"
->
-
-</div>
-
-</div>
-
-<button class="secondary danger removeEx">
-Remove Exercise
-</button>
-
-`;
+    exercise.className =
+        "builderExercise";
 
 
-exercise
-.querySelector(
-".exName"
-)
-.value =
-data?.name || "";
+    exercise.innerHTML = `
+
+        <label>
+            Exercise
+        </label>
+
+        <input
+            class="exName"
+            placeholder="Chest Press"
+        >
+
+        <label>
+            Sets
+        </label>
+
+        <input
+            class="exSets"
+            type="number"
+            min="1"
+            value="3"
+        >
+
+        <div class="grid2">
+
+            <div>
+
+                <label>
+                    Min reps
+                </label>
+
+                <input
+                    class="minReps"
+                    type="number"
+                    min="1"
+                    value="6"
+                >
+
+            </div>
 
 
-exercise
-.querySelector(
-".exSets"
-)
-.value =
-data?.sets || 3;
+            <div>
+
+                <label>
+                    Max reps
+                </label>
+
+                <input
+                    class="maxReps"
+                    type="number"
+                    min="1"
+                    value="10"
+                >
+
+            </div>
+
+        </div>
 
 
-exercise
-.querySelector(
-".minReps"
-)
-.value =
-data?.minReps || 6;
+        <button class="secondary danger removeEx">
+            Remove Exercise
+        </button>
+    `;
 
 
-exercise
-.querySelector(
-".maxReps"
-)
-.value =
-data?.maxReps || 10;
+    exercise
+        .querySelector(
+            ".exName"
+        )
+        .value =
+            data?.name || "";
 
 
-exercise
-.querySelector(
-".removeEx"
-)
-.onclick =
-() =>
-exercise.remove();
+    exercise
+        .querySelector(
+            ".exSets"
+        )
+        .value =
+            data?.sets || 3;
 
 
-container
-.appendChild(
-exercise
-);
+    exercise
+        .querySelector(
+            ".minReps"
+        )
+        .value =
+            data?.minReps || 6;
 
+
+    exercise
+        .querySelector(
+            ".maxReps"
+        )
+        .value =
+            data?.maxReps || 10;
+
+
+    exercise
+        .querySelector(
+            ".removeEx"
+        )
+        .onclick =
+            () =>
+                exercise.remove();
+
+
+    container
+        .appendChild(
+            exercise
+        );
 }
+/* =========================
+   SAVE / DELETE SPLIT
+========================= */
+
 $("saveSplit").onclick =
 async () => {
 
-const name =
-$("splitName")
-.value
-.trim();
+    const name =
+        $("splitName")
+            .value
+            .trim();
 
 
-const days =
-[];
+    if (!name) {
 
+        alert(
+            "Enter a split name."
+        );
 
-if(!name){
+        return;
+    }
 
-alert(
-"Enter a split name."
-);
 
-return;
+    const days = [];
 
-}
 
+    for (
+        const dayElement
+        of document.querySelectorAll(
+            ".dayBuilder"
+        )
+    ) {
 
-for(
-const dayElement
-of document.querySelectorAll(
-".dayBuilder"
-)
-){
+        const dayName =
+            dayElement
+                .querySelector(
+                    ".dayName"
+                )
+                .value
+                .trim();
 
-const dayName =
-dayElement
-.querySelector(
-".dayName"
-)
-.value
-.trim();
 
+        if (!dayName) {
 
-const exercises =
-[];
+            alert(
+                "Name every workout day."
+            );
 
+            return;
+        }
 
-if(!dayName){
 
-alert(
-"Name every workout day."
-);
+        const exercises = [];
 
-return;
 
-}
+        for (
+            const exerciseElement
+            of dayElement.querySelectorAll(
+                ".builderExercise"
+            )
+        ) {
 
+            const exerciseName =
+                exerciseElement
+                    .querySelector(
+                        ".exName"
+                    )
+                    .value
+                    .trim();
 
-for(
-const exerciseElement
-of dayElement.querySelectorAll(
-".builderExercise"
-)
-){
 
-const exerciseName =
-exerciseElement
-.querySelector(
-".exName"
-)
-.value
-.trim();
+            const sets =
+                Number(
+                    exerciseElement
+                        .querySelector(
+                            ".exSets"
+                        )
+                        .value
+                );
 
 
-const sets =
-Number(
-exerciseElement
-.querySelector(
-".exSets"
-)
-.value
-);
+            const minReps =
+                Number(
+                    exerciseElement
+                        .querySelector(
+                            ".minReps"
+                        )
+                        .value
+                );
 
 
-const minReps =
-Number(
-exerciseElement
-.querySelector(
-".minReps"
-)
-.value
-);
+            const maxReps =
+                Number(
+                    exerciseElement
+                        .querySelector(
+                            ".maxReps"
+                        )
+                        .value
+                );
 
 
-const maxReps =
-Number(
-exerciseElement
-.querySelector(
-".maxReps"
-)
-.value
-);
+            if (
+                !exerciseName ||
+                sets < 1 ||
+                minReps < 1 ||
+                maxReps < minReps
+            ) {
 
+                alert(
+                    "Check every exercise."
+                );
 
-if(
-!exerciseName ||
-sets < 1 ||
-minReps < 1 ||
-maxReps < minReps
-){
+                return;
+            }
 
-alert(
-"Check every exercise."
-);
 
-return;
+            exercises.push({
 
-}
+                name:
+                    exerciseName,
 
+                sets,
 
-exercises.push({
+                minReps,
 
-name:
-exerciseName,
+                maxReps
+            });
+        }
 
-sets,
 
-minReps,
+        if (!exercises.length) {
 
-maxReps
+            alert(
+                "Each workout day needs at least one exercise."
+            );
 
-});
+            return;
+        }
 
-}
 
+        days.push({
 
-if(
-!exercises.length
-){
+            name:
+                dayName,
 
-alert(
-"Each day needs an exercise."
-);
+            exercises
+        });
+    }
 
-return;
 
-}
+    if (!days.length) {
 
+        alert(
+            "Add at least one workout day."
+        );
 
-days.push({
+        return;
+    }
 
-name:
-dayName,
 
-exercises
+    split = {
 
-});
+        name,
 
-}
+        days
+    };
 
 
-split = {
+    await setDoc(
 
-name,
+        doc(
+            db,
+            "users",
+            user.uid,
+            "data",
+            "split"
+        ),
 
-days
+        split
+    );
 
-};
 
+    await syncSharedSplit();
 
-await setDoc(
 
-doc(
-db,
-"users",
-user.uid,
-"data",
-"split"
-),
+    renderSplit();
 
-split
 
-);
-
-
-await syncSharedSplit();
-
-
-renderSplit();
-
-
-screen(
-"homeScreen"
-);
-
+    screen(
+        "homeScreen"
+    );
 };
 
 
 $("deleteSplit").onclick =
 async () => {
 
-if(
-!split ||
-!confirm(
-`Delete "${split.name}"? Your workout history will be kept.`
-)
-){
+    if (
+        !split ||
+        !confirm(
+            `Delete "${split.name}"? Your workout history and PRs will be kept.`
+        )
+    ) {
 
-return;
-
-}
-
-
-await deleteDoc(
-
-doc(
-db,
-"users",
-user.uid,
-"data",
-"split"
-)
-
-);
+        return;
+    }
 
 
-try{
+    await deleteDoc(
 
-await deleteDoc(
+        doc(
+            db,
+            "users",
+            user.uid,
+            "data",
+            "split"
+        )
 
-doc(
-db,
-"sharedSplits",
-user.uid
-)
-
-);
-
-}
-catch{}
+    );
 
 
-split =
-null;
+    try {
+
+        await deleteDoc(
+
+            doc(
+                db,
+                "sharedSplits",
+                user.uid
+            )
+
+        );
+
+    }
+
+    catch (error) {
+
+        console.log(error);
+    }
 
 
-renderSplit();
+    split =
+        null;
 
 
-screen(
-"homeScreen"
-);
+    renderSplit();
 
+
+    screen(
+        "homeScreen"
+    );
 };
 
 
-async function syncSharedSplit(){
+async function syncSharedSplit() {
 
-if(!split){
+    if (!split) {
 
-return;
+        return;
+    }
 
+
+    if (
+        profile?.shareSplit
+    ) {
+
+        await setDoc(
+
+            doc(
+                db,
+                "sharedSplits",
+                user.uid
+            ),
+
+            split
+        );
+
+    }
+
+    else {
+
+        try {
+
+            await deleteDoc(
+
+                doc(
+                    db,
+                    "sharedSplits",
+                    user.uid
+                )
+
+            );
+
+        }
+
+        catch (error) {
+
+            console.log(error);
+        }
+    }
 }
 
 
-if(
-profile?.shareSplit
-){
+/* =========================
+   PREVIOUS WORKOUT
+========================= */
 
-await setDoc(
+async function previousFor(day) {
 
-doc(
-db,
-"sharedSplits",
-user.uid
-),
-
-split
-
-);
-
-}
-else{
-
-try{
-
-await deleteDoc(
-
-doc(
-db,
-"sharedSplits",
-user.uid
-)
-
-);
-
-}
-catch{}
-
-}
-
-}
+    const result = {};
 
 
-/* WORKOUT */
+    day.exercises
+        .forEach(
+            exercise => {
 
-async function previousFor(day){
-
-const result =
-{};
-
-
-day.exercises
-.forEach(
-exercise => {
-
-result[
-exercise.name
-.toLowerCase()
-] = null;
-
-}
-);
+                result[
+                    exercise.name
+                        .toLowerCase()
+                ] = null;
+            }
+        );
 
 
-const snapshot =
-await getDocs(
+    const snapshot =
+        await getDocs(
 
-query(
+            query(
 
-collection(
-db,
-"users",
-user.uid,
-"workouts"
-),
+                collection(
+                    db,
+                    "users",
+                    user.uid,
+                    "workouts"
+                ),
 
-orderBy(
-"completedAt",
-"desc"
-),
+                orderBy(
+                    "completedAt",
+                    "desc"
+                ),
 
-limit(50)
+                limit(50)
+            )
 
-)
-
-);
-
-
-snapshot
-.forEach(
-workoutDoc => {
-
-workoutDoc
-.data()
-.exercises
-?.forEach(
-exercise => {
-
-const key =
-exercise.name
-.toLowerCase();
+        );
 
 
-if(
-key in result &&
-result[key] === null
-){
+    snapshot.forEach(
+        workoutDocument => {
 
-result[key] =
-exercise;
-
-}
-
-}
-);
-
-}
-);
+            const workout =
+                workoutDocument.data();
 
 
-return result;
+            workout.exercises
+                ?.forEach(
+                    exercise => {
 
+                        const key =
+                            String(
+                                exercise.name
+                            )
+                                .toLowerCase();
+
+
+                        if (
+                            key in result &&
+                            result[key] === null
+                        ) {
+
+                            result[key] =
+                                exercise;
+                        }
+                    }
+                );
+        }
+    );
+
+
+    return result;
 }
 
 
-async function startWorkout(index){
+/* =========================
+   START WORKOUT
+========================= */
 
-activeDay =
-split.days[index];
+async function startWorkout(index) {
 
-
-$("activeWorkoutName")
-.textContent =
-activeDay.name;
-
-
-$("activeExercises")
-.innerHTML =
-'<div class="loading">Loading...</div>';
+    activeDay =
+        split.days[index];
 
 
-$("finishWorkout")
-.style.display =
-"none";
+    $("activeWorkoutName")
+        .textContent =
+            activeDay.name;
 
 
-screen(
-"workoutScreen"
-);
+    $("activeExercises")
+        .innerHTML =
+            '<div class="loading">Loading previous workout...</div>';
 
 
-previous =
-await previousFor(
-activeDay
-);
+    $("finishWorkout")
+        .style.display =
+            "none";
 
 
-$("activeExercises")
-.innerHTML =
-"";
+    screen(
+        "workoutScreen"
+    );
 
 
-activeDay.exercises
-.forEach(
-makeWorkoutCard
-);
+    previous =
+        await previousFor(
+            activeDay
+        );
 
+
+    $("activeExercises")
+        .innerHTML =
+            "";
+
+
+    activeDay.exercises
+        .forEach(
+            exercise =>
+                makeWorkoutCard(
+                    exercise
+                )
+        );
 }
 
 
-function makeWorkoutCard(exercise){
+function makeWorkoutCard(exercise) {
 
-const card =
-document.createElement(
-"div"
-);
-
-
-card.className =
-"card exerciseWorkout";
+    const card =
+        document.createElement(
+            "div"
+        );
 
 
-card.dataset.finished =
-"false";
+    card.className =
+        "card exerciseWorkout";
 
 
-const old =
-previous[
-exercise.name
-.toLowerCase()
-];
+    card.dataset.finished =
+        "false";
 
 
-let rows =
-"";
+    const old =
+        previous[
+            exercise.name
+                .toLowerCase()
+        ];
 
 
-for(
-let i = 0;
-i < exercise.sets;
-i++
-){
+    let rows = "";
 
-rows += `
 
-<div class="setRow">
+    for (
+        let index = 0;
+        index < exercise.sets;
+        index++
+    ) {
 
-<b>
-${i + 1}
-</b>
+        rows += `
 
-<input
-class="weight"
-type="number"
-inputmode="decimal"
-value="${old?.sets?.[i]?.weight || ""}"
-placeholder="lb"
->
+            <div class="setRow">
 
-<input
-class="reps"
-type="number"
-inputmode="numeric"
-value="${old?.sets?.[i]?.reps || ""}"
-placeholder="${exercise.minReps}–${exercise.maxReps}"
->
+                <b>
+                    ${index + 1}
+                </b>
 
-</div>
+                <input
+                    class="weight"
+                    type="number"
+                    inputmode="decimal"
+                    min="0"
+                    step="0.5"
+                    value="${old?.sets?.[index]?.weight || ""}"
+                    placeholder="lb"
+                >
 
-`;
+                <input
+                    class="reps"
+                    type="number"
+                    inputmode="numeric"
+                    min="1"
+                    value="${old?.sets?.[index]?.reps || ""}"
+                    placeholder="${exercise.minReps}–${exercise.maxReps}"
+                >
 
+            </div>
+        `;
+    }
+
+
+    card.innerHTML = `
+
+        <div class="progress">
+
+            <div class="muted">
+                ↑ PROGRESS
+            </div>
+
+            <strong></strong>
+
+            <div class="muted">
+                Since previous workout
+            </div>
+
+        </div>
+
+
+        <h2>
+            ${esc(exercise.name)}
+        </h2>
+
+
+        <div class="muted">
+
+            ${exercise.sets} sets
+
+            · Target
+
+            ${exercise.minReps}–${exercise.maxReps} reps
+
+        </div>
+
+
+        <div class="previous">
+
+            <b>
+                Previous
+            </b>
+
+            <br>
+
+            ${
+                old?.sets
+                    ?.map(
+                        (set, index) =>
+                            `Set ${index + 1}: ${set.weight} lb × ${set.reps}`
+                    )
+                    .join("<br>")
+
+                ||
+
+                "No previous workout"
+            }
+
+        </div>
+
+
+        <div class="setHeader">
+
+            <span>SET</span>
+
+            <span>WEIGHT</span>
+
+            <span>REPS</span>
+
+        </div>
+
+
+        ${rows}
+
+
+        <button class="secondary finishEx">
+            Finish Exercise
+        </button>
+    `;
+
+
+    card
+        .querySelector(
+            ".finishEx"
+        )
+        .onclick =
+            () =>
+                finishExercise(
+                    card,
+                    exercise
+                );
+
+
+    $("activeExercises")
+        .appendChild(
+            card
+        );
 }
 
 
-card.innerHTML = `
+/* =========================
+   PROGRESS CALCULATION
+========================= */
 
-<div class="progress">
+function estimatedStrength(
+    weight,
+    reps
+) {
 
-<div class="muted">
-↑ PROGRESS
-</div>
-
-<strong></strong>
-
-<div class="muted">
-Since previous workout
-</div>
-
-</div>
+    weight =
+        Number(weight);
 
 
-<h2>
-${esc(exercise.name)}
-</h2>
-
-<div class="muted">
-
-${exercise.sets} sets
-· Target
-${exercise.minReps}–${exercise.maxReps}
-
-</div>
+    reps =
+        Number(reps);
 
 
-<div class="previous">
+    if (
+        weight <= 0 ||
+        reps <= 0
+    ) {
 
-<b>
-Previous
-</b>
-
-<br>
-
-${
-old?.sets
-?.map(
-(set,i) =>
-`Set ${i + 1}: ${set.weight} lb × ${set.reps}`
-)
-.join("<br>")
-||
-"No previous workout"
-}
-
-</div>
+        return 0;
+    }
 
 
-<div class="setHeader">
-
-<span>SET</span>
-<span>WEIGHT</span>
-<span>REPS</span>
-
-</div>
-
-
-${rows}
-
-
-<button class="secondary finishEx">
-Finish Exercise
-</button>
-
-`;
-
-
-card
-.querySelector(
-".finishEx"
-)
-.onclick =
-() =>
-finishExercise(
-card,
-exercise
-);
-
-
-$("activeExercises")
-.appendChild(
-card
-);
-
+    return (
+        weight *
+        (
+            1 +
+            reps / 30
+        )
+    );
 }
 
 
-const strength =
-(weight,reps) =>
+function bestStrength(sets) {
 
-weight > 0 &&
-reps > 0
+    return Math.max(
 
-? weight *
-(
-1 +
-reps / 30
-)
+        0,
 
-: 0;
-
-
-const best =
-sets =>
-
-Math.max(
-
-0,
-
-...sets.map(
-set =>
-strength(
-Number(set.weight),
-Number(set.reps)
-)
-)
-
-);
+        ...sets.map(
+            set =>
+                estimatedStrength(
+                    set.weight,
+                    set.reps
+                )
+        )
+    );
+}
 
 
 function finishExercise(
-card,
-exercise
-){
+    card,
+    exercise
+) {
 
-const sets =
-[];
-
-
-for(
-const row
-of card.querySelectorAll(
-".setRow"
-)
-){
-
-const weight =
-Number(
-row
-.querySelector(
-".weight"
-)
-.value
-);
+    const sets = [];
 
 
-const reps =
-Number(
-row
-.querySelector(
-".reps"
-)
-.value
-);
+    for (
+        const row
+        of card.querySelectorAll(
+            ".setRow"
+        )
+    ) {
+
+        const weight =
+            Number(
+                row
+                    .querySelector(
+                        ".weight"
+                    )
+                    .value
+            );
 
 
-if(
-weight <= 0 ||
-reps <= 0
-){
+        const reps =
+            Number(
+                row
+                    .querySelector(
+                        ".reps"
+                    )
+                    .value
+            );
 
-alert(
-"Enter weight and reps for every set."
-);
 
-return;
+        if (
+            weight <= 0 ||
+            reps <= 0
+        ) {
 
+            alert(
+                "Enter weight and reps for every set."
+            );
+
+            return;
+        }
+
+
+        sets.push({
+
+            weight,
+
+            reps
+        });
+
+
+        row
+            .querySelectorAll(
+                "input"
+            )
+            .forEach(
+                input => {
+
+                    input.disabled =
+                        true;
+                }
+            );
+    }
+
+
+    card.dataset.finished =
+        "true";
+
+
+    card.currentSets =
+        sets;
+
+
+    card
+        .querySelector(
+            ".finishEx"
+        )
+        .style.display =
+            "none";
+
+
+    const old =
+        previous[
+            exercise.name
+                .toLowerCase()
+        ];
+
+
+    if (
+        old?.sets?.length
+    ) {
+
+        const oldBest =
+            bestStrength(
+                old.sets
+            );
+
+
+        const newBest =
+            bestStrength(
+                sets
+            );
+
+
+        if (
+            oldBest > 0 &&
+            newBest > oldBest
+        ) {
+
+            const percent =
+                (
+                    (
+                        newBest -
+                        oldBest
+                    )
+                    /
+                    oldBest
+                )
+                *
+                100;
+
+
+            const progress =
+                card.querySelector(
+                    ".progress"
+                );
+
+
+            progress
+                .querySelector(
+                    "strong"
+                )
+                .textContent =
+                    `+${percent.toFixed(1)}%`;
+
+
+            progress
+                .classList
+                .add("show");
+        }
+    }
+
+
+    const allFinished =
+        [
+            ...document.querySelectorAll(
+                ".exerciseWorkout"
+            )
+        ]
+            .every(
+                exerciseCard =>
+                    exerciseCard.dataset.finished ===
+                    "true"
+            );
+
+
+    if (allFinished) {
+
+        $("finishWorkout")
+            .style.display =
+                "block";
+    }
 }
 
 
-sets.push({
-
-weight,
-
-reps
-
-});
-
-
-row
-.querySelectorAll(
-"input"
-)
-.forEach(
-input =>
-input.disabled =
-true
-);
-
-}
-
-
-card.dataset.finished =
-"true";
-
-
-card.currentSets =
-sets;
-
-
-card
-.querySelector(
-".finishEx"
-)
-.style.display =
-"none";
-
-
-const old =
-previous[
-exercise.name
-.toLowerCase()
-];
-
-
-if(
-old?.sets?.length
-){
-
-const oldBest =
-best(
-old.sets
-);
-
-
-const newBest =
-best(
-sets
-);
-
-
-if(
-newBest > oldBest &&
-oldBest > 0
-){
-
-const progress =
-card.querySelector(
-".progress"
-);
-
-
-progress
-.querySelector(
-"strong"
-)
-.textContent =
-
-`+${
-(
-(
-newBest -
-oldBest
-)
-/
-oldBest
-*
-100
-)
-.toFixed(1)
-}%`;
-
-
-progress
-.classList
-.add(
-"show"
-);
-
-}
-
-}
-
-
-if(
-
-[
-...document.querySelectorAll(
-".exerciseWorkout"
-)
-]
-.every(
-exerciseCard =>
-exerciseCard.dataset.finished ===
-"true"
-)
-
-){
-
-$("finishWorkout")
-.style.display =
-"block";
-
-}
-
-}
-
+/* =========================
+   FINISH WORKOUT
+========================= */
 
 $("finishWorkout").onclick =
 async () => {
 
-const cards =
-[
-...document.querySelectorAll(
-".exerciseWorkout"
-)
-];
+    const cards =
+        [
+            ...document.querySelectorAll(
+                ".exerciseWorkout"
+            )
+        ];
 
 
-if(
-!cards.every(
-card =>
-card.dataset.finished ===
-"true"
-)
-){
+    if (
+        !cards.every(
+            card =>
+                card.dataset.finished ===
+                "true"
+        )
+    ) {
 
-return;
+        alert(
+            "Finish every exercise first."
+        );
 
-}
-
-
-const exercises =
-cards.map(
-(card,index) => ({
-
-name:
-activeDay
-.exercises[index]
-.name,
-
-sets:
-card.currentSets
-
-})
-);
+        return;
+    }
 
 
-const data = {
+    const exercises =
+        cards.map(
+            (card, index) => ({
 
-split:
-split.name,
+                name:
+                    activeDay
+                        .exercises[index]
+                        .name,
 
-workout:
-activeDay.name,
-
-exercises,
-
-completedAt:
-serverTimestamp()
-
-};
-
-
-const saved =
-await addDoc(
-
-collection(
-db,
-"users",
-user.uid,
-"workouts"
-),
-
-data
-
-);
+                sets:
+                    card.currentSets
+            })
+        );
 
 
-await setDoc(
+    const workoutData = {
 
-doc(
-db,
-"sharedWorkouts",
-user.uid,
-"items",
-saved.id
-),
+        split:
+            split.name,
 
-data
+        workout:
+            activeDay.name,
 
-);
+        exercises,
 
-
-activeDay =
-null;
+        completedAt:
+            serverTimestamp()
+    };
 
 
-$("finishWorkout")
-.style.display =
-"none";
+    try {
+
+        const saved =
+            await addDoc(
+
+                collection(
+                    db,
+                    "users",
+                    user.uid,
+                    "workouts"
+                ),
+
+                workoutData
+            );
 
 
-screen(
-"homeScreen"
-);
+        await setDoc(
+
+            doc(
+                db,
+                "sharedWorkouts",
+                user.uid,
+                "items",
+                saved.id
+            ),
+
+            workoutData
+        );
 
 
-alert(
-"Workout saved!"
-);
+        activeDay =
+            null;
 
+
+        $("finishWorkout")
+            .style.display =
+                "none";
+
+
+        screen(
+            "homeScreen"
+        );
+
+
+        alert(
+            "Workout saved!"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+
+        alert(
+            "Could not save workout: " +
+            error.message
+        );
+    }
 };
 
 
 $("exitWorkout").onclick =
 () => {
 
-if(
-confirm(
-"Exit workout? Unsaved progress will be lost."
-)
-){
+    if (
+        confirm(
+            "Exit workout? Unsaved progress will be lost."
+        )
+    ) {
 
-activeDay =
-null;
+        activeDay =
+            null;
 
-screen(
-"homeScreen"
-);
 
-}
-
+        screen(
+            "homeScreen"
+        );
+    }
 };
 
 
-/* PERSONAL RECORDS */
+/* =========================
+   PERSONAL RECORDS
+========================= */
 
 $("prButton").onclick =
 async () => {
 
-screen(
-"prScreen"
-);
+    screen(
+        "prScreen"
+    );
 
 
-$("prDate")
-.value =
-dkey(
-new Date()
-);
+    $("prDate")
+        .value =
+            dkey(
+                new Date()
+            );
 
 
-await loadPRs();
-
+    await loadPRs();
 };
 
 
 $("showAddPR").onclick =
 () => {
 
-$("prForm")
-.style.display =
+    $("prForm")
+        .style.display =
 
-$("prForm")
-.style.display ===
-"none"
+            $("prForm")
+                .style.display ===
+                "none"
 
-? "block"
-: "none";
+                ? "block"
 
+                : "none";
 };
 
 
 $("savePR").onclick =
 async () => {
 
-const exercise =
-$("prExercise")
-.value
-.trim();
+    const exercise =
+        $("prExercise")
+            .value
+            .trim();
 
 
-const weight =
-Number(
-$("prWeight")
-.value
-);
+    const weight =
+        Number(
+            $("prWeight")
+                .value
+        );
 
 
-const reps =
-Number(
-$("prReps")
-.value
-);
+    const reps =
+        Number(
+            $("prReps")
+                .value
+        );
 
 
-const date =
-$("prDate")
-.value;
+    const date =
+        $("prDate")
+            .value;
 
 
-if(
-!exercise ||
-weight <= 0 ||
-reps <= 0 ||
-!date
-){
+    if (
+        !exercise ||
+        weight <= 0 ||
+        reps <= 0 ||
+        !date
+    ) {
 
-alert(
-"Complete all PR fields."
-);
+        alert(
+            "Complete all PR fields."
+        );
 
-return;
-
-}
-
-
-await addDoc(
-
-collection(
-db,
-"users",
-user.uid,
-"prs"
-),
-
-{
-
-exercise,
-
-weight,
-
-reps,
-
-date,
-
-createdAt:
-serverTimestamp()
-
-}
-
-);
+        return;
+    }
 
 
-$("prForm")
-.style.display =
-"none";
+    await addDoc(
+
+        collection(
+            db,
+            "users",
+            user.uid,
+            "prs"
+        ),
+
+        {
+
+            exercise,
+
+            weight,
+
+            reps,
+
+            date,
+
+            createdAt:
+                serverTimestamp()
+        }
+
+    );
 
 
-await loadPRs();
+    $("prExercise")
+        .value =
+            "";
 
+
+    $("prWeight")
+        .value =
+            "";
+
+
+    $("prReps")
+        .value =
+            "";
+
+
+    $("prForm")
+        .style.display =
+            "none";
+
+
+    await loadPRs();
 };
 
 
-async function loadPRs(){
+async function loadPRs() {
 
-const container =
-$("prList");
-
-
-container.innerHTML =
-'<div class="loading">Loading...</div>';
+    const container =
+        $("prList");
 
 
-const snapshot =
-await getDocs(
-
-collection(
-db,
-"users",
-user.uid,
-"prs"
-)
-
-);
+    container.innerHTML =
+        '<div class="loading">Loading...</div>';
 
 
-const records =
-snapshot.docs
-.map(
-record => ({
+    const snapshot =
+        await getDocs(
 
-id:
-record.id,
+            collection(
+                db,
+                "users",
+                user.uid,
+                "prs"
+            )
 
-...record.data()
-
-})
-)
-.sort(
-(a,b) =>
-b.date.localeCompare(
-a.date
-)
-);
+        );
 
 
-container.innerHTML =
-records.length
-? ""
-: '<div class="card muted">No PRs yet.</div>';
+    const records =
+        snapshot.docs
+            .map(
+                record => ({
+
+                    id:
+                        record.id,
+
+                    ...record.data()
+                })
+            )
+            .sort(
+                (a, b) =>
+                    String(b.date)
+                        .localeCompare(
+                            String(a.date)
+                        )
+            );
 
 
-records.forEach(
-record => {
-
-const row =
-document.createElement(
-"div"
-);
+    container.innerHTML =
+        "";
 
 
-row.className =
-"card prRow";
+    if (!records.length) {
+
+        container.innerHTML =
+            '<div class="card muted">No PRs yet.</div>';
+
+        return;
+    }
 
 
-row.innerHTML = `
+    records.forEach(
+        record => {
 
-<div>
-
-<b>
-${esc(record.exercise)}
-</b>
-
-<div class="muted">
-${esc(record.date)}
-</div>
-
-</div>
+            const row =
+                document.createElement(
+                    "div"
+                );
 
 
-<div>
-
-<b>
-${record.weight} lb × ${record.reps}
-</b>
-
-<br>
-
-<button
-class="deletePR secondary danger"
-style="width:auto;padding:6px 9px"
->
-Delete
-</button>
-
-</div>
-
-`;
+            row.className =
+                "card prRow";
 
 
-row
-.querySelector(
-".deletePR"
-)
-.onclick =
-async () => {
+            row.innerHTML = `
 
-await deleteDoc(
+                <div>
 
-doc(
-db,
-"users",
-user.uid,
-"prs",
-record.id
-)
+                    <b>
+                        ${esc(record.exercise)}
+                    </b>
 
-);
+                    <div class="muted">
+                        ${esc(record.date)}
+                    </div>
+
+                </div>
 
 
-loadPRs();
+                <div style="text-align:right">
 
-};
+                    <b>
+                        ${record.weight} lb × ${record.reps}
+                    </b>
+
+                    <br>
+
+                    <button
+                        class="deletePR secondary danger"
+                        style="width:auto;padding:6px 9px"
+                    >
+                        Delete
+                    </button>
+
+                </div>
+            `;
 
 
-container
-.appendChild(
-row
-);
+            row
+                .querySelector(
+                    ".deletePR"
+                )
+                .onclick =
+                    async () => {
 
+                        await deleteDoc(
+
+                            doc(
+                                db,
+                                "users",
+                                user.uid,
+                                "prs",
+                                record.id
+                            )
+
+                        );
+
+
+                        await loadPRs();
+                    };
+
+
+            container
+                .appendChild(
+                    row
+                );
+        }
+    );
 }
-);
-
-}
 
 
-/* FRIEND PRIVACY */
+/* =========================
+   FRIEND PRIVACY
+========================= */
 
-async function savePrivacy(){
+async function savePrivacy() {
 
-profile.shareSplit =
-$("shareSplit")
-.checked;
-
-
-profile.shareWeights =
-$("shareWeights")
-.checked;
+    profile.shareSplit =
+        $("shareSplit")
+            .checked;
 
 
-profile.shareCalendar =
-$("shareCalendar")
-.checked;
+    profile.shareWeights =
+        $("shareWeights")
+            .checked;
 
 
-await setDoc(
-
-doc(
-db,
-"profiles",
-user.uid
-),
-
-profile
-
-);
+    profile.shareCalendar =
+        $("shareCalendar")
+            .checked;
 
 
-await syncSharedSplit();
+    await setDoc(
 
+        doc(
+            db,
+            "profiles",
+            user.uid
+        ),
+
+        profile
+    );
+
+
+    await syncSharedSplit();
 }
 
 
 [
-"shareSplit",
-"shareWeights",
-"shareCalendar"
+    "shareSplit",
+    "shareWeights",
+    "shareCalendar"
 ]
-.forEach(
-id => {
+    .forEach(
+        id => {
 
-$(id)
-.onchange =
-savePrivacy;
+            $(id)
+                .onchange =
+                    savePrivacy;
+        }
+    );
 
-}
-);
 
-
-/* FRIENDS */
+/* =========================
+   FRIENDS
+========================= */
 
 $("friendsButton").onclick =
 async () => {
 
-$("shareSplit")
-.checked =
-!!profile.shareSplit;
+    $("shareSplit")
+        .checked =
+            !!profile.shareSplit;
 
 
-$("shareWeights")
-.checked =
-!!profile.shareWeights;
+    $("shareWeights")
+        .checked =
+            !!profile.shareWeights;
 
 
-$("shareCalendar")
-.checked =
-!!profile.shareCalendar;
+    $("shareCalendar")
+        .checked =
+            !!profile.shareCalendar;
 
 
-screen(
-"friendsScreen"
-);
+    screen(
+        "friendsScreen"
+    );
 
 
-await loadRequests();
+    await loadRequests();
 
-await loadFriends();
-
+    await loadFriends();
 };
 
 
 $("sendRequest").onclick =
 async () => {
 
-const email =
-normEmail(
-$("friendEmail")
-.value
-);
+    const email =
+        normEmail(
+            $("friendEmail")
+                .value
+        );
 
 
-if(!email){
+    if (!email) {
 
-return;
+        alert(
+            "Enter their Google email."
+        );
 
-}
-
-
-if(
-email ===
-normEmail(
-user.email
-)
-){
-
-alert(
-"You can't add yourself."
-);
-
-return;
-
-}
+        return;
+    }
 
 
-const lookup =
-await getDoc(
+    if (
+        email ===
+        normEmail(
+            user.email
+        )
+    ) {
 
-doc(
-db,
-"emailLookup",
-await emailKey(email)
-)
+        alert(
+            "You can't add yourself."
+        );
 
-);
-
-
-if(
-!lookup.exists()
-){
-
-alert(
-"No account found."
-);
-
-return;
-
-}
+        return;
+    }
 
 
-const friendUid =
-lookup.data().uid;
+    const lookup =
+        await getDoc(
+
+            doc(
+                db,
+                "emailLookup",
+                await emailKey(email)
+            )
+
+        );
 
 
-const friendship =
-await getDoc(
+    if (!lookup.exists()) {
 
-doc(
-db,
-"friendships",
-friendshipId(
-user.uid,
-friendUid
-)
-)
+        alert(
+            "No Fitness Tracker account was found with that email."
+        );
 
-);
+        return;
+    }
 
 
-if(
-friendship.exists()
-){
-
-alert(
-"Already friends."
-);
-
-return;
-
-}
+    const friendUid =
+        lookup.data().uid;
 
 
-const duplicate =
-await getDocs(
+    const friendship =
+        await getDoc(
 
-query(
+            doc(
+                db,
+                "friendships",
+                friendshipId(
+                    user.uid,
+                    friendUid
+                )
+            )
 
-collection(
-db,
-"friendRequests"
-),
-
-where(
-"fromUid",
-"==",
-user.uid
-),
-
-where(
-"toUid",
-"==",
-friendUid
-)
-
-)
-
-);
+        );
 
 
-if(
-!duplicate.empty
-){
+    if (friendship.exists()) {
 
-alert(
-"Request already sent."
-);
+        alert(
+            "You're already friends."
+        );
 
-return;
-
-}
+        return;
+    }
 
 
-await addDoc(
+    const duplicate =
+        await getDocs(
 
-collection(
-db,
-"friendRequests"
-),
+            query(
 
-{
+                collection(
+                    db,
+                    "friendRequests"
+                ),
 
-fromUid:
-user.uid,
+                where(
+                    "fromUid",
+                    "==",
+                    user.uid
+                ),
 
-toUid:
-friendUid,
+                where(
+                    "toUid",
+                    "==",
+                    friendUid
+                )
 
-status:
-"pending",
+            )
 
-createdAt:
-serverTimestamp()
-
-}
-
-);
-
-
-$("friendEmail")
-.value =
-"";
+        );
 
 
-alert(
-"Friend request sent!"
-);
+    if (!duplicate.empty) {
 
+        alert(
+            "Friend request already sent."
+        );
+
+        return;
+    }
+
+
+    await addDoc(
+
+        collection(
+            db,
+            "friendRequests"
+        ),
+
+        {
+
+            fromUid:
+                user.uid,
+
+            toUid:
+                friendUid,
+
+            status:
+                "pending",
+
+            createdAt:
+                serverTimestamp()
+        }
+
+    );
+
+
+    $("friendEmail")
+        .value =
+            "";
+
+
+    alert(
+        "Friend request sent!"
+    );
 };
 
 
-async function loadRequests(){
+async function loadRequests() {
 
-const container =
-$("requestsList");
-
-
-const snapshot =
-await getDocs(
-
-query(
-
-collection(
-db,
-"friendRequests"
-),
-
-where(
-"toUid",
-"==",
-user.uid
-)
-
-)
-
-);
+    const container =
+        $("requestsList");
 
 
-container.innerHTML =
-"";
+    container.innerHTML =
+        '<div class="loading">Loading...</div>';
 
 
-for(
-const requestDoc
-of snapshot.docs
-){
+    const snapshot =
+        await getDocs(
 
-const request =
-requestDoc.data();
+            query(
+
+                collection(
+                    db,
+                    "friendRequests"
+                ),
+
+                where(
+                    "toUid",
+                    "==",
+                    user.uid
+                )
+
+            )
+
+        );
 
 
-if(
-request.status !==
-"pending"
-){
+    container.innerHTML =
+        "";
 
-continue;
 
+    for (
+        const requestDocument
+        of snapshot.docs
+    ) {
+
+        const request =
+            requestDocument.data();
+
+
+        if (
+            request.status !==
+            "pending"
+        ) {
+
+            continue;
+        }
+
+
+        const profileSnapshot =
+            await getDoc(
+
+                doc(
+                    db,
+                    "profiles",
+                    request.fromUid
+                )
+
+            );
+
+
+        if (
+            !profileSnapshot.exists()
+        ) {
+
+            continue;
+        }
+
+
+        const friendProfile =
+            profileSnapshot.data();
+
+
+        const row =
+            document.createElement(
+                "div"
+            );
+
+
+        row.className =
+            "friendRow";
+
+
+        row.innerHTML = `
+
+            <img
+                class="avatar"
+                src="${esc(friendProfile.photoURL)}"
+            >
+
+            <div class="friendInfo">
+
+                <b>
+                    ${esc(friendProfile.displayName)}
+                </b>
+
+                <div class="friendEmail">
+                    ${esc(friendProfile.email)}
+                </div>
+
+            </div>
+
+            <button class="secondary accept">
+                Accept
+            </button>
+
+            <button class="secondary danger decline">
+                Decline
+            </button>
+        `;
+
+
+        row
+            .querySelector(
+                ".accept"
+            )
+            .onclick =
+                async () => {
+
+                    await setDoc(
+
+                        doc(
+                            db,
+                            "friendships",
+                            friendshipId(
+                                user.uid,
+                                request.fromUid
+                            )
+                        ),
+
+                        {
+
+                            users: [
+                                user.uid,
+                                request.fromUid
+                            ],
+
+                            createdAt:
+                                serverTimestamp()
+                        }
+
+                    );
+
+
+                    await deleteDoc(
+
+                        doc(
+                            db,
+                            "friendRequests",
+                            requestDocument.id
+                        )
+
+                    );
+
+
+                    await loadRequests();
+
+                    await loadFriends();
+                };
+
+
+        row
+            .querySelector(
+                ".decline"
+            )
+            .onclick =
+                async () => {
+
+                    await deleteDoc(
+
+                        doc(
+                            db,
+                            "friendRequests",
+                            requestDocument.id
+                        )
+
+                    );
+
+
+                    await loadRequests();
+                };
+
+
+        container
+            .appendChild(
+                row
+            );
+    }
+
+
+    if (
+        !container.children.length
+    ) {
+
+        container.innerHTML =
+            '<div class="muted">No requests</div>';
+    }
 }
 
 
-const profileSnapshot =
-await getDoc(
+async function loadFriends() {
 
-doc(
-db,
-"profiles",
-request.fromUid
-)
-
-);
+    const container =
+        $("friendsList");
 
 
-if(
-!profileSnapshot.exists()
-){
+    container.innerHTML =
+        '<div class="loading">Loading...</div>';
 
-continue;
 
+    const snapshot =
+        await getDocs(
+
+            query(
+
+                collection(
+                    db,
+                    "friendships"
+                ),
+
+                where(
+                    "users",
+                    "array-contains",
+                    user.uid
+                )
+
+            )
+
+        );
+
+
+    container.innerHTML =
+        "";
+
+
+    for (
+        const friendship
+        of snapshot.docs
+    ) {
+
+        const friendUid =
+            friendship
+                .data()
+                .users
+                .find(
+                    id =>
+                        id !== user.uid
+                );
+
+
+        if (!friendUid) {
+
+            continue;
+        }
+
+
+        const profileSnapshot =
+            await getDoc(
+
+                doc(
+                    db,
+                    "profiles",
+                    friendUid
+                )
+
+            );
+
+
+        if (
+            !profileSnapshot.exists()
+        ) {
+
+            continue;
+        }
+
+
+        const friend = {
+
+            ...profileSnapshot.data(),
+
+            friendshipId:
+                friendship.id
+        };
+
+
+        const row =
+            document.createElement(
+                "div"
+            );
+
+
+        row.className =
+            "friendRow";
+
+
+        row.innerHTML = `
+
+            <img
+                class="avatar"
+                src="${esc(friend.photoURL)}"
+            >
+
+            <div class="friendInfo">
+
+                <b>
+                    ${esc(friend.displayName)}
+                </b>
+
+                <div class="friendEmail">
+                    ${esc(friend.email)}
+                </div>
+
+            </div>
+
+            <button class="secondary view">
+                View
+            </button>
+        `;
+
+
+        row
+            .querySelector(
+                ".view"
+            )
+            .onclick =
+                () =>
+                    openFriend(
+                        friend
+                    );
+
+
+        container
+            .appendChild(
+                row
+            );
+    }
+
+
+    if (
+        !container.children.length
+    ) {
+
+        container.innerHTML =
+            '<div class="muted">No friends yet</div>';
+    }
 }
 
 
-const friendProfile =
-profileSnapshot.data();
+async function openFriend(friend) {
 
+    selectedFriend =
+        friend;
 
-const row =
-document.createElement(
-"div"
-);
 
+    $("friendName")
+        .textContent =
+            friend.displayName;
 
-row.className =
-"friendRow";
 
+    $("friendEmailLabel")
+        .textContent =
+            friend.email;
 
-row.innerHTML = `
 
-<img
-class="avatar"
-src="${esc(friendProfile.photoURL)}"
->
+    $("friendPhoto")
+        .src =
+            friend.photoURL || "";
 
-<div class="friendInfo">
 
-<b>
-${esc(friendProfile.displayName)}
-</b>
+    $("friendCalendarButton")
+        .style.display =
 
-<div class="friendEmail">
-${esc(friendProfile.email)}
-</div>
+            friend.shareCalendar
 
-</div>
+                ? "block"
 
-<button class="secondary accept">
-Accept
-</button>
+                : "none";
 
-<button class="secondary danger decline">
-Decline
-</button>
 
-`;
+    if (
+        friend.shareSplit
+    ) {
 
+        try {
 
-row
-.querySelector(
-".accept"
-)
-.onclick =
-async () => {
+            const splitSnapshot =
+                await getDoc(
 
-await setDoc(
+                    doc(
+                        db,
+                        "sharedSplits",
+                        friend.uid
+                    )
 
-doc(
-db,
-"friendships",
-friendshipId(
-user.uid,
-request.fromUid
-)
-),
+                );
 
-{
 
-users: [
-user.uid,
-request.fromUid
-],
+            if (
+                splitSnapshot.exists()
+            ) {
 
-createdAt:
-serverTimestamp()
+                const friendSplit =
+                    splitSnapshot.data();
 
-}
 
-);
+                $("friendSplit")
+                    .innerHTML = `
 
+                        <div class="card">
 
-await deleteDoc(
+                            <div class="muted">
+                                CURRENT SPLIT
+                            </div>
 
-doc(
-db,
-"friendRequests",
-requestDoc.id
-)
+                            <h2>
+                                ${esc(friendSplit.name)}
+                            </h2>
 
-);
+                            ${friendSplit.days
+                                .map(
+                                    day => `
 
+                                        <div style="margin-top:15px">
 
-loadRequests();
+                                            <b>
+                                                ${esc(day.name)}
+                                            </b>
 
-loadFriends();
+                                            ${day.exercises
+                                                .map(
+                                                    exercise => `
 
-};
+                                                        <div class="exerciseSummary">
 
+                                                            ${esc(exercise.name)}
 
-row
-.querySelector(
-".decline"
-)
-.onclick =
-async () => {
+                                                            · ${exercise.sets} sets
 
-await deleteDoc(
+                                                            · ${exercise.minReps}–${exercise.maxReps}
 
-doc(
-db,
-"friendRequests",
-requestDoc.id
-)
+                                                        </div>
+                                                    `
+                                                )
+                                                .join("")}
 
-);
+                                        </div>
+                                    `
+                                )
+                                .join("")}
 
+                        </div>
+                    `;
 
-loadRequests();
+            }
 
-};
+            else {
 
+                $("friendSplit")
+                    .innerHTML =
+                        '<div class="card muted">No shared split.</div>';
+            }
 
-container
-.appendChild(
-row
-);
+        }
 
-}
+        catch (error) {
 
+            console.error(error);
 
-if(
-!container.children.length
-){
 
-container.innerHTML =
-'<div class="muted">No requests</div>';
+            $("friendSplit")
+                .innerHTML =
+                    '<div class="card muted">Unable to load split.</div>';
+        }
 
-}
+    }
 
-}
+    else {
 
+        $("friendSplit")
+            .innerHTML =
+                '<div class="card muted">🔒 Workout split is private</div>';
+    }
 
-async function loadFriends(){
 
-const container =
-$("friendsList");
-
-
-const snapshot =
-await getDocs(
-
-query(
-
-collection(
-db,
-"friendships"
-),
-
-where(
-"users",
-"array-contains",
-user.uid
-)
-
-)
-
-);
-
-
-container.innerHTML =
-"";
-
-
-for(
-const friendship
-of snapshot.docs
-){
-
-const friendUid =
-friendship
-.data()
-.users
-.find(
-id =>
-id !== user.uid
-);
-
-
-const profileSnapshot =
-await getDoc(
-
-doc(
-db,
-"profiles",
-friendUid
-)
-
-);
-
-
-if(
-!profileSnapshot.exists()
-){
-
-continue;
-
-}
-
-
-const friend = {
-
-...profileSnapshot.data(),
-
-friendshipId:
-friendship.id
-
-};
-
-
-const row =
-document.createElement(
-"div"
-);
-
-
-row.className =
-"friendRow";
-
-
-row.innerHTML = `
-
-<img
-class="avatar"
-src="${esc(friend.photoURL)}"
->
-
-<div class="friendInfo">
-
-<b>
-${esc(friend.displayName)}
-</b>
-
-<div class="friendEmail">
-${esc(friend.email)}
-</div>
-
-</div>
-
-<button class="secondary view">
-View
-</button>
-
-`;
-
-
-row
-.querySelector(
-".view"
-)
-.onclick =
-() =>
-openFriend(
-friend
-);
-
-
-container
-.appendChild(
-row
-);
-
-}
-
-
-if(
-!container.children.length
-){
-
-container.innerHTML =
-'<div class="muted">No friends yet</div>';
-
-}
-
-}
-
-
-async function openFriend(friend){
-
-selectedFriend =
-friend;
-
-
-$("friendName")
-.textContent =
-friend.displayName;
-
-
-$("friendEmailLabel")
-.textContent =
-friend.email;
-
-
-$("friendPhoto")
-.src =
-friend.photoURL || "";
-
-
-$("friendCalendarButton")
-.style.display =
-friend.shareCalendar
-? "block"
-: "none";
-
-
-if(
-friend.shareSplit
-){
-
-try{
-
-const splitSnapshot =
-await getDoc(
-
-doc(
-db,
-"sharedSplits",
-friend.uid
-)
-
-);
-
-
-$("friendSplit")
-.innerHTML =
-
-splitSnapshot.exists()
-
-? `
-
-<div class="card">
-
-<div class="muted">
-CURRENT SPLIT
-</div>
-
-<h2>
-${esc(splitSnapshot.data().name)}
-</h2>
-
-${splitSnapshot
-.data()
-.days
-.map(
-day => `
-
-<div style="margin-top:15px">
-
-<b>
-${esc(day.name)}
-</b>
-
-${day.exercises
-.map(
-exercise => `
-
-<div class="exerciseSummary">
-
-${esc(exercise.name)}
-· ${exercise.sets} sets
-· ${exercise.minReps}–${exercise.maxReps}
-
-</div>
-
-`
-)
-.join("")}
-
-</div>
-
-`
-)
-.join("")}
-
-</div>
-
-`
-
-: '<div class="card muted">No shared split.</div>';
-
-}
-catch{
-
-$("friendSplit")
-.innerHTML =
-'<div class="card muted">Unable to load split.</div>';
-
-}
-
-}
-else{
-
-$("friendSplit")
-.innerHTML =
-'<div class="card muted">🔒 Workout split is private</div>';
-
-}
-
-
-screen(
-"friendProfileScreen"
-);
-
+    screen(
+        "friendProfileScreen"
+    );
 }
 
 
 $("friendBack").onclick =
 () =>
-screen(
-"friendsScreen"
-);
+    screen(
+        "friendsScreen"
+    );
 
 
 $("removeFriend").onclick =
 async () => {
 
-if(
-selectedFriend &&
-confirm(
-`Remove ${selectedFriend.displayName}?`
-)
-){
+    if (
+        !selectedFriend
+    ) {
 
-await deleteDoc(
-
-doc(
-db,
-"friendships",
-friendshipId(
-user.uid,
-selectedFriend.uid
-)
-)
-
-);
+        return;
+    }
 
 
-selectedFriend =
-null;
+    if (
+        !confirm(
+            `Remove ${selectedFriend.displayName}?`
+        )
+    ) {
+
+        return;
+    }
 
 
-screen(
-"friendsScreen"
-);
+    await deleteDoc(
+
+        doc(
+            db,
+            "friendships",
+            friendshipId(
+                user.uid,
+                selectedFriend.uid
+            )
+        )
+
+    );
 
 
-loadFriends();
+    selectedFriend =
+        null;
 
-}
 
+    screen(
+        "friendsScreen"
+    );
+
+
+    await loadFriends();
 };
-
-
-/* CALENDAR */
+/* =========================
+   CALENDAR
+========================= */
 
 $("calendarButton").onclick =
 () =>
-openCalendar(null);
+    openCalendar(
+        null
+    );
 
 
 $("friendCalendarButton").onclick =
 () =>
-openCalendar(
-selectedFriend
-);
+    openCalendar(
+        selectedFriend
+    );
 
 
 $("calendarBack").onclick =
-() =>
-screen(
-
-calendarFriend
-
-? "friendProfileScreen"
-
-: "homeScreen"
-
-);
-
-
-async function openCalendar(friend){
-
-calendarFriend =
-friend;
-
-
-calView =
-"week";
-
-
-calDate =
-new Date();
-
-
-$("calendarOwner")
-.textContent =
-
-friend
-
-? `${friend.displayName.toUpperCase()}'S ACTIVITY`
-
-: "YOUR ACTIVITY";
-
-
-document
-.querySelectorAll(
-"[data-calview]"
-)
-.forEach(
-button =>
-button.classList.toggle(
-"active",
-button.dataset.calview ===
-"week"
-)
-);
-
-
-screen(
-"calendarScreen"
-);
-
-
-await loadHistory();
-
-
-renderCalendar();
-
-}
-
-
-document
-.querySelectorAll(
-"[data-calview]"
-)
-.forEach(
-button => {
-
-button.onclick =
 () => {
 
-calView =
-button.dataset.calview;
+    screen(
+
+        calendarFriend
+
+            ? "friendProfileScreen"
+
+            : "homeScreen"
+    );
+};
+
+
+async function openCalendar(friend) {
+
+    calendarFriend =
+        friend;
+
+
+    calView =
+        "week";
+
+
+    calDate =
+        new Date();
+
+
+    $("calendarOwner")
+        .textContent =
+
+            friend
+
+                ? `${friend.displayName.toUpperCase()}'S ACTIVITY`
+
+                : "YOUR ACTIVITY";
+
+
+    document
+        .querySelectorAll(
+            "[data-calview]"
+        )
+        .forEach(
+            button => {
+
+                button.classList.toggle(
+                    "active",
+                    button.dataset.calview ===
+                    "week"
+                );
+            }
+        );
+
+
+    screen(
+        "calendarScreen"
+    );
+
+
+    $("calendarContent")
+        .innerHTML =
+            '<div class="loading">Loading activity...</div>';
+
+
+    await loadHistory();
+
+
+    renderCalendar();
+}
 
 
 document
-.querySelectorAll(
-"[data-calview]"
-)
-.forEach(
-item =>
-item.classList.toggle(
-"active",
-item === button
-)
-);
+    .querySelectorAll(
+        "[data-calview]"
+    )
+    .forEach(
+        button => {
+
+            button.onclick =
+                () => {
+
+                    calView =
+                        button.dataset.calview;
 
 
-renderCalendar();
+                    document
+                        .querySelectorAll(
+                            "[data-calview]"
+                        )
+                        .forEach(
+                            item => {
 
-};
+                                item.classList.toggle(
+                                    "active",
+                                    item === button
+                                );
+                            }
+                        );
 
-}
-);
+
+                    renderCalendar();
+                };
+        }
+    );
 
 
 $("calPrev").onclick =
 () =>
-moveCal(-1);
+    moveCalendar(
+        -1
+    );
 
 
 $("calNext").onclick =
 () =>
-moveCal(1);
+    moveCalendar(
+        1
+    );
 
 
-function moveCal(amount){
+function moveCalendar(amount) {
 
-if(
-calView ===
-"week"
-){
+    if (
+        calView ===
+        "week"
+    ) {
 
-calDate.setDate(
-calDate.getDate() +
-7 * amount
-);
+        calDate.setDate(
+            calDate.getDate() +
+            7 * amount
+        );
 
-}
-else if(
-calView ===
-"month"
-){
+    }
 
-calDate.setMonth(
-calDate.getMonth() +
-amount
-);
+    else if (
+        calView ===
+        "month"
+    ) {
 
-}
-else{
+        calDate.setMonth(
+            calDate.getMonth() +
+            amount
+        );
 
-calDate.setFullYear(
-calDate.getFullYear() +
-amount
-);
+    }
 
-}
+    else {
 
-
-calDate =
-new Date(
-calDate
-);
+        calDate.setFullYear(
+            calDate.getFullYear() +
+            amount
+        );
+    }
 
 
-renderCalendar();
-
-}
-
-
-async function loadHistory(){
-
-history =
-[];
+    calDate =
+        new Date(
+            calDate
+        );
 
 
-const reference =
-
-calendarFriend
-
-? collection(
-db,
-"sharedWorkouts",
-calendarFriend.uid,
-"items"
-)
-
-: collection(
-db,
-"users",
-user.uid,
-"workouts"
-);
-
-
-try{
-
-const snapshot =
-await getDocs(
-
-query(
-
-reference,
-
-orderBy(
-"completedAt",
-"desc"
-),
-
-limit(500)
-
-)
-
-);
-
-
-snapshot.forEach(
-workoutDoc => {
-
-const workout =
-workoutDoc.data();
-
-
-if(
-workout.completedAt
-){
-
-history.push({
-
-id:
-workoutDoc.id,
-
-...workout,
-
-date:
-workout.completedAt
-.toDate()
-
-});
-
-}
-
-}
-);
-
-}
-catch(e){
-
-console.error(e);
-
-}
-
+    renderCalendar();
 }
 
 
-function historyMap(){
+async function loadHistory() {
 
-const map =
-{};
-
-
-history.forEach(
-workout => {
-
-const key =
-dkey(
-workout.date
-);
+    history =
+        [];
 
 
-if(
-!map[key]
-){
+    const reference =
 
-map[key] =
-[];
+        calendarFriend
 
+            ? collection(
+                db,
+                "sharedWorkouts",
+                calendarFriend.uid,
+                "items"
+            )
+
+            : collection(
+                db,
+                "users",
+                user.uid,
+                "workouts"
+            );
+
+
+    try {
+
+        const snapshot =
+            await getDocs(
+
+                query(
+
+                    reference,
+
+                    orderBy(
+                        "completedAt",
+                        "desc"
+                    ),
+
+                    limit(500)
+                )
+
+            );
+
+
+        snapshot.forEach(
+            workoutDocument => {
+
+                const workout =
+                    workoutDocument.data();
+
+
+                if (
+                    !workout.completedAt
+                ) {
+
+                    return;
+                }
+
+
+                history.push({
+
+                    id:
+                        workoutDocument.id,
+
+                    ...workout,
+
+                    date:
+                        workout.completedAt
+                            .toDate()
+                });
+            }
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            error
+        );
+    }
 }
 
 
-map[key]
-.push(
-workout
-);
+function historyMap() {
 
-}
-);
+    const map = {};
 
 
-return map;
+    history.forEach(
+        workout => {
 
+            const key =
+                dkey(
+                    workout.date
+                );
+
+
+            if (!map[key]) {
+
+                map[key] =
+                    [];
+            }
+
+
+            map[key]
+                .push(
+                    workout
+                );
+        }
+    );
+
+
+    return map;
 }
 
 
 function calendarStatus(
-date,
-map
-){
+    date,
+    map
+) {
 
-if(
-map[
-dkey(date)
-]?.length
-){
+    if (
+        map[
+            dkey(date)
+        ]?.length
+    ) {
 
-return "gym";
+        return "gym";
+    }
 
+
+    if (
+        dayStart(date) >
+        dayStart(
+            new Date()
+        )
+    ) {
+
+        return "future";
+    }
+
+
+    return "missed";
 }
 
 
-return (
+function renderCalendar() {
 
-dayStart(date) >
-dayStart(
-new Date()
-)
-
-? "future"
-
-: "missed"
-
-);
-
-}
+    $("calendarDetail")
+        .innerHTML =
+            "";
 
 
-function renderCalendar(){
+    if (
+        calView ===
+        "week"
+    ) {
 
-if(
-calView ===
-"week"
-){
+        renderWeek();
 
-renderWeek();
+    }
 
-}
-else if(
-calView ===
-"month"
-){
+    else if (
+        calView ===
+        "month"
+    ) {
 
-renderMonth();
+        renderMonth();
 
-}
-else{
+    }
 
-renderYear();
+    else {
 
-}
-
-
-$("calendarDetail")
-.innerHTML =
-"";
-
+        renderYear();
+    }
 }
 
 
 function calendarBox(
-date,
-status
-){
+    date,
+    status
+) {
 
-return `
+    return `
 
-<div
-class="day ${status} ${today(date) ? "today" : ""}"
-data-date="${dkey(date)}"
->
-
-${date.getDate()}
-
-</div>
-
-`;
-
+        <div
+            class="day ${status} ${today(date) ? "today" : ""}"
+            data-date="${dkey(date)}"
+        >
+            ${date.getDate()}
+        </div>
+    `;
 }
 
 
-function renderWeek(){
+function renderWeek() {
 
-const map =
-historyMap();
+    const map =
+        historyMap();
 
 
-const selected =
-new Date(
-calDate
-);
+    const selected =
+        new Date(
+            calDate
+        );
 
 
-const difference =
+    const difference =
 
-selected.getDay() === 0
+        selected.getDay() === 0
 
-? -6
+            ? -6
 
-: 1 -
-selected.getDay();
+            : 1 -
+              selected.getDay();
 
 
-const monday =
-new Date(
+    const monday =
+        new Date(
 
-selected.getFullYear(),
+            selected.getFullYear(),
 
-selected.getMonth(),
+            selected.getMonth(),
 
-selected.getDate() +
-difference
+            selected.getDate() +
+            difference
+        );
 
-);
 
+    const sunday =
+        new Date(
 
-const sunday =
-new Date(
+            monday.getFullYear(),
 
-monday.getFullYear(),
+            monday.getMonth(),
 
-monday.getMonth(),
+            monday.getDate() + 6
+        );
 
-monday.getDate() + 6
 
-);
+    $("calTitle")
+        .textContent =
 
+            `${monday.toLocaleDateString(
+                "en-US",
+                {
+                    month:
+                        "short",
 
-$("calTitle")
-.textContent =
+                    day:
+                        "numeric"
+                }
+            )} – ${sunday.toLocaleDateString(
+                "en-US",
+                {
+                    month:
+                        "short",
 
-`${monday.toLocaleDateString(
-"en-US",
-{
-month:"short",
-day:"numeric"
-}
-)} – ${sunday.toLocaleDateString(
-"en-US",
-{
-month:"short",
-day:"numeric"
-}
-)}`;
+                    day:
+                        "numeric"
+                }
+            )}`;
 
 
-let html = `
+    let html = `
 
-<div class="weeklabels">
+        <div class="weeklabels">
 
-${[
-"MON",
-"TUE",
-"WED",
-"THU",
-"FRI",
-"SAT",
-"SUN"
-]
-.map(
-day =>
-`<div>${day}</div>`
-)
-.join("")}
+            ${[
+                "MON",
+                "TUE",
+                "WED",
+                "THU",
+                "FRI",
+                "SAT",
+                "SUN"
+            ]
+                .map(
+                    day =>
+                        `<div>${day}</div>`
+                )
+                .join("")}
 
-</div>
+        </div>
 
-<div class="weekGrid">
+        <div class="weekGrid">
+    `;
 
-`;
 
+    for (
+        let index = 0;
+        index < 7;
+        index++
+    ) {
 
-for(
-let i = 0;
-i < 7;
-i++
-){
+        const date =
+            new Date(
 
-const date =
-new Date(
+                monday.getFullYear(),
 
-monday.getFullYear(),
+                monday.getMonth(),
 
-monday.getMonth(),
+                monday.getDate() +
+                index
+            );
 
-monday.getDate() + i
 
-);
+        html +=
+            calendarBox(
 
+                date,
 
-html +=
-calendarBox(
+                calendarStatus(
+                    date,
+                    map
+                )
+            );
+    }
 
-date,
 
-calendarStatus(
-date,
-map
-)
+    html +=
+        "</div>";
 
-);
 
-}
+    $("calendarContent")
+        .innerHTML =
+            html;
 
 
-html +=
-"</div>";
-
-
-$("calendarContent")
-.innerHTML =
-html;
-
-
-calendarListeners();
-
-}
-
-
-function renderMonth(){
-
-const map =
-historyMap();
-
-
-const year =
-calDate.getFullYear();
-
-
-const month =
-calDate.getMonth();
-
-
-const first =
-new Date(
-year,
-month,
-1
-);
-
-
-const last =
-new Date(
-year,
-month + 1,
-0
-);
-
-
-$("calTitle")
-.textContent =
-
-first.toLocaleDateString(
-
-"en-US",
-
-{
-month:"long",
-year:"numeric"
-}
-
-);
-
-
-let html = `
-
-<div class="weeklabels">
-
-${[
-"SUN",
-"MON",
-"TUE",
-"WED",
-"THU",
-"FRI",
-"SAT"
-]
-.map(
-day =>
-`<div>${day}</div>`
-)
-.join("")}
-
-</div>
-
-<div class="calendarGrid">
-
-`;
-
-
-for(
-let i = 0;
-i < first.getDay();
-i++
-){
-
-html +=
-'<div class="day blank"></div>';
-
+    calendarListeners();
 }
 
 
-for(
-let day = 1;
-day <= last.getDate();
-day++
-){
+function renderMonth() {
 
-const date =
-new Date(
-year,
-month,
-day
-);
+    const map =
+        historyMap();
 
 
-html +=
-calendarBox(
+    const year =
+        calDate.getFullYear();
 
-date,
 
-calendarStatus(
-date,
-map
-)
+    const month =
+        calDate.getMonth();
 
-);
 
+    const first =
+        new Date(
+            year,
+            month,
+            1
+        );
+
+
+    const last =
+        new Date(
+            year,
+            month + 1,
+            0
+        );
+
+
+    $("calTitle")
+        .textContent =
+
+            first.toLocaleDateString(
+
+                "en-US",
+
+                {
+                    month:
+                        "long",
+
+                    year:
+                        "numeric"
+                }
+
+            );
+
+
+    let html = `
+
+        <div class="weeklabels">
+
+            ${[
+                "SUN",
+                "MON",
+                "TUE",
+                "WED",
+                "THU",
+                "FRI",
+                "SAT"
+            ]
+                .map(
+                    day =>
+                        `<div>${day}</div>`
+                )
+                .join("")}
+
+        </div>
+
+        <div class="calendarGrid">
+    `;
+
+
+    for (
+        let index = 0;
+        index < first.getDay();
+        index++
+    ) {
+
+        html +=
+            '<div class="day blank"></div>';
+    }
+
+
+    for (
+        let day = 1;
+        day <= last.getDate();
+        day++
+    ) {
+
+        const date =
+            new Date(
+                year,
+                month,
+                day
+            );
+
+
+        html +=
+            calendarBox(
+
+                date,
+
+                calendarStatus(
+                    date,
+                    map
+                )
+            );
+    }
+
+
+    html +=
+        "</div>";
+
+
+    $("calendarContent")
+        .innerHTML =
+            html;
+
+
+    calendarListeners();
 }
 
 
-html +=
-"</div>";
+function renderYear() {
+
+    const map =
+        historyMap();
 
 
-$("calendarContent")
-.innerHTML =
-html;
+    const year =
+        calDate.getFullYear();
 
 
-calendarListeners();
+    $("calTitle")
+        .textContent =
+            year;
 
+
+    let html =
+        '<div class="yearGrid">';
+
+
+    for (
+        let month = 0;
+        month < 12;
+        month++
+    ) {
+
+        const first =
+            new Date(
+                year,
+                month,
+                1
+            );
+
+
+        const last =
+            new Date(
+                year,
+                month + 1,
+                0
+            );
+
+
+        html += `
+
+            <div class="miniMonth">
+
+                <div class="miniTitle">
+
+                    ${first.toLocaleDateString(
+                        "en-US",
+                        {
+                            month:
+                                "short"
+                        }
+                    )}
+
+                </div>
+
+                <div class="miniGrid">
+        `;
+
+
+        for (
+            let index = 0;
+            index < first.getDay();
+            index++
+        ) {
+
+            html +=
+                "<div></div>";
+        }
+
+
+        for (
+            let day = 1;
+            day <= last.getDate();
+            day++
+        ) {
+
+            const date =
+                new Date(
+                    year,
+                    month,
+                    day
+                );
+
+
+            html += `
+
+                <div
+                    class="miniDay ${calendarStatus(date, map)}"
+                    data-date="${dkey(date)}"
+                ></div>
+            `;
+        }
+
+
+        html += `
+
+                </div>
+
+            </div>
+        `;
+    }
+
+
+    html +=
+        "</div>";
+
+
+    $("calendarContent")
+        .innerHTML =
+            html;
+
+
+    calendarListeners();
 }
 
 
-function renderYear(){
+function calendarListeners() {
 
-const map =
-historyMap();
+    document
+        .querySelectorAll(
+            "[data-date]"
+        )
+        .forEach(
+            element => {
 
+                element.onclick =
+                    () => {
 
-const year =
-calDate.getFullYear();
-
-
-$("calTitle")
-.textContent =
-year;
-
-
-let html =
-'<div class="yearGrid">';
-
-
-for(
-let month = 0;
-month < 12;
-month++
-){
-
-const first =
-new Date(
-year,
-month,
-1
-);
+                        const workouts =
+                            history.filter(
+                                workout =>
+                                    dkey(
+                                        workout.date
+                                    ) ===
+                                    element.dataset.date
+                            );
 
 
-const last =
-new Date(
-year,
-month + 1,
-0
-);
+                        if (
+                            workouts.length
+                        ) {
 
+                            showCalendarDay(
 
-html += `
+                                element.dataset.date,
 
-<div class="miniMonth">
-
-<div class="miniTitle">
-
-${first.toLocaleDateString(
-"en-US",
-{
-month:"short"
-}
-)}
-
-</div>
-
-<div class="miniGrid">
-
-`;
-
-
-for(
-let i = 0;
-i < first.getDay();
-i++
-){
-
-html +=
-"<div></div>";
-
-}
-
-
-for(
-let day = 1;
-day <= last.getDate();
-day++
-){
-
-const date =
-new Date(
-year,
-month,
-day
-);
-
-
-html += `
-
-<div
-class="miniDay ${calendarStatus(date,map)}"
-data-date="${dkey(date)}"
-></div>
-
-`;
-
-}
-
-
-html += `
-
-</div>
-
-</div>
-
-`;
-
-}
-
-
-html +=
-"</div>";
-
-
-$("calendarContent")
-.innerHTML =
-html;
-
-
-calendarListeners();
-
-}
-
-
-function calendarListeners(){
-
-document
-.querySelectorAll(
-"[data-date]"
-)
-.forEach(
-element => {
-
-element.onclick =
-() => {
-
-const workouts =
-history.filter(
-workout =>
-dkey(
-workout.date
-) ===
-element.dataset.date
-);
-
-
-if(
-workouts.length
-){
-
-showCalendarDay(
-
-element.dataset.date,
-
-workouts
-
-);
-
-}
-
-};
-
-}
-);
-
+                                workouts
+                            );
+                        }
+                    };
+            }
+        );
 }
 
 
 function showCalendarDay(
-key,
-workouts
-){
+    key,
+    workouts
+) {
 
-let html = `
+    let html = `
 
-<div class="card">
+        <div class="card">
 
-<h2>
-${esc(key)}
-</h2>
-
-`;
-
-
-workouts.forEach(
-workout => {
-
-html += `
-
-<h3>
-${esc(
-workout.workout ||
-"Workout"
-)}
-</h3>
-
-`;
+            <h2>
+                ${esc(key)}
+            </h2>
+    `;
 
 
-if(
-!calendarFriend ||
-calendarFriend.shareWeights
-){
+    workouts.forEach(
+        workout => {
 
-workout.exercises
-?.forEach(
-exercise => {
+            html += `
 
-html += `
-
-<div class="detailExercise">
-
-<b>
-${esc(exercise.name)}
-</b>
-
-<div class="detailSets">
-
-${exercise.sets
-?.map(
-(set,index) =>
-`Set ${index + 1}: ${set.weight} lb × ${set.reps}`
-)
-.join("<br>")
-||
-""}
-
-</div>
-
-</div>
-
-`;
-
-}
-);
-
-}
-else{
-
-html += `
-
-<p>
-🔒 Weights and reps are private.
-</p>
-
-`;
-
-}
-
-}
-);
+                <h3>
+                    ${esc(
+                        workout.workout ||
+                        "Workout"
+                    )}
+                </h3>
+            `;
 
 
-html +=
-"</div>";
+            if (
+                !calendarFriend ||
+                calendarFriend.shareWeights
+            ) {
+
+                workout.exercises
+                    ?.forEach(
+                        exercise => {
+
+                            html += `
+
+                                <div class="prRow">
+
+                                    <div>
+
+                                        <b>
+                                            ${esc(exercise.name)}
+                                        </b>
+
+                                        <div class="muted">
+
+                                            ${exercise.sets
+                                                ?.map(
+                                                    (set, index) =>
+                                                        `Set ${index + 1}: ${set.weight} lb × ${set.reps}`
+                                                )
+                                                .join("<br>")
+
+                                            || ""}
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            `;
+                        }
+                    );
+
+            }
+
+            else {
+
+                html += `
+
+                    <p>
+                        🔒 Weights and reps are private.
+                    </p>
+                `;
+            }
+        }
+    );
 
 
-$("calendarDetail")
-.innerHTML =
-html;
+    html +=
+        "</div>";
 
+
+    $("calendarDetail")
+        .innerHTML =
+            html;
 }
 
 
-/* AI MUSCLE ANALYSIS */
+/* =========================
+   MUSCLE ANALYSIS
+========================= */
 
 async function openOverview(
-dayIndex = null
-){
+    dayIndex = null
+) {
 
-if(!split){
+    if (!split) {
 
-return;
+        return;
+    }
 
+
+    selectedMuscle =
+        null;
+
+
+    analysis =
+        null;
+
+
+    $("analysisSummary")
+        .style.display =
+            "none";
+
+
+    $("muscleInfo")
+        .innerHTML = `
+
+            <div class="muted">
+
+                Tap Analyze with AI,
+                then tap a highlighted muscle.
+
+            </div>
+        `;
+
+
+    $("analysisStatus")
+        .textContent =
+            "";
+
+
+    const selector =
+        $("analysisSelector");
+
+
+    selector.innerHTML = `
+
+        <option value="all">
+            Entire Split
+        </option>
+
+        ${split.days
+            .map(
+                (day, index) =>
+                    `<option value="${index}">${esc(day.name)}</option>`
+            )
+            .join("")}
+    `;
+
+
+    if (
+        dayIndex !== null
+    ) {
+
+        selector.value =
+            String(
+                dayIndex
+            );
+    }
+
+
+    resetMuscles();
+
+
+    screen(
+        "overviewScreen"
+    );
 }
 
 
-selectedMuscle =
-null;
+function resetMuscles() {
 
+    document
+        .querySelectorAll(
+            ".muscle"
+        )
+        .forEach(
+            muscle => {
 
-analysis =
-null;
-
-
-$("analysisSummary")
-.style.display =
-"none";
-
-
-$("muscleInfo")
-.innerHTML = `
-
-<div class="muted">
-
-Tap Analyze with AI,
-then tap a highlighted muscle.
-
-</div>
-
-`;
-
-
-$("analysisStatus")
-.textContent =
-"";
-
-
-const selector =
-$("analysisSelector");
-
-
-selector.innerHTML = `
-
-<option value="all">
-Entire Split
-</option>
-
-${split.days
-.map(
-(day,index) =>
-`<option value="${index}">${esc(day.name)}</option>`
-)
-.join("")}
-
-`;
-
-
-if(
-dayIndex !== null
-){
-
-selector.value =
-String(
-dayIndex
-);
-
-}
-
-
-resetMuscles();
-
-
-screen(
-"overviewScreen"
-);
-
-}
-
-
-function resetMuscles(){
-
-document
-.querySelectorAll(
-".muscle"
-)
-.forEach(
-muscle => {
-
-muscle.classList.remove(
-"i1",
-"i2",
-"i3",
-"selected"
-);
-
-}
-);
-
+                muscle.classList.remove(
+                    "i1",
+                    "i2",
+                    "i3",
+                    "selected"
+                );
+            }
+        );
 }
 
 
 $("analyzeButton").onclick =
 async () => {
 
-const selected =
-$("analysisSelector")
-.value;
+    const selected =
+        $("analysisSelector")
+            .value;
 
 
-const target =
+    const target =
 
-selected ===
-"all"
+        selected === "all"
 
-? split
+            ? split
 
-: {
+            : {
 
-name:
-split.days[
-Number(selected)
-].name,
+                name:
+                    split.days[
+                        Number(selected)
+                    ].name,
 
-days: [
-split.days[
-Number(selected)
-]
-]
+                days: [
 
-};
+                    split.days[
+                        Number(selected)
+                    ]
 
-
-$("analysisStatus")
-.textContent =
-"AI is analyzing your exercises...";
+                ]
+            };
 
 
-resetMuscles();
+    $("analysisStatus")
+        .textContent =
+            "AI is analyzing your exercises...";
 
 
-try{
-
-const response =
-await fetch(
-
-AI_URL,
-
-{
-
-method:
-"POST",
-
-headers: {
-"Content-Type":
-"application/json"
-},
-
-body:
-JSON.stringify({
-
-type:
-"analyzeSplit",
-
-split:
-target
-
-})
-
-}
-
-);
+    resetMuscles();
 
 
-const data =
-await response.json();
+    try {
+
+        const response =
+            await fetch(
+
+                AI_URL,
+
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            type:
+                                "analyzeSplit",
+
+                            split:
+                                target
+                        })
+                }
+
+            );
 
 
-if(
-!response.ok ||
-data.error
-){
-
-throw new Error(
-data.error ||
-"Analysis failed"
-);
-
-}
+        const data =
+            await response.json();
 
 
-analysis =
-data;
+        if (
+            !response.ok ||
+            data.error
+        ) {
+
+            throw new Error(
+                data.error ||
+                "Analysis failed"
+            );
+        }
 
 
-$("analysisStatus")
-.textContent =
-"Tap any highlighted muscle.";
+        analysis =
+            data;
 
 
-for(
-const [
-name,
-muscleData
-]
-of Object.entries(
-data.muscles ||
-{}
-)
-){
-
-document
-.querySelectorAll(
-`[data-muscle="${name}"]`
-)
-.forEach(
-muscle => {
-
-muscle.classList.add(
-
-`i${Math.max(
-1,
-Math.min(
-3,
-Number(
-muscleData.intensity
-) || 1
-)
-)}`
-
-);
-
-}
-);
-
-}
+        $("analysisStatus")
+            .textContent =
+                "Tap any highlighted muscle.";
 
 
-$("analysisSummary")
-.style.display =
-"block";
+        for (
+            const [
+                name,
+                muscleData
+            ]
+            of Object.entries(
+                data.muscles ||
+                {}
+            )
+        ) {
+
+            const intensity =
+                Math.max(
+                    1,
+                    Math.min(
+                        3,
+                        Number(
+                            muscleData.intensity
+                        ) || 1
+                    )
+                );
 
 
-$("analysisSummary")
-.innerHTML = `
+            document
+                .querySelectorAll(
+                    `[data-muscle="${name}"]`
+                )
+                .forEach(
+                    muscle => {
 
-<h2>
-Coverage Summary
-</h2>
+                        muscle.classList.add(
+                            `i${intensity}`
+                        );
+                    }
+                );
+        }
 
-<p>
-${esc(
-data.summary ||
-""
-)}
-</p>
 
-${
-data.missing?.length
+        $("analysisSummary")
+            .style.display =
+                "block";
 
-? `
 
-<div class="muted">
+        $("analysisSummary")
+            .innerHTML = `
 
-Low / missing:
-${data.missing
-.map(
-prettyMuscle
-)
-.join(", ")}
+                <h2>
+                    Coverage Summary
+                </h2>
 
-</div>
+                <p>
+                    ${esc(
+                        data.summary ||
+                        ""
+                    )}
+                </p>
 
-`
+                ${
+                    data.strongAreas?.length
 
-: ""
-}
+                        ? `
 
-`;
+                            <div style="margin-top:12px">
 
-}
-catch(e){
+                                <b>
+                                    Strong coverage
+                                </b>
 
-$("analysisStatus")
-.textContent =
+                                <div class="muted">
 
-"Could not analyze: " +
-e.message;
+                                    ${data.strongAreas
+                                        .map(
+                                            prettyMuscle
+                                        )
+                                        .join(", ")}
 
-}
+                                </div>
 
+                            </div>
+                        `
+
+                        : ""
+                }
+
+                ${
+                    data.missing?.length
+
+                        ? `
+
+                            <div style="margin-top:12px">
+
+                                <b>
+                                    Low / missing
+                                </b>
+
+                                <div class="muted">
+
+                                    ${data.missing
+                                        .map(
+                                            prettyMuscle
+                                        )
+                                        .join(", ")}
+
+                                </div>
+
+                            </div>
+                        `
+
+                        : ""
+                }
+            `;
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+
+        $("analysisStatus")
+            .textContent =
+
+                "Could not analyze: " +
+                error.message;
+    }
 };
 
 
 function prettyMuscle(
-muscle
-){
+    muscle
+) {
 
-return String(muscle)
+    return String(muscle)
 
-.replaceAll(
-"_",
-" "
-)
+        .replaceAll(
+            "_",
+            " "
+        )
 
-.replace(
-/\b\w/g,
-character =>
-character.toUpperCase()
-);
-
+        .replace(
+            /\b\w/g,
+            character =>
+                character
+                    .toUpperCase()
+        );
 }
 
 
 document
-.querySelectorAll(
-".muscle"
-)
-.forEach(
-element => {
+    .querySelectorAll(
+        ".muscle"
+    )
+    .forEach(
+        element => {
 
-element.onclick =
+            element.onclick =
+                () => {
+
+                    if (!analysis) {
+
+                        return;
+                    }
+
+
+                    const name =
+                        element.dataset.muscle;
+
+
+                    const data =
+                        analysis.muscles?.[
+                            name
+                        ];
+
+
+                    if (!data) {
+
+                        return;
+                    }
+
+
+                    selectedMuscle =
+                        name;
+
+
+                    document
+                        .querySelectorAll(
+                            ".muscle"
+                        )
+                        .forEach(
+                            muscle => {
+
+                                muscle.classList.remove(
+                                    "selected"
+                                );
+                            }
+                        );
+
+
+                    document
+                        .querySelectorAll(
+                            `[data-muscle="${name}"]`
+                        )
+                        .forEach(
+                            muscle => {
+
+                                muscle.classList.add(
+                                    "selected"
+                                );
+                            }
+                        );
+
+
+                    const level =
+
+                        data.intensity === 3
+
+                            ? "High"
+
+                            : data.intensity === 2
+
+                                ? "Moderate"
+
+                                : "Light";
+
+
+                    $("muscleInfo")
+                        .innerHTML = `
+
+                            <div class="muted">
+                                SELECTED MUSCLE
+                            </div>
+
+                            <h2>
+                                ${prettyMuscle(name)}
+                            </h2>
+
+                            <p>
+                                <b>${level}</b> involvement
+                            </p>
+
+
+                            <h3>
+                                Targeted by
+                            </h3>
+
+
+                            ${
+                                (data.exercises || [])
+                                    .map(
+                                        exercise => `
+
+                                            <div class="prRow">
+
+                                                <span>
+                                                    ${esc(exercise.name)}
+                                                </span>
+
+                                                <span class="role">
+                                                    ${esc(exercise.role)}
+                                                </span>
+
+                                            </div>
+                                        `
+                                    )
+                                    .join("")
+
+                                ||
+
+                                "<p>No exercise details.</p>"
+                            }
+
+
+                            <button
+                                id="askMuscle"
+                                class="primary"
+                            >
+
+                                ✦ Ask AI about
+                                ${prettyMuscle(name)}
+
+                            </button>
+                        `;
+
+
+                    $("askMuscle")
+                        .onclick =
+                            () => {
+
+                                openChat();
+
+
+                                $("chatQuestion")
+                                    .value =
+
+                                        `Tell me about my ${prettyMuscle(name)} training. Am I covering it well, which exercises in my split train it, and what would you change?`;
+                            };
+                };
+        }
+    );
+
+
+/* =========================
+   AI CHAT
+========================= */
+
+$("aiFab").onclick =
+    openChat;
+
+
+$("closeChat").onclick =
 () => {
 
-if(!analysis){
-
-return;
-
-}
-
-
-const name =
-element.dataset.muscle;
-
-
-const data =
-analysis.muscles?.[
-name
-];
-
-
-if(!data){
-
-return;
-
-}
-
-
-selectedMuscle =
-name;
-
-
-document
-.querySelectorAll(
-".muscle"
-)
-.forEach(
-muscle =>
-muscle.classList.remove(
-"selected"
-)
-);
-
-
-document
-.querySelectorAll(
-`[data-muscle="${name}"]`
-)
-.forEach(
-muscle =>
-muscle.classList.add(
-"selected"
-)
-);
-
-
-$("muscleInfo")
-.innerHTML = `
-
-<div class="muted">
-SELECTED MUSCLE
-</div>
-
-<h2>
-${prettyMuscle(name)}
-</h2>
-
-<p>
-
-${
-data.intensity === 3
-? "High"
-
-: data.intensity === 2
-? "Moderate"
-
-: "Light"
-}
-
-involvement
-
-</p>
-
-
-<h3>
-Targeted by
-</h3>
-
-
-${
-(data.exercises || [])
-.map(
-exercise => `
-
-<div class="prRow">
-
-<span>
-${esc(exercise.name)}
-</span>
-
-<span class="role">
-${esc(exercise.role)}
-</span>
-
-</div>
-
-`
-)
-.join("")
-
-||
-
-"<p>No exercise details.</p>"
-}
-
-
-<button
-id="askMuscle"
-class="primary"
->
-
-✦ Ask AI about
-${prettyMuscle(name)}
-
-</button>
-
-`;
-
-
-$("askMuscle")
-.onclick =
-() => {
-
-openChat();
-
-
-$("chatQuestion")
-.value =
-
-`Tell me about my ${prettyMuscle(name)} training. Am I covering it well, and what would you change?`;
-
-};
-
-};
-
-}
-);
-
-
-/* AI CHAT */
-
-$("aiFab")
-.onclick =
-openChat;
-
-
-$("closeChat")
-.onclick =
-() =>
-$("chatPanel")
-.classList.remove(
-"show"
-);
-
-
-function openChat(){
-
-$("chatPanel")
-.classList.add(
-"show"
-);
-
-
-setTimeout(
-() =>
-$("chatQuestion")
-.focus(),
-50
-);
-
-}
-
-
-$("sendChat")
-.onclick =
-sendChat;
-
-
-$("chatQuestion")
-.addEventListener(
-"keydown",
-event => {
-
-if(
-event.key ===
-"Enter"
-){
-
-sendChat();
-
-}
-
-}
-);
-
-
-async function sendChat(){
-
-const question =
-$("chatQuestion")
-.value
-.trim();
-
-
-if(!question){
-
-return;
-
-}
-
-
-$("chatQuestion")
-.value =
-"";
-
-
-addBubble(
-question,
-"user"
-);
-
-
-const thinking =
-addBubble(
-"Thinking…",
-"ai"
-);
-
-
-const context = {
-
-split,
-
-activeWorkout:
-activeDay?.name ||
-null,
-
-selectedMuscle,
-
-selectedMuscleAnalysis:
-
-selectedMuscle
-
-? analysis?.muscles?.[
-selectedMuscle
-]
-
-: null
-
+    $("chatPanel")
+        .classList
+        .remove("show");
 };
 
 
-try{
+function openChat() {
 
-const response =
-await fetch(
+    $("chatPanel")
+        .classList
+        .add("show");
 
-AI_URL,
 
-{
+    setTimeout(
+        () => {
 
-method:
-"POST",
+            $("chatQuestion")
+                .focus();
 
-headers: {
-"Content-Type":
-"application/json"
-},
-
-body:
-JSON.stringify({
-
-type:
-"chat",
-
-question,
-
-context
-
-})
-
+        },
+        50
+    );
 }
 
-);
+
+$("sendChat").onclick =
+    sendChat;
 
 
-const data =
-await response.json();
+$("chatQuestion")
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key ===
+                "Enter"
+            ) {
+
+                sendChat();
+            }
+        }
+    );
 
 
-thinking.innerHTML =
-formatAIResponse(
-    data.answer ||
-    data.error ||
-    "I couldn't answer that."
-);
-catch(e){
+/* =========================
+   AI FORMATTING
+========================= */
 
-thinking.textContent =
+function formatAIResponse(text) {
 
-"AI connection failed: " +
-e.message;
+    let safe =
+        esc(text);
 
+
+    /*
+       Headings:
+       ### Recommendation
+       ## Recommendation
+       # Recommendation
+    */
+
+    safe =
+        safe.replace(
+            /^###\s+(.+)$/gm,
+            "<h3>$1</h3>"
+        );
+
+
+    safe =
+        safe.replace(
+            /^##\s+(.+)$/gm,
+            "<h3>$1</h3>"
+        );
+
+
+    safe =
+        safe.replace(
+            /^#\s+(.+)$/gm,
+            "<h3>$1</h3>"
+        );
+
+
+    /*
+       Bold
+    */
+
+    safe =
+        safe.replace(
+            /\*\*(.*?)\*\*/g,
+            "<strong>$1</strong>"
+        );
+
+
+    /*
+       Bullet points
+    */
+
+    safe =
+        safe.replace(
+            /^[-•]\s+(.+)$/gm,
+
+            '<div class="aiBullet">' +
+            '<span class="aiBulletDot">•</span>' +
+            '<span>$1</span>' +
+            '</div>'
+        );
+
+
+    /*
+       Numbered items
+    */
+
+    safe =
+        safe.replace(
+            /^(\d+)\.\s+(.+)$/gm,
+
+            '<div class="aiBullet">' +
+            '<span class="aiBulletDot">$1.</span>' +
+            '<span>$2</span>' +
+            '</div>'
+        );
+
+
+    /*
+       Remaining line breaks
+    */
+
+    safe =
+        safe.replace(
+            /\n/g,
+            "<br>"
+        );
+
+
+    /*
+       Remove excessive breaks around
+       block-level elements.
+    */
+
+    safe =
+        safe.replace(
+            /<br>\s*(<h3>)/g,
+            "$1"
+        );
+
+
+    safe =
+        safe.replace(
+            /(<\/h3>)\s*<br>/g,
+            "$1"
+        );
+
+
+    safe =
+        safe.replace(
+            /<br>\s*(<div class="aiBullet">)/g,
+            "$1"
+        );
+
+
+    return safe;
 }
 
+
+async function sendChat() {
+
+    const question =
+        $("chatQuestion")
+            .value
+            .trim();
+
+
+    if (!question) {
+
+        return;
+    }
+
+
+    $("chatQuestion")
+        .value =
+            "";
+
+
+    addBubble(
+        question,
+        "user"
+    );
+
+
+    const thinking =
+        addBubble(
+            "Thinking…",
+            "ai"
+        );
+
+
+    const context = {
+
+        split,
+
+        activeWorkout:
+            activeDay?.name ||
+            null,
+
+        selectedMuscle,
+
+        selectedMuscleAnalysis:
+
+            selectedMuscle
+
+                ? analysis?.muscles?.[
+                    selectedMuscle
+                ]
+
+                : null
+    };
+
+
+    try {
+
+        const response =
+            await fetch(
+
+                AI_URL,
+
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            type:
+                                "chat",
+
+                            question,
+
+                            context
+                        })
+                }
+
+            );
+
+
+        const data =
+            await response.json();
+
+
+        const answer =
+
+            data.answer ||
+
+            data.error ||
+
+            "I couldn't answer that.";
+
+
+        thinking.innerHTML =
+            formatAIResponse(
+                answer
+            );
+
+
+        $("chatMessages")
+            .scrollTop =
+                $("chatMessages")
+                    .scrollHeight;
+
+    }
+
+    catch (error) {
+
+        thinking.textContent =
+
+            "AI connection failed: " +
+            error.message;
+    }
 }
 
 
 function addBubble(
-text,
-type
-){
+    text,
+    type
+) {
 
-const bubble =
-document.createElement(
-"div"
-);
-
-
-bubble.className =
-`bubble ${type}`;
+    const bubble =
+        document.createElement(
+            "div"
+        );
 
 
-bubble.textContent =
-text;
+    bubble.className =
+        `bubble ${type}`;
 
 
-$("chatMessages")
-.appendChild(
-bubble
-);
+    bubble.textContent =
+        text;
 
 
-$("chatMessages")
-.scrollTop =
-$("chatMessages")
-.scrollHeight;
+    $("chatMessages")
+        .appendChild(
+            bubble
+        );
 
 
-return bubble;
+    $("chatMessages")
+        .scrollTop =
+            $("chatMessages")
+                .scrollHeight;
 
+
+    return bubble;
 }
 
 </script>
 
 </body>
+
 </html>
