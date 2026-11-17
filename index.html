@@ -1,1 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0a0a">
 
+  <title>Fitness Tracker</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0a0a0a;
+      color: white;
+      min-height: 100vh;
+    }
+
+    #loginPage {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 30px;
+      max-width: 500px;
+      margin: auto;
+    }
+
+    .logo {
+      font-size: 55px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 42px;
+      line-height: 1.05;
+      margin-bottom: 15px;
+    }
+
+    .subtitle {
+      color: #999;
+      font-size: 17px;
+      line-height: 1.5;
+      margin-bottom: 45px;
+    }
+
+    #googleButton {
+      width: 100%;
+      border: none;
+      border-radius: 16px;
+      padding: 17px;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      background: white;
+      color: black;
+    }
+
+    #googleButton:active {
+      transform: scale(.98);
+    }
+
+    #appPage {
+      display: none;
+      max-width: 500px;
+      margin: auto;
+      padding: 25px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 40px;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    #profilePicture {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+    }
+
+    .small {
+      color: #888;
+      font-size: 13px;
+    }
+
+    .card {
+      background: #171717;
+      border: 1px solid #252525;
+      border-radius: 22px;
+      padding: 22px;
+      margin-top: 15px;
+    }
+
+    .card h2 {
+      margin-bottom: 7px;
+    }
+
+    .card p {
+      color: #999;
+    }
+
+    .primaryButton {
+      width: 100%;
+      background: #ffffff;
+      color: #000;
+      border: none;
+      border-radius: 15px;
+      padding: 16px;
+      margin-top: 18px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .secondaryButton {
+      width: 100%;
+      background: #1c1c1c;
+      color: white;
+      border: 1px solid #333;
+      border-radius: 15px;
+      padding: 16px;
+      margin-top: 12px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    #logoutButton {
+      background: none;
+      border: none;
+      color: #888;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOGIN -->
+
+  <div id="loginPage">
+
+    <div class="logo">🏋️</div>
+
+    <h1>Train.<br>Track.<br>Progress.</h1>
+
+    <p class="subtitle">
+      Build your workout split, track every set,
+      and see how much stronger you're getting.
+    </p>
+
+    <button id="googleButton">
+      Continue with Google
+    </button>
+
+  </div>
+
+
+  <!-- MAIN APP -->
+
+  <div id="appPage">
+
+    <div class="topbar">
+
+      <div class="profile">
+        <img id="profilePicture">
+
+        <div>
+          <div class="small">WELCOME BACK</div>
+          <strong id="userName"></strong>
+        </div>
+      </div>
+
+      <button id="logoutButton">
+        Log out
+      </button>
+
+    </div>
+
+
+    <h1>Your Training</h1>
+
+    <div class="card">
+
+      <h2>No workout split yet</h2>
+
+      <p>
+        Create your own training split or start
+        with a prebuilt program.
+      </p>
+
+      <button class="primaryButton">
+        + Create Workout Split
+      </button>
+
+      <button class="secondaryButton">
+        Browse Prebuilt Splits
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <script type="module">
+
+    import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+
+    import {
+      getAuth,
+      GoogleAuthProvider,
+      signInWithPopup,
+      signOut,
+      onAuthStateChanged
+    }
+    from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBtPjGGV8n_1y58m4yLRVFAEahxtT-HbM0",
+      authDomain: "fitness-tracker-d235f.firebaseapp.com",
+      projectId: "fitness-tracker-d235f",
+      storageBucket: "fitness-tracker-d235f.firebasestorage.app",
+      messagingSenderId: "786431774975",
+      appId: "1:786431774975:web:d037c915f88d771e00fcca"
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+    const provider = new GoogleAuthProvider();
+
+
+    const loginPage =
+      document.getElementById("loginPage");
+
+    const appPage =
+      document.getElementById("appPage");
+
+    const googleButton =
+      document.getElementById("googleButton");
+
+    const logoutButton =
+      document.getElementById("logoutButton");
+
+    const userName =
+      document.getElementById("userName");
+
+    const profilePicture =
+      document.getElementById("profilePicture");
+
+
+    googleButton.addEventListener("click", async () => {
+
+      try {
+
+        await signInWithPopup(auth, provider);
+
+      } catch (error) {
+
+        console.error(error);
+
+        alert("Google login failed: " + error.message);
+
+      }
+
+    });
+
+
+    logoutButton.addEventListener("click", async () => {
+
+      await signOut(auth);
+
+    });
+
+
+    onAuthStateChanged(auth, (user) => {
+
+      if (user) {
+
+        loginPage.style.display = "none";
+        appPage.style.display = "block";
+
+        userName.textContent =
+          user.displayName || "Athlete";
+
+        profilePicture.src =
+          user.photoURL || "";
+
+      } else {
+
+        loginPage.style.display = "flex";
+        appPage.style.display = "none";
+
+      }
+
+    });
+
+  </script>
+
+</body>
+</html>
