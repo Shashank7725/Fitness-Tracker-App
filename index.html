@@ -4833,6 +4833,8 @@ async () => {
 $("sendRequest").onclick =
 async () => {
 
+    try {
+
     const email =
         normEmail(
             $("friendEmail")
@@ -4986,6 +4988,20 @@ async () => {
     alert(
         "Friend request sent!"
     );
+    }
+
+    catch (error) {
+
+        console.error(
+            "Friend request error:",
+            error
+        );
+
+        alert(
+            "Friend request failed: " +
+            error.message
+        );
+    }
 };
 
 
