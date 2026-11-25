@@ -4833,159 +4833,174 @@ async () => {
 $("sendRequest").onclick =
 async () => {
 
-    const email =
-        normEmail(
-            $("friendEmail")
-                .value
-        );
+    try {
+
+        const email =
+            normEmail(
+                $("friendEmail")
+                    .value
+            );
 
 
-    if (!email) {
+        if (!email) {
 
-        alert(
-            "Enter their Google email."
-        );
+            alert(
+                "Enter their Google email."
+            );
 
-        return;
-    }
-
-
-    if (
-        email ===
-        normEmail(
-            user.email
-        )
-    ) {
-
-        alert(
-            "You can't add yourself."
-        );
-
-        return;
-    }
-
-
-    const lookup =
-        await getDoc(
-
-            doc(
-                db,
-                "emailLookup",
-                await emailKey(email)
-            )
-
-        );
-
-
-    if (!lookup.exists()) {
-
-        alert(
-            "No Fitness Tracker account was found with that email."
-        );
-
-        return;
-    }
-
-
-    const friendUid =
-        lookup.data().uid;
-
-
-    const friendship =
-        await getDoc(
-
-            doc(
-                db,
-                "friendships",
-                friendshipId(
-                    user.uid,
-                    friendUid
-                )
-            )
-
-        );
-
-
-    if (friendship.exists()) {
-
-        alert(
-            "You're already friends."
-        );
-
-        return;
-    }
-
-
-    const duplicate =
-        await getDocs(
-
-            query(
-
-                collection(
-                    db,
-                    "friendRequests"
-                ),
-
-                where(
-                    "fromUid",
-                    "==",
-                    user.uid
-                ),
-
-                where(
-                    "toUid",
-                    "==",
-                    friendUid
-                )
-
-            )
-
-        );
-
-
-    if (!duplicate.empty) {
-
-        alert(
-            "Friend request already sent."
-        );
-
-        return;
-    }
-
-
-    await addDoc(
-
-        collection(
-            db,
-            "friendRequests"
-        ),
-
-        {
-
-            fromUid:
-                user.uid,
-
-            toUid:
-                friendUid,
-
-            status:
-                "pending",
-
-            createdAt:
-                serverTimestamp()
+            return;
         }
 
-    );
+
+        if (
+            email ===
+            normEmail(
+                user.email
+            )
+        ) {
+
+            alert(
+                "You can't add yourself."
+            );
+
+            return;
+        }
 
 
-    $("friendEmail")
-        .value =
-            "";
+        const lookup =
+            await getDoc(
+
+                doc(
+                    db,
+                    "emailLookup",
+                    await emailKey(email)
+                )
+
+            );
 
 
-    alert(
-        "Friend request sent!"
-    );
+        if (!lookup.exists()) {
+
+            alert(
+                "No Fitness Tracker account was found with that email."
+            );
+
+            return;
+        }
+
+
+        const friendUid =
+            lookup.data().uid;
+
+
+        const relationshipId =
+            friendshipId(
+                user.uid,
+                friendUid
+            );
+
+
+        const friendship =
+            await getDoc(
+                doc(
+                    db,
+                    "friendships",
+                    relationshipId
+                )
+            );
+
+
+        if (friendship.exists()) {
+
+            alert(
+                "You're already friends."
+            );
+
+            return;
+        }
+
+
+        const requestRef =
+            doc(
+                db,
+                "friendRequests",
+                relationshipId
+            );
+
+
+        const existingRequest =
+            await getDoc(
+                requestRef
+            );
+
+
+        if (existingRequest.exists()) {
+
+            const request =
+                existingRequest.data();
+
+            if (
+                request.fromUid === user.uid
+            ) {
+
+                alert(
+                    "Friend request already sent."
+                );
+            }
+
+            else {
+
+                alert(
+                    "This person already sent you a friend request. Check your Requests section."
+                );
+            }
+
+            return;
+        }
+
+
+        await setDoc(
+            requestRef,
+            {
+                fromUid:
+                    user.uid,
+
+                toUid:
+                    friendUid,
+
+                status:
+                    "pending",
+
+                createdAt:
+                    serverTimestamp()
+            }
+        );
+
+
+        $("friendEmail")
+            .value =
+                "";
+
+
+        alert(
+            "Friend request sent!"
+        );
+
+        await loadRequests();
+    }
+
+    catch (error) {
+
+        console.error(
+            "Friend request error:",
+            error
+        );
+
+        alert(
+            "Friend request failed: " +
+            error.message
+        );
+    }
 };
 
 
