@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -4316,6 +4316,7 @@ function finishExercise(
             .style.display =
                 "block";
     }
+
 }
 
 
@@ -4396,18 +4397,31 @@ async () => {
             );
 
 
-        await setDoc(
+        try {
 
-            doc(
-                db,
-                "sharedWorkouts",
-                user.uid,
-                "items",
-                saved.id
-            ),
+            await setDoc(
 
-            workoutData
-        );
+                doc(
+                    db,
+                    "sharedWorkouts",
+                    user.uid,
+                    "items",
+                    saved.id
+                ),
+
+                workoutData
+            );
+
+        }
+
+        catch (shareError) {
+
+            console.error(
+                "Workout saved, but sharing failed:",
+                shareError
+            );
+        }
+
 
 
         activeDay =
@@ -7252,3 +7266,4 @@ function addBubble(
 </body>
 
 </html>
+
