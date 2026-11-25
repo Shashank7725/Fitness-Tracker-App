@@ -5350,8 +5350,53 @@ async function openFriend(friend) {
                                 )
                                 .join("")}
 
+                            <button class="primary copyFriendSplit">
+                                Copy Split to My Workouts
+                            </button>
+
                         </div>
                     `;
+
+                $("friendSplit")
+                    .querySelector(".copyFriendSplit")
+                    .onclick = async () => {
+
+                        if (
+                            split &&
+                            !confirm(
+                                `This will replace your current split "${split.name}". Continue?`
+                            )
+                        ) {
+                            return;
+                        }
+
+                        const copiedSplit =
+                            JSON.parse(
+                                JSON.stringify(friendSplit)
+                            );
+
+                        split = copiedSplit;
+
+                        await setDoc(
+                            doc(
+                                db,
+                                "users",
+                                user.uid,
+                                "data",
+                                "split"
+                            ),
+                            copiedSplit
+                        );
+
+                        await syncSharedSplit();
+                        renderSplit();
+
+                        alert(
+                            `Copied "${copiedSplit.name}" to your workouts!`
+                        );
+
+                        screen("homeScreen");
+                    };
 
             }
 
