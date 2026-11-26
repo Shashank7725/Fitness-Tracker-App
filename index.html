@@ -3907,7 +3907,7 @@ async function startWorkout(index) {
 
     $("finishWorkout")
         .style.display =
-            "none";
+            "block";
 
 
     screen(
@@ -4333,36 +4333,33 @@ async () => {
                 ".exerciseWorkout"
             )
         ];
-
-
-    if (
-        !cards.every(
-            card =>
-                card.dataset.finished ===
-                "true"
-        )
-    ) {
-
-        alert(
-            "Finish every exercise first."
-        );
-
-        return;
-    }
-
-
+    
     const exercises =
-        cards.map(
-            (card, index) => ({
+    cards
+        .map(
+            (card, index) => {
 
-                name:
-                    activeDay
-                        .exercises[index]
-                        .name,
+                if (
+                    card.dataset.finished !== "true"
+                ) {
+                    return null;
+                }
 
-                sets:
-                    card.currentSets
-            })
+                return {
+
+                    name:
+                        activeDay
+                            .exercises[index]
+                            .name,
+
+                    sets:
+                        card.currentSets
+                };
+            }
+        )
+        .filter(
+            exercise =>
+                exercise !== null
         );
 
 
