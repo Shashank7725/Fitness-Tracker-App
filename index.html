@@ -594,6 +594,28 @@ label {
 }
 
 
+
+/* =========================
+   PROGRESS TRACKER
+========================= */
+.progressExerciseGrid { display:grid; grid-template-columns:repeat(2,1fr); gap:9px; margin-top:14px; }
+.progressExerciseGrid button { margin:0; }
+.progressFilters { display:flex; gap:6px; flex-wrap:wrap; margin:14px 0; }
+.progressFilters button { width:auto; margin:0; padding:8px 11px; border-radius:10px; border:1px solid var(--border); background:var(--soft); color:var(--secondary); font-weight:750; }
+.progressFilters button.active { background:var(--primary); color:var(--primaryText); border-color:var(--primary); }
+.progressChartWrap { overflow-x:auto; margin-top:12px; }
+.progressChart { width:100%; min-width:520px; height:300px; display:block; }
+.progressLegend { display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:10px; }
+.progressLegend button { width:auto; margin:0; padding:6px 9px; border-radius:9px; border:1px solid var(--border); background:var(--soft); color:var(--text); font-size:12px; }
+.progressLegend button.off { opacity:.35; }
+.progressDot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:5px; vertical-align:middle; }
+.progressStats { display:grid; grid-template-columns:repeat(2,1fr); gap:9px; margin-top:12px; }
+.progressStat { background:var(--soft); border-radius:12px; padding:12px; }
+.progressStat b { display:block; font-size:19px; margin-top:3px; }
+.progressHistorySet { margin:3px 0; }
+@media(max-width:390px) { .progressExerciseGrid { grid-template-columns:1fr; } }
+
+\n/* =========================\n   PROGRESS TRACKER\n========================= */\n\nlet progressWorkouts = [];\nlet progressEligible = [];\nlet progressMode = "everything";\nlet progressExercise = null;\nlet progressRange = "1M";\nlet hiddenProgressSeries = new Set();\n\nconst progressColors = [\n    "#e76f51", "#2a9d8f", "#457b9d", "#e9c46a", "#9b5de5",\n    "#f15bb5", "#00b4d8", "#90be6d", "#f8961e", "#577590",\n    "#ef476f", "#06d6a0", "#118ab2", "#8338ec", "#fb5607",\n    "#3a86ff", "#8ac926", "#ffca3a", "#6a4c93", "#ff595e"\n];\n\nfunction progressKey(name) {\n    return String(name || "").trim().replace(/\\s+/g, " ").toLowerCase();\n}\n\nfunction splitExerciseMap() {\n    const map = new Map();\n    split?.days?.forEach(day => day.exercises?.forEach(ex => {\n        const key = progressKey(ex.name);\n        if (key && !map.has(key)) map.set(key, String(ex.name).trim());\n    }));\n    return map;\n}\n\nasync function loadProgressData() {\n    const snapshot = await getDocs(query(\n        collection(db, "users", user.uid, "workouts"),\n        orderBy("completedAt", "asc"),\n        limit(1000)\n    ));\n    progressWorkouts = [];\n    snapshot.forEach(d => {\n        const w = d.data();\n        if (!w.completedAt) return;\n        progressWorkouts.push({ id:d.id, ...w, date:w.completedAt.toDate() });\n    });\n    const current = splitExerciseMap();\n    const performed = new Set();\n    progressWorkouts.forEach(w => w.exercises?.forEach(ex => performed.add(progressKey(ex.name))));\n    progressEligible = [...current.entries()]\n        .filter(([key]) => performed.has(key))\n        .map(([key,name]) => ({key,name}));\n}\n\n$("progressButton").onclick = async () => {\n    screen("progressScreen");\n    $("progressHome").style.display = "block";\n    $("progressDetail").style.display = "none";\n    $("progressExerciseGrid").innerHTML = '<div class="loading">Loading progress...</div>';\n    await loadProgressData();\n    renderProgressButtons();\n};\n\n$("progressBack").onclick = () => {\n    if ($("progressDetail").style.display !== "none") {\n        $("progressDetail").style.display = "none";\n        $("progressHome").style.display = "block";\n        return;\n    }\n    screen("homeScreen");\n};\n\n$("progressSearch").oninput = renderProgressButtons;\n$("everythingProgress").onclick = () => openProgressDetail("everything");\n\nfunction renderProgressButtons() {\n    const q = progressKey($("progressSearch").value);\n    const list = progressEligible.filter(x => !q || x.key.includes(q));\n    const box = $("progressExerciseGrid");\n    box.innerHTML = "";\n    if (!list.length) {\n        box.innerHTML = '<div class="muted">No completed exercises match.</div>';\n        return;\n    }\n    list.forEach(item => {\n        const b = document.createElement("button");\n        b.className = "secondary";\n        b.textContent = item.name;\n        b.onclick = () => openProgressDetail("exercise", item);\n        box.appendChild(b);\n    });\n}\n\nfunction rangeStart(range) {\n    if (range === "ALL") return null;\n    const d = new Date();\n    const days = range === "2W" ? 14 : range === "1M" ? 30 : range === "3M" ? 90 : range === "6M" ? 180 : 365;\n    d.setDate(d.getDate() - days);\n    return d;\n}\n\nfunction filteredProgressWorkouts() {\n    const start = rangeStart(progressRange);\n    return start ? progressWorkouts.filter(w => w.date >= start) : progressWorkouts;\n}\n\nfunction exercisePoints(key) {\n    const points = [];\n    filteredProgressWorkouts().forEach(w => {\n        const ex = w.exercises?.find(e => progressKey(e.name) === key);\n        if (!ex?.sets?.length) return;\n        const strength = bestStrength(ex.sets);\n        if (strength > 0) points.push({date:w.date, strength, sets:ex.sets, workout:w.workout});\n    });\n    return points;\n}\n\nfunction openProgressDetail(mode, item=null) {\n    progressMode = mode;\n    progressExercise = item;\n    progressRange = "1M";\n    hiddenProgressSeries = new Set();\n    $("progressHome").style.display = "none";\n    $("progressDetail").style.display = "block";\n    renderProgressDetail();\n}\n\nfunction filterButtons() {\n    return `<div class="progressFilters">${["2W","1M","3M","6M","1Y","ALL"].map(r =>\n        `<button data-prange="${r}" class="${r===progressRange?"active":""}">${r}</button>`\n    ).join("")}</div>`;\n}\n\nfunction renderProgressDetail() {\n    const detail = $("progressDetail");\n    const title = progressMode === "everything" ? "Everything" : progressExercise.name;\n    detail.innerHTML = `<button id="progressDetailBack" class="back">← Exercises</button><div class="muted">PROGRESS</div><h1>${esc(title)}</h1>${filterButtons()}<div id="progressChartArea"></div>`;\n    $("progressDetailBack").onclick = () => { detail.style.display="none"; $("progressHome").style.display="block"; };\n    detail.querySelectorAll("[data-prange]").forEach(b => b.onclick = () => { progressRange=b.dataset.prange; renderProgressDetail(); });\n    if (progressMode === "everything") renderEverythingChart(); else renderExerciseChart(progressExercise);\n}\n\nfunction chartSvg(series, percentMode) {\n    const width=760, height=290, left=52, right=18, top=18, bottom=42;\n    const all = series.flatMap(s => s.points);\n    if (!all.length) return '<div class="card muted">No workout data in this time range.</div>';\n    let minDate=Math.min(...all.map(p=>p.date.getTime())), maxDate=Math.max(...all.map(p=>p.date.getTime()));\n    if (minDate===maxDate) { minDate-=86400000; maxDate+=86400000; }\n    let vals=all.map(p=>p.value), minY=Math.min(...vals), maxY=Math.max(...vals);\n    if (percentMode) minY=Math.min(0,minY);\n    if (minY===maxY) { minY-=1; maxY+=1; }\n    const pad=(maxY-minY)*.12; minY-=pad; maxY+=pad;\n    const x=t=>left+(t-minDate)/(maxDate-minDate)*(width-left-right);\n    const y=v=>top+(maxY-v)/(maxY-minY)*(height-top-bottom);\n    let svg=`<svg class="progressChart" viewBox="0 0 ${width} ${height}" role="img" aria-label="Progress line graph">`;\n    for(let i=0;i<=4;i++){ const yy=top+(height-top-bottom)*i/4; const val=maxY-(maxY-minY)*i/4; svg+=`<line x1="${left}" y1="${yy}" x2="${width-right}" y2="${yy}" stroke="var(--border)"/><text x="${left-7}" y="${yy+4}" text-anchor="end" font-size="11" fill="var(--secondary)">${percentMode?val.toFixed(0)+"%":val.toFixed(0)}</text>`; }\n    series.forEach(s=>{ if(hiddenProgressSeries.has(s.key)||!s.points.length)return; const pts=s.points.map(p=>`${x(p.date.getTime())},${y(p.value)}`).join(" "); svg+=`<polyline points="${pts}" fill="none" stroke="${s.color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`; s.points.forEach(p=>svg+=`<circle cx="${x(p.date.getTime())}" cy="${y(p.value)}" r="4" fill="${s.color}"><title>${esc(s.name)}: ${percentMode?p.value.toFixed(1)+"%":p.value.toFixed(1)} · ${p.date.toLocaleDateString()}</title></circle>`); });\n    const labels=[minDate,(minDate+maxDate)/2,maxDate]; labels.forEach(t=>svg+=`<text x="${x(t)}" y="${height-12}" text-anchor="middle" font-size="11" fill="var(--secondary)">${new Date(t).toLocaleDateString("en-US",{month:"short",day:"numeric"})}</text>`);\n    return `<div class="progressChartWrap">${svg}</svg></div>`;\n}\n\nfunction renderEverythingChart() {\n    const series=[];\n    progressEligible.forEach((item,i)=>{\n        const raw=exercisePoints(item.key);\n        if(!raw.length)return;\n        const base=raw[0].strength;\n        series.push({key:item.key,name:item.name,color:progressColors[i%progressColors.length],points:raw.map(p=>({...p,value:base>0?(p.strength-base)/base*100:0}))});\n    });\n    const area=$("progressChartArea");\n    area.innerHTML=`<div class="card"><h2>Strength Progress (%)</h2><div class="muted">Every performed exercise in your current split. Each line starts at 0% for its first workout in this time range.</div>${chartSvg(series,true)}<div class="progressLegend" id="progressLegend"></div></div><div id="improvedList"></div>`;\n    const legend=$("progressLegend");\n    series.forEach(s=>{ const b=document.createElement("button"); b.className=hiddenProgressSeries.has(s.key)?"off":""; b.innerHTML=`<span class="progressDot" style="background:${s.color}"></span>${esc(s.name)}`; b.onclick=()=>{ hiddenProgressSeries.has(s.key)?hiddenProgressSeries.delete(s.key):hiddenProgressSeries.add(s.key); renderEverythingChart(); }; legend.appendChild(b); });\n    const ranked=series.map(s=>({name:s.name,change:s.points.at(-1)?.value||0})).sort((a,b)=>b.change-a.change).slice(0,5);\n    $("improvedList").innerHTML=ranked.length?`<div class="card"><h2>Most Improved</h2>${ranked.map((x,i)=>`<div class="prRow"><span>${i+1}. ${esc(x.name)}</span><b>${x.change>=0?"+":""}${x.change.toFixed(1)}%</b></div>`).join("")}</div>`:"";\n}\n\nfunction renderExerciseChart(item) {\n    const raw=exercisePoints(item.key);\n    const series=[{key:item.key,name:item.name,color:progressColors[0],points:raw.map(p=>({...p,value:p.strength}))}];\n    const area=$("progressChartArea");\n    if(!raw.length){ area.innerHTML='<div class="card muted">No completed workouts for this exercise in this time range.</div>'; return; }\n    const first=raw[0], last=raw.at(-1), best=raw.reduce((a,b)=>a.strength>b.strength?a:b);\n    const change=first.strength>0?(last.strength-first.strength)/first.strength*100:0;\n    const bestSet=best.sets.reduce((a,b)=>estimatedStrength(a.weight,a.reps)>=estimatedStrength(b.weight,b.reps)?a:b);\n    const lastSet=last.sets.reduce((a,b)=>estimatedStrength(a.weight,a.reps)>=estimatedStrength(b.weight,b.reps)?a:b);\n    area.innerHTML=`<div class="card"><h2>Estimated Strength</h2>${chartSvg(series,false)}<div class="progressStats"><div class="progressStat"><span class="muted">CURRENT</span><b>${lastSet.weight} lb × ${lastSet.reps}</b></div><div class="progressStat"><span class="muted">BEST</span><b>${bestSet.weight} lb × ${bestSet.reps}</b></div><div class="progressStat"><span class="muted">PROGRESS</span><b>${change>=0?"+":""}${change.toFixed(1)}%</b></div><div class="progressStat"><span class="muted">WORKOUTS</span><b>${raw.length}</b></div></div></div><div class="card"><h2>History</h2>${[...raw].reverse().map(p=>`<div class="prRow"><div><b>${p.date.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})}</b><div class="muted">${esc(p.workout||"Workout")}</div></div><div style="text-align:right">${p.sets.map((set,i)=>`<div class="progressHistorySet">Set ${i+1}: ${set.weight} lb × ${set.reps}</div>`).join("")}</div></div>`).join("")}</div>`;\n}\n\n
 /* =========================
    CALENDAR
 ========================= */
@@ -1388,6 +1410,15 @@ title="Calendar"
 </button>
 
 <button
+id="progressButton"
+class="icon"
+title="Progress"
+>
+📈
+</button>
+
+
+<button
 class="icon themeBtn"
 title="Theme"
 >
@@ -1533,6 +1564,24 @@ Finish Workout
 
 </div>
 
+
+
+<!-- =========================
+     PROGRESS
+========================= -->
+<div id="progressScreen" class="screen">
+<button id="progressBack" class="back">← Back</button>
+<div class="muted">TRAINING PROGRESS</div>
+<h1>Progress</h1>
+<p>Track strength changes from completed workouts.</p>
+<div id="progressHome">
+    <button id="everythingProgress" class="primary">Everything</button>
+    <label>Find exercise</label>
+    <input id="progressSearch" placeholder="Search exercises...">
+    <div id="progressExerciseGrid" class="progressExerciseGrid"></div>
+</div>
+<div id="progressDetail" style="display:none"></div>
+</div>
 
 <!-- =========================
      CALENDAR
@@ -3907,7 +3956,7 @@ async function startWorkout(index) {
 
     $("finishWorkout")
         .style.display =
-            "block";
+            "none";
 
 
     screen(
@@ -4333,33 +4382,36 @@ async () => {
                 ".exerciseWorkout"
             )
         ];
-    
-    const exercises =
-    cards
-        .map(
-            (card, index) => {
 
-                if (
-                    card.dataset.finished !== "true"
-                ) {
-                    return null;
-                }
 
-                return {
-
-                    name:
-                        activeDay
-                            .exercises[index]
-                            .name,
-
-                    sets:
-                        card.currentSets
-                };
-            }
+    if (
+        !cards.every(
+            card =>
+                card.dataset.finished ===
+                "true"
         )
-        .filter(
-            exercise =>
-                exercise !== null
+    ) {
+
+        alert(
+            "Finish every exercise first."
+        );
+
+        return;
+    }
+
+
+    const exercises =
+        cards.map(
+            (card, index) => ({
+
+                name:
+                    activeDay
+                        .exercises[index]
+                        .name,
+
+                sets:
+                    card.currentSets
+            })
         );
 
 
@@ -4830,68 +4882,161 @@ async () => {
 $("sendRequest").onclick =
 async () => {
 
-    try {
-
-        const email =
-            normEmail(
-                $("friendEmail")
-                    .value
-            );
-
-        if (!email) {
-            alert("Enter their Google email.");
-            return;
-        }
-
-        if (email === normEmail(user.email)) {
-            alert("You can\'t add yourself.");
-            return;
-        }
-
-        const lookup =
-            await getDoc(
-                doc(
-                    db,
-                    "emailLookup",
-                    await emailKey(email)
-                )
-            );
-
-        if (!lookup.exists()) {
-            alert("No Fitness Tracker account was found with that email.");
-            return;
-        }
-
-        const friendUid =
-            lookup.data().uid;
-
-        const requestRef =
-            doc(
-                db,
-                "friendRequests",
-                user.uid + "_" + friendUid
-            );
-
-        await setDoc(
-            requestRef,
-            {
-                fromUid: user.uid,
-                toUid: friendUid,
-                status: "pending",
-                createdAt: serverTimestamp()
-            }
+    const email =
+        normEmail(
+            $("friendEmail")
+                .value
         );
 
-        $("friendEmail").value = "";
 
-        alert("Friend request sent!");
+    if (!email) {
+
+        alert(
+            "Enter their Google email."
+        );
+
+        return;
     }
 
-    catch (error) {
-        console.error("Friend request error:", error);
-        alert("Friend request failed: " + error.message);
+
+    if (
+        email ===
+        normEmail(
+            user.email
+        )
+    ) {
+
+        alert(
+            "You can't add yourself."
+        );
+
+        return;
     }
+
+
+    const lookup =
+        await getDoc(
+
+            doc(
+                db,
+                "emailLookup",
+                await emailKey(email)
+            )
+
+        );
+
+
+    if (!lookup.exists()) {
+
+        alert(
+            "No Fitness Tracker account was found with that email."
+        );
+
+        return;
+    }
+
+
+    const friendUid =
+        lookup.data().uid;
+
+
+    const friendship =
+        await getDoc(
+
+            doc(
+                db,
+                "friendships",
+                friendshipId(
+                    user.uid,
+                    friendUid
+                )
+            )
+
+        );
+
+
+    if (friendship.exists()) {
+
+        alert(
+            "You're already friends."
+        );
+
+        return;
+    }
+
+
+    const duplicate =
+        await getDocs(
+
+            query(
+
+                collection(
+                    db,
+                    "friendRequests"
+                ),
+
+                where(
+                    "fromUid",
+                    "==",
+                    user.uid
+                ),
+
+                where(
+                    "toUid",
+                    "==",
+                    friendUid
+                )
+
+            )
+
+        );
+
+
+    if (!duplicate.empty) {
+
+        alert(
+            "Friend request already sent."
+        );
+
+        return;
+    }
+
+
+    await addDoc(
+
+        collection(
+            db,
+            "friendRequests"
+        ),
+
+        {
+
+            fromUid:
+                user.uid,
+
+            toUid:
+                friendUid,
+
+            status:
+                "pending",
+
+            createdAt:
+                serverTimestamp()
+        }
+
+    );
+
+
+    $("friendEmail")
+        .value =
+            "";
+
+
+    alert(
+        "Friend request sent!"
+    );
 };
+
 
 async function loadRequests() {
 
@@ -5347,53 +5492,8 @@ async function openFriend(friend) {
                                 )
                                 .join("")}
 
-                            <button class="primary copyFriendSplit">
-                                Copy Split to My Workouts
-                            </button>
-
                         </div>
                     `;
-
-                $("friendSplit")
-                    .querySelector(".copyFriendSplit")
-                    .onclick = async () => {
-
-                        if (
-                            split &&
-                            !confirm(
-                                `This will replace your current split "${split.name}". Continue?`
-                            )
-                        ) {
-                            return;
-                        }
-
-                        const copiedSplit =
-                            JSON.parse(
-                                JSON.stringify(friendSplit)
-                            );
-
-                        split = copiedSplit;
-
-                        await setDoc(
-                            doc(
-                                db,
-                                "users",
-                                user.uid,
-                                "data",
-                                "split"
-                            ),
-                            copiedSplit
-                        );
-
-                        await syncSharedSplit();
-                        renderSplit();
-
-                        alert(
-                            `Copied "${copiedSplit.name}" to your workouts!`
-                        );
-
-                        screen("homeScreen");
-                    };
 
             }
 
